@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html lang = "en-US">
+<head>
+	<meta charset = "UTF-8">
+	<title>Coin Drop Game</title>
+	<link rel = "stylesheet" type = "text/css" href = "styles/game.css">
+	<script src = "scripts/modernizr.js"></script>
+	<script src = "scripts/loader.js"></script>
+</head>
+<body>
+	<div id="body_div">
+	
+	<div id = "game">
+	<div id="score">
+		<table>
+			<tr><td><img border="0" src="images/Piggy-Bank.png" alt="" width="120" height="98"></td></tr>
+			<tr><td id="score_cell"></td></tr>
+		</table>
+	</div>
+	<div id="countdown">Count Down</div>
+		<div id = "main-menu" class = "screen">
+			<ul class = "menu">
+				<li><button id = "id-new-game">New&nbsp;Game</button></li>
+				<li><button id = "id-high-scores">High&nbsp;Scores</button></li>
+				<li><button id = "id-help">Help</button></li>
+				<li><button id = "id-about">Credits</button></li>
+			</ul>
+		</div>
+		<div id = "game-play" class = "screen">
+			<canvas id = "canvas-main" width = "800" height = "532"></canvas>
+		</div>
+		<div id = "high-scores" class = "screen">
+			<h1>High Scores</h1>
+			<table id="scores-table">
+				<tr>
+					<td class="highscore-cell"><ol id="overall-scores"></ol></td>
+					<td class="highscore-cell"><ol id="level1-scores"></ol></td>
+				</tr>
+				<tr>
+					<td class="highscore-cell"><ol id="level2-scores"></ol></td>
+					<td class="highscore-cell"><ol id="level3-scores"></ol></td>
+				</tr>
+			</table>
+			<ul class = "menu">
+				<li><button id = "id-high-scores-back">Back</button></li>
+			</ul>
+		</div>
+		<div id = "help" class = "screen">
+			<h1>Help</h1>
+			<p>Click on the U.S. and Roman coins to earn points. Avoid the Canadian</p>
+			<p>coins, as clicking on them will reset your score to zero. Clicking on</p>
+			<p>the clock will increase the number coins that will drop during that level.</p>
+			<p>You must earn at least 100 points to proceed to the next level.</p>
+			<ul class = "menu">
+				<li><button id = "id-help-back">Back</button></li>
+			</ul>
+		</div>
+		<div id = "about" class = "screen">
+			<h1>Credits</h1><br>
+			<p>Developed by: Jesse Rogers</p>
+			<p>With much help from Dr. Mathias</p>
+			<ul class = "menu">
+				<li><button id = "id-about-back">Back</button></li>
+			</ul>
+		</div>
+	</div>
+	</div>
+</body>
+</html>
