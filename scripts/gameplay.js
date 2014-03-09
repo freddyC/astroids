@@ -5,7 +5,14 @@ MYGAME.screens['game-play'] = (function() {
 	
 	var myMouse = MYGAME.input.Mouse(),
 		cancelNextRequest = false,
-		levelHandler = null;
+		levelHandler = null,
+		gameDiv = document.getElementById('score');
+	
+	gameDiv.style.height = window.innerHeight;
+	gameDiv.style.width = window.innerWidth;
+	//gameDiv.style.backgroundSize = '' + window.innerHeight + 'px ' + window.innerWidth + 'px';
+	window.onscroll = function () { window.scrollTo(0, 0); };
+	
 	
 	function initialize() {
 		console.log('game initializing...');
