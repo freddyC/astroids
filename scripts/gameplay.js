@@ -4,25 +4,27 @@ MYGAME.screens['game-play'] = (function() {
 	'use strict';
 	
 	var myMouse = MYGAME.input.Mouse(),
-		cancelNextRequest = false,
-		levelHandler = null,
-		gameDiv = document.getElementById('score');
+		cancelNextRequest = false;
+		//levelHandler = null,
 	
-	gameDiv.style.height = window.innerHeight;
-	gameDiv.style.width = window.innerWidth;
-	//gameDiv.style.backgroundSize = '' + window.innerHeight + 'px ' + window.innerWidth + 'px';
 	window.onscroll = function () { window.scrollTo(0, 0); };
 	
 	
 	function initialize() {
 		console.log('game initializing...');
 
+		document.getElementById('canvas-main').height = window.innerHeight;
+		document.getElementById('canvas-main').width = window.innerWidth;
+		document.getElementById('canvas-main').style.height = '100%';
+		document.getElementById('canvas-main').style.width = '100%';
+		
+		/*
 		myMouse.registerCommand('mouseup', function(e) {
 			if (levelHandler !== null) {
 				levelHandler.mouseClicks.push(e);
 			}
 		});
-		
+		*/
 	}
 	
 	//------------------------------------------------------------------
@@ -34,17 +36,11 @@ MYGAME.screens['game-play'] = (function() {
 		MYGAME.elapsedTime = time - MYGAME.lastTimeStamp;
 		MYGAME.lastTimeStamp = time;
 
-		myMouse.update(MYGAME.elapsedTime);
+		//myMouse.update(MYGAME.elapsedTime);
 
 		MYGAME.graphics.clear();
 		
-		if(levelHandler.gameInProgress) {
-			levelHandler.update(MYGAME.elapsedTime);
-			levelHandler.render(MYGAME.elapsedTime);
-		} else {
-			cancelNextRequest = true;
-			MYGAME.game.showScreen('main-menu');
-		}
+		// Do updates and render here
 
 		if (!cancelNextRequest) {
 			requestAnimationFrame(gameLoop);
@@ -54,10 +50,7 @@ MYGAME.screens['game-play'] = (function() {
 	function run() {
 		MYGAME.lastTimeStamp = performance.now();
 		
-		MYGAME.score = 0;
-		levelHandler = MYGAME.MakeLevelHandler();
-		levelHandler.init();
-		document.getElementById('score').style.visibility = "visible";
+		//Create the new game here
 		
 		// Start the animation loop
 		cancelNextRequest = false;

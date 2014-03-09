@@ -11,6 +11,11 @@ MYGAME.screens['main-menu'] = (function() {
 			function() { MYGAME.game.showScreen('game-play'); },
 			false);
 		
+		document.getElementById('id-controls').addEventListener(
+				'click',
+				function() { MYGAME.game.showScreen('configure-controls'); },
+				false);
+		
 		document.getElementById('id-high-scores').addEventListener(
 			'click',
 			function() { MYGAME.game.showScreen('high-scores'); },

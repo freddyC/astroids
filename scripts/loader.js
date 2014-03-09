@@ -22,21 +22,15 @@ window.addEventListener('load', function() {
 			load : [
 			    'preload!scripts/random.js',
 			    'preload!scripts/particle-system.js',
-			    'preload!scripts/coins.js',
-			    'preload!scripts/level.js',
 				'preload!scripts/renderer.js',
 				'preload!scripts/input.js',
 				'preload!scripts/game.js',
 				'preload!scripts/mainmenu.js',
 				'preload!scripts/gameplay.js',
+				'preload!scripts/configurecontrols.js',
 				'preload!scripts/highscores.js',
 				'preload!scripts/help.js',
-				'preload!scripts/about.js',
-				'preload!images/Clock.png',
-				'preload!images/Coin-Canadian-Dollar.png',
-				'preload!images/Coin-Roman.png',
-				'preload!images/Coin-US-Dollary.png',
-				'preload!images/Dollar-Sign.png'
+				'preload!scripts/about.js'
 			],
 			complete : function() {
 				console.log('All files requested for loading...');
