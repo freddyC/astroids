@@ -41,6 +41,7 @@ MYGAME.screens['game-play'] = (function() {
 		MYGAME.graphics.clear();
 		
 		// Do updates and render here
+		playerShip.update(MYGAME.elapsedTime);
 		playerShip.render();
 		
 		if (!cancelNextRequest) {
