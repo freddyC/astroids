@@ -4,8 +4,8 @@ MYGAME.screens['game-play'] = (function() {
 	'use strict';
 	
 	var myMouse = MYGAME.input.Mouse(),
-		cancelNextRequest = false;
-		//levelHandler = null,
+		cancelNextRequest = false,
+		playerShip = null;
 	
 	window.onscroll = function () { window.scrollTo(0, 0); };
 	
@@ -17,7 +17,7 @@ MYGAME.screens['game-play'] = (function() {
 		document.getElementById('canvas-main').width = window.innerWidth;
 		document.getElementById('canvas-main').style.height = '100%';
 		document.getElementById('canvas-main').style.width = '100%';
-		
+
 		/*
 		myMouse.registerCommand('mouseup', function(e) {
 			if (levelHandler !== null) {
@@ -41,7 +41,8 @@ MYGAME.screens['game-play'] = (function() {
 		MYGAME.graphics.clear();
 		
 		// Do updates and render here
-
+		playerShip.render();
+		
 		if (!cancelNextRequest) {
 			requestAnimationFrame(gameLoop);
 		}
@@ -51,6 +52,14 @@ MYGAME.screens['game-play'] = (function() {
 		MYGAME.lastTimeStamp = performance.now();
 		
 		//Create the new game here
+		var spec = { image: MYGAME.images['images/ship.png'],
+					 width: 50,
+					 height: 50,
+					 acceleration: 10,
+					 center: { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+		};
+		
+		playerShip = MYGAME.playerShip(spec, MYGAME.graphics);
 		
 		// Start the animation loop
 		cancelNextRequest = false;

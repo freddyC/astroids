@@ -23,6 +23,7 @@ window.addEventListener('load', function() {
 			    'preload!scripts/random.js',
 			    'preload!scripts/particle-system.js',
 				'preload!scripts/renderer.js',
+				'preload!scripts/playership.js',
 				'preload!scripts/input.js',
 				'preload!scripts/game.js',
 				'preload!scripts/mainmenu.js',
@@ -30,7 +31,8 @@ window.addEventListener('load', function() {
 				'preload!scripts/configurecontrols.js',
 				'preload!scripts/highscores.js',
 				'preload!scripts/help.js',
-				'preload!scripts/about.js'
+				'preload!scripts/about.js',
+				'preload!images/ship.png',
 			],
 			complete : function() {
 				console.log('All files requested for loading...');
