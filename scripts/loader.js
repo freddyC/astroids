@@ -24,6 +24,7 @@ window.addEventListener('load', function() {
 			    'preload!scripts/particle-system.js',
 				'preload!scripts/renderer.js',
 				'preload!scripts/playership.js',
+				'preload!scripts/playershipengine.js',
 				'preload!scripts/input.js',
 				'preload!scripts/game.js',
 				'preload!scripts/mainmenu.js',
@@ -33,6 +34,9 @@ window.addEventListener('load', function() {
 				'preload!scripts/help.js',
 				'preload!scripts/about.js',
 				'preload!images/ship.png',
+				'preload!images/enterprise.png',
+				'preload!images/blue.png',
+				'preload!images/klingon_raptor.png'
 			],
 			complete : function() {
 				console.log('All files requested for loading...');

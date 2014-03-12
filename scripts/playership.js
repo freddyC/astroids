@@ -5,6 +5,8 @@ MYGAME.playerShip = function(spec, graphics) {
 		isAccelerating = false,
 		isTurningLeft = false,
 		isTurningRight = false,
+		engineSpec,
+		engine,
 		
 		myKeyboard = MYGAME.input.Keyboard(),
 		
@@ -45,15 +47,24 @@ MYGAME.playerShip = function(spec, graphics) {
 				var Xspeed = Math.sin(ship.direction) * ship.speed,
 					Yspeed = Math.cos(ship.direction) * ship.speed,
 					Xforce = Math.sin(ship.rotation) * ship.acceleration * elapsedSeconds,
-					Yforce = Math.cos(ship.rotation) * ship.acceleration * elapsedSeconds;
+					Yforce = Math.cos(ship.rotation) * ship.acceleration * elapsedSeconds,
+					eSpec;
 
 				ship.speed = Math.sqrt(Math.pow((Xspeed + Xforce),2) + Math.pow((Yspeed + Yforce),2));
-				console.log('speed: ' + ship.speed);
-				ship.direction = Math.atan((Xspeed + Xforce)/(Yspeed + Yforce));
+				//console.log('speed: ' + ship.speed);
+				ship.direction = (Math.atan((Xspeed + Xforce)/(Yspeed + Yforce))) % (2*Math.PI);
 				
 				if (Yspeed + Yforce < 0) {
 					ship.direction = ship.direction + Math.PI;
 				}
+				
+				eSpec = { shipFacing: ship.rotation,
+						  speed: { mean: 100, stdev: 25},
+						  width: 8,
+						  height: 8,
+						  center: ship.center };
+				engine.create(eSpec);
+				engine.create(eSpec);
 				
 			} else {
 				ship.speed = ship.speed - ship.acceleration * elapsedSeconds / 8;
@@ -78,7 +89,12 @@ MYGAME.playerShip = function(spec, graphics) {
 			}
 			
 		};
-
+	
+	engineSpec = { image: MYGAME.images['images/blue.png'],
+				   lifetime: { mean: 2, stdev: .5 } };
+	
+	engine = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
+		
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_W, shipShouldAccel);
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
@@ -90,10 +106,12 @@ MYGAME.playerShip = function(spec, graphics) {
 		isTurningRight = false;
 		myKeyboard.update(elapsedTime);
 		moveShip(elapsedTime);
+		engine.update(elapsedTime/1000);
 	};
 	
 	that.render = function() {
 		graphics.drawImage(ship);
+		engine.render();
 	};
 	
 	return that;

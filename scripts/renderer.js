@@ -60,12 +60,28 @@ MYGAME.graphics = (function() {
 			spec.size.width, spec.size.height);
 		
 		context.restore();
+		
 	}
 	
+	function drawParticle(spec) {
+		context.save();
+		context.translate(spec.center.x, spec.center.y);
+		context.rotate(spec.rotation);
+		context.translate(-spec.center.x, -spec.center.y);
+		
+		context.drawImage(
+			spec.image, 
+			spec.center.x - (spec.width / 2), 
+			spec.center.y - (spec.height / 2),
+			spec.width, spec.height);
+		
+		context.restore();
+	}
 	
 	return {
 		clear : clear,
 		DrawObject : DrawObject,
-		drawImage : drawImage
+		drawImage : drawImage,
+		drawParticle : drawParticle
 	};
 }());

@@ -53,11 +53,19 @@ MYGAME.screens['game-play'] = (function() {
 		MYGAME.lastTimeStamp = performance.now();
 		
 		//Create the new game here
-		var spec = { image: MYGAME.images['images/ship.png'],
-					 width: 50,
-					 height: 50,
+		/*
+		var spec = { image: MYGAME.images['images/enterprise.png'],
+					 width: 43,
+					 height: 100,
 					 acceleration: 10,
 					 center: { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+		};
+		*/
+		var spec = { image: MYGAME.images['images/klingon_raptor.png'],
+				 width: 65,
+				 height: 76,
+				 acceleration: 10,
+				 center: { x: window.innerWidth / 2, y: window.innerHeight / 2 }
 		};
 		
 		playerShip = MYGAME.playerShip(spec, MYGAME.graphics);
