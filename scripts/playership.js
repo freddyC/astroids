@@ -5,9 +5,11 @@ MYGAME.playerShip = function(spec, graphics) {
 		isAccelerating = false,
 		isTurningLeft = false,
 		isTurningRight = false,
+		isPlayingRocketSound = false,
 		engineSpec,
 		engine1,
 		engine2,
+		rocketSnd,
 		
 		myKeyboard = MYGAME.input.Keyboard(),
 		
@@ -44,7 +46,7 @@ MYGAME.playerShip = function(spec, graphics) {
 			}
 			
 			if (isAccelerating) {
-				
+
 				var Xspeed = Math.sin(ship.direction) * ship.speed,
 					Yspeed = Math.cos(ship.direction) * ship.speed,
 					Xforce = Math.sin(ship.rotation) * ship.acceleration * elapsedSeconds,
@@ -102,6 +104,9 @@ MYGAME.playerShip = function(spec, graphics) {
 			
 		};
 	
+	rocketSnd = new Audio('sounds/rocket.wav');
+	rocketSnd.volume = 0.5;
+		
 	engineSpec = { image: MYGAME.images['images/blue.png'],
 				   lifetime: { mean: 2, stdev: .5 } };
 	
@@ -121,6 +126,17 @@ MYGAME.playerShip = function(spec, graphics) {
 		moveShip(elapsedTime);
 		engine1.update(elapsedTime/1000);
 		engine2.update(elapsedTime/1000);
+		
+		if (isAccelerating !== isPlayingRocketSound) {
+			isPlayingRocketSound = isAccelerating;
+			if (isPlayingRocketSound) {
+				rocketSnd.play();
+			} else {
+				rocketSnd.pause();
+				rocketSnd.currentTime = 0;
+			}
+		}
+		
 	};
 	
 	that.render = function() {
