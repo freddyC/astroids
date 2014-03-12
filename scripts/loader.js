@@ -17,27 +17,34 @@ var MYGAME = {
 //------------------------------------------------------------------
 window.addEventListener('load', function() {
 	console.log('Loading resources...');
+	var i, load;
+	load = [
+		    'preload!scripts/random.js',
+		    'preload!scripts/particle-system.js',
+			'preload!scripts/renderer.js',
+			'preload!scripts/playership.js',
+			'preload!scripts/playershipengine.js',
+			'preload!scripts/asteroid.js',
+			'preload!scripts/input.js',
+			'preload!scripts/game.js',
+			'preload!scripts/mainmenu.js',
+			'preload!scripts/gameplay.js',
+			'preload!scripts/configurecontrols.js',
+			'preload!scripts/highscores.js',
+			'preload!scripts/help.js',
+			'preload!scripts/about.js',
+			'preload!images/ship.png',
+			'preload!images/enterprise.png',
+			'preload!images/blue.png',
+			'preload!images/klingon_raptor.png'
+		];
+	for (i = 1; i <= 64; i++) {
+		load.push('preload!images/asteroid_medium/medium' + i + '.png');
+	}
+	
 	Modernizr.load([
 		{
-			load : [
-			    'preload!scripts/random.js',
-			    'preload!scripts/particle-system.js',
-				'preload!scripts/renderer.js',
-				'preload!scripts/playership.js',
-				'preload!scripts/playershipengine.js',
-				'preload!scripts/input.js',
-				'preload!scripts/game.js',
-				'preload!scripts/mainmenu.js',
-				'preload!scripts/gameplay.js',
-				'preload!scripts/configurecontrols.js',
-				'preload!scripts/highscores.js',
-				'preload!scripts/help.js',
-				'preload!scripts/about.js',
-				'preload!images/ship.png',
-				'preload!images/enterprise.png',
-				'preload!images/blue.png',
-				'preload!images/klingon_raptor.png'
-			],
+			load : load,
 			complete : function() {
 				console.log('All files requested for loading...');
 			}

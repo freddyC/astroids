@@ -5,7 +5,8 @@ MYGAME.screens['game-play'] = (function() {
 	
 	var myMouse = MYGAME.input.Mouse(),
 		cancelNextRequest = false,
-		playerShip = null;
+		playerShip = null,
+		testAsteroids = [];
 	
 	window.onscroll = function () { window.scrollTo(0, 0); };
 	
@@ -44,6 +45,12 @@ MYGAME.screens['game-play'] = (function() {
 		playerShip.update(MYGAME.elapsedTime);
 		playerShip.render();
 		
+		var i;
+		for (i = 0; i < testAsteroids.length; i++) {
+			testAsteroids[i].update(MYGAME.elapsedTime);
+			testAsteroids[i].render();
+		}
+		
 		if (!cancelNextRequest) {
 			requestAnimationFrame(gameLoop);
 		}
@@ -61,14 +68,34 @@ MYGAME.screens['game-play'] = (function() {
 					 center: { x: window.innerWidth / 2, y: window.innerHeight / 2 }
 		};
 		*/
-		var spec = { image: MYGAME.images['images/klingon_raptor.png'],
+		var shipSpec = { image: MYGAME.images['images/klingon_raptor.png'],
 				 width: 65,
 				 height: 76,
 				 acceleration: 10,
 				 center: { x: window.innerWidth / 2, y: window.innerHeight / 2 }
 		};
 		
-		playerShip = MYGAME.playerShip(spec, MYGAME.graphics);
+		playerShip = MYGAME.playerShip(shipSpec, MYGAME.graphics);
+		
+		
+		var imageArray = [], i = 0, imageName;
+		for (i = 1; i <= 64; i++) {
+			imageName = 'images/asteroid_medium/medium' + i + '.png';
+			imageArray.push(MYGAME.images[imageName]);
+		}
+		
+		//console.log(imageArray);
+		var i, asteroidSpec;
+		for (i = 0; i < 10; i++) {
+			asteroidSpec = { imageArray: imageArray,
+							  size: { width: 46, height: 46 },
+							  center: { x: Random.nextRange(0, window.innerWidth) , y: Random.nextRange(0, window.innerHeight) },
+							  speed: Random.nextRange(100, 300),
+							  secondsToCycle: (Math.random() + 1)
+							};
+		
+			testAsteroids.push(MYGAME.asteroid(asteroidSpec, MYGAME.graphics));
+		}
 		
 		// Start the animation loop
 		cancelNextRequest = false;
