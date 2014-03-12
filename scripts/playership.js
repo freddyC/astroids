@@ -6,7 +6,8 @@ MYGAME.playerShip = function(spec, graphics) {
 		isTurningLeft = false,
 		isTurningRight = false,
 		engineSpec,
-		engine,
+		engine1,
+		engine2,
 		
 		myKeyboard = MYGAME.input.Keyboard(),
 		
@@ -51,7 +52,6 @@ MYGAME.playerShip = function(spec, graphics) {
 					eSpec;
 
 				ship.speed = Math.sqrt(Math.pow((Xspeed + Xforce),2) + Math.pow((Yspeed + Yforce),2));
-				//console.log('speed: ' + ship.speed);
 				ship.direction = (Math.atan((Xspeed + Xforce)/(Yspeed + Yforce))) % (2*Math.PI);
 				
 				if (Yspeed + Yforce < 0) {
@@ -60,11 +60,23 @@ MYGAME.playerShip = function(spec, graphics) {
 				
 				eSpec = { shipFacing: ship.rotation,
 						  speed: { mean: 100, stdev: 25},
-						  width: 8,
-						  height: 8,
-						  center: ship.center };
-				engine.create(eSpec);
-				engine.create(eSpec);
+						  center: { x : ship.center.x + Math.sin(ship.rotation + Math.PI * 4.9 / 4) * ship.size.width/1.5,
+							  		y : ship.center.y - Math.cos(ship.rotation + Math.PI * 4.9 / 4) * ship.size.height/1.5 }
+						 };
+				
+				engine1.create(eSpec);
+				engine1.create(eSpec);
+				engine1.create(eSpec);
+				
+				eSpec = { shipFacing: ship.rotation,
+						  speed: { mean: 100, stdev: 25},
+						  center: { x : ship.center.x + Math.sin(ship.rotation - Math.PI * 4.9 / 4) * ship.size.width/1.5,
+							  		y : ship.center.y - Math.cos(ship.rotation - Math.PI * 4.9 / 4) * ship.size.height/1.5 }
+						 };
+				
+				engine2.create(eSpec);
+				engine2.create(eSpec);
+				engine2.create(eSpec);
 				
 			} else {
 				ship.speed = ship.speed - ship.acceleration * elapsedSeconds / 8;
@@ -93,7 +105,8 @@ MYGAME.playerShip = function(spec, graphics) {
 	engineSpec = { image: MYGAME.images['images/blue.png'],
 				   lifetime: { mean: 2, stdev: .5 } };
 	
-	engine = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
+	engine1 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
+	engine2 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
 		
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_W, shipShouldAccel);
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
@@ -106,12 +119,14 @@ MYGAME.playerShip = function(spec, graphics) {
 		isTurningRight = false;
 		myKeyboard.update(elapsedTime);
 		moveShip(elapsedTime);
-		engine.update(elapsedTime/1000);
+		engine1.update(elapsedTime/1000);
+		engine2.update(elapsedTime/1000);
 	};
 	
 	that.render = function() {
 		graphics.drawImage(ship);
-		engine.render();
+		engine1.render();
+		engine2.render();
 	};
 	
 	return that;
