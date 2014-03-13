@@ -135,6 +135,17 @@ MYGAME.playerShip = function(spec, graphics) {
 			} else {
 				rocketSnd.pause();
 				rocketSnd.currentTime = 0;
+				rocketSoundSecondsPlayed = 0;
+			}
+		}
+		
+		if (isPlayingRocketSound) {
+			rocketSoundSecondsPlayed += elapsedTime/1000;
+			if (rocketSoundSecondsPlayed >= 20) {
+				rocketSoundSecondsPlayed = 0;
+				rocketSnd.pause();
+				rocketSnd.currentTime = 0;
+				rocketSnd.play();
 			}
 		}
 		
