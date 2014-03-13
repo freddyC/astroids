@@ -6,7 +6,9 @@ MYGAME.screens['game-play'] = (function() {
 	var myMouse = MYGAME.input.Mouse(),
 		cancelNextRequest = false,
 		playerShip = null,
-		testAsteroids = [];
+		testAsteroids = [],
+		backgroundSnd = new Audio('sounds/background.mp3'),
+		soundSecondsPlayed = 0;
 	
 	window.onscroll = function () { window.scrollTo(0, 0); };
 	
@@ -28,6 +30,17 @@ MYGAME.screens['game-play'] = (function() {
 		*/
 	}
 	
+	function backgroundSound(elapsedSeconds) {
+		soundSecondsPlayed += elapsedSeconds;
+		if (soundSecondsPlayed >= 70) {
+			soundSecondsPlayed = 0;
+			backgroundSnd.pause();
+			backgroundSnd.currentTime = 0;
+			backgroundSnd.play();
+		} 
+	}
+	
+	
 	//------------------------------------------------------------------
 	//
 	// This is the Game Loop function!
@@ -39,6 +52,8 @@ MYGAME.screens['game-play'] = (function() {
 
 		//myMouse.update(MYGAME.elapsedTime);
 
+		backgroundSound(MYGAME.elapsedTime / 1000);
+		
 		MYGAME.graphics.clear();
 		
 		// Do updates and render here
@@ -96,6 +111,8 @@ MYGAME.screens['game-play'] = (function() {
 		
 			testAsteroids.push(MYGAME.asteroid(asteroidSpec, MYGAME.graphics));
 		}
+		
+		backgroundSnd.play();
 		
 		// Start the animation loop
 		cancelNextRequest = false;

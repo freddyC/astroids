@@ -6,6 +6,7 @@ MYGAME.playerShip = function(spec, graphics) {
 		isTurningLeft = false,
 		isTurningRight = false,
 		isPlayingRocketSound = false,
+		rocketSoundSecondsPlayed = 0,
 		engineSpec,
 		engine1,
 		engine2,
@@ -104,8 +105,8 @@ MYGAME.playerShip = function(spec, graphics) {
 			
 		};
 	
-	rocketSnd = new Audio('sounds/rocket.wav');
-	rocketSnd.volume = 0.5;
+	rocketSnd = new Audio('sounds/rocket.mp3');
+	rocketSnd.volume = 0.3;
 		
 	engineSpec = { image: MYGAME.images['images/blue.png'],
 				   lifetime: { mean: 2, stdev: .5 } };
