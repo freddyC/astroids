@@ -6,7 +6,8 @@ MYGAME.screens['game-play'] = (function() {
 	var myMouse = MYGAME.input.Mouse(),
 		cancelNextRequest = false,
 		playerShip = null,
-		testAsteroids = [],
+		mediumAsteroids = [],
+		largeAsteroids = [],
 		backgroundSnd = new Audio('sounds/background.mp3'),
 		soundSecondsPlayed = 0;
 	
@@ -61,9 +62,14 @@ MYGAME.screens['game-play'] = (function() {
 		playerShip.render();
 		
 		var i;
-		for (i = 0; i < testAsteroids.length; i++) {
-			testAsteroids[i].update(MYGAME.elapsedTime);
-			testAsteroids[i].render();
+		for (i = 0; i < mediumAsteroids.length; i++) {
+			mediumAsteroids[i].update(MYGAME.elapsedTime);
+			mediumAsteroids[i].render();
+		}
+		
+		for (i = 0; i < largeAsteroids.length; i++) {
+			largeAsteroids[i].update(MYGAME.elapsedTime);
+			largeAsteroids[i].render();
 		}
 		
 		if (!cancelNextRequest) {
@@ -92,24 +98,44 @@ MYGAME.screens['game-play'] = (function() {
 		
 		playerShip = MYGAME.playerShip(shipSpec, MYGAME.graphics);
 		
+		var i, 
+			asteroidSpec,
+			mediumAsteroidImageArray = [],
+			largeAsteroidImageArray = [],
+			imageName;
 		
-		var imageArray = [], i = 0, imageName;
 		for (i = 1; i <= 64; i++) {
 			imageName = 'images/asteroid_medium/medium' + i + '.png';
-			imageArray.push(MYGAME.images[imageName]);
+			mediumAsteroidImageArray.push(MYGAME.images[imageName]);
 		}
 		
-		//console.log(imageArray);
-		var i, asteroidSpec;
-		for (i = 0; i < 10; i++) {
-			asteroidSpec = { imageArray: imageArray,
-							  size: { width: 46, height: 46 },
+		
+		for (i = 0; i < 8; i++) {
+			asteroidSpec = { imageArray: mediumAsteroidImageArray,
+							  size: { width: 52, height: 52 },
 							  center: { x: Random.nextRange(0, window.innerWidth) , y: Random.nextRange(0, window.innerHeight) },
 							  speed: Random.nextRange(100, 300),
 							  secondsToCycle: (Math.random() + 1)
 							};
 		
-			testAsteroids.push(MYGAME.asteroid(asteroidSpec, MYGAME.graphics));
+			mediumAsteroids.push(MYGAME.asteroid(asteroidSpec, MYGAME.graphics));
+		}
+		
+		for (i = 1; i <= 60; i++) {
+			imageName = 'images/asteroid_large/large' + i + '.png';
+			largeAsteroidImageArray.push(MYGAME.images[imageName]);
+		}
+		
+		
+		for (i = 0; i < 5; i++) {
+			asteroidSpec = { imageArray: largeAsteroidImageArray,
+							  size: { width: 110, height: 110 },
+							  center: { x: Random.nextRange(0, window.innerWidth) , y: Random.nextRange(0, window.innerHeight) },
+							  speed: Random.nextRange(100, 300),
+							  secondsToCycle: (Math.random() + 1)
+							};
+		
+			largeAsteroids.push(MYGAME.asteroid(asteroidSpec, MYGAME.graphics));
 		}
 		
 		backgroundSnd.play();

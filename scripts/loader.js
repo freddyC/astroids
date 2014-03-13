@@ -41,6 +41,9 @@ window.addEventListener('load', function() {
 	for (i = 1; i <= 64; i++) {
 		load.push('preload!images/asteroid_medium/medium' + i + '.png');
 	}
+	for (i = 1; i <= 60; i++) {
+		load.push('preload!images/asteroid_large/large' + i + '.png');
+	}
 	
 	Modernizr.load([
 		{
