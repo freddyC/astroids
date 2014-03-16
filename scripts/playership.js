@@ -63,8 +63,8 @@ MYGAME.playerShip = function(spec, graphics) {
 				
 				eSpec = { shipFacing: ship.rotation,
 						  speed: { mean: 100, stdev: 25},
-						  center: { x : ship.center.x + Math.sin(ship.rotation + Math.PI * 4.9 / 4) * ship.size.width/1.5,
-							  		y : ship.center.y - Math.cos(ship.rotation + Math.PI * 4.9 / 4) * ship.size.height/1.5 }
+						  center: { x : ship.center.x + Math.sin(ship.rotation + (Math.PI * 1.225)) * (ship.size.width / 1.58),
+							  		y : ship.center.y - Math.cos(ship.rotation + (Math.PI * 1.225)) * (ship.size.height / 1.58) }
 						 };
 				
 				engine1.create(eSpec);
@@ -73,8 +73,8 @@ MYGAME.playerShip = function(spec, graphics) {
 				
 				eSpec = { shipFacing: ship.rotation,
 						  speed: { mean: 100, stdev: 25},
-						  center: { x : ship.center.x + Math.sin(ship.rotation - Math.PI * 4.9 / 4) * ship.size.width/1.5,
-							  		y : ship.center.y - Math.cos(ship.rotation - Math.PI * 4.9 / 4) * ship.size.height/1.5 }
+						  center: { x : ship.center.x + Math.sin(ship.rotation - Math.PI * 4.9 / 4) * ship.size.width/1.58,
+							  		y : ship.center.y - Math.cos(ship.rotation - Math.PI * 4.9 / 4) * ship.size.height/1.58 }
 						 };
 				
 				engine2.create(eSpec);

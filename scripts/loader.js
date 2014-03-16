@@ -25,6 +25,7 @@ window.addEventListener('load', function() {
 			'preload!scripts/playership.js',
 			'preload!scripts/playershipengine.js',
 			'preload!scripts/asteroid.js',
+			'preload!scripts/laser.js',
 			'preload!scripts/input.js',
 			'preload!scripts/game.js',
 			'preload!scripts/mainmenu.js',
@@ -36,6 +37,7 @@ window.addEventListener('load', function() {
 			'preload!images/ship.png',
 			'preload!images/enterprise.png',
 			'preload!images/blue.png',
+			'preload!images/pew.png',
 			'preload!images/klingon_raptor.png'
 		];
 	for (i = 1; i <= 64; i++) {

@@ -92,6 +92,8 @@ MYGAME.screens['game-play'] = (function() {
 		var shipSpec = { image: MYGAME.images['images/klingon_raptor.png'],
 				 width: 65,
 				 height: 76,
+				 //width: 400,
+				 //height: 510,
 				 acceleration: 10,
 				 center: { x: window.innerWidth / 2, y: window.innerHeight / 2 }
 		};
