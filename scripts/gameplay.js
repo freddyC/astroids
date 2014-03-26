@@ -22,6 +22,8 @@ MYGAME.screens['game-play'] = (function() {
 		document.getElementById('canvas-main').style.height = '100%';
 		document.getElementById('canvas-main').style.width = '100%';
 
+		MYGAME.lasers = [];
+		
 		/*
 		myMouse.registerCommand('mouseup', function(e) {
 			if (levelHandler !== null) {
@@ -70,6 +72,11 @@ MYGAME.screens['game-play'] = (function() {
 		for (i = 0; i < largeAsteroids.length; i++) {
 			largeAsteroids[i].update(MYGAME.elapsedTime);
 			largeAsteroids[i].render();
+		}
+		
+		for (i = 0; i < MYGAME.lasers.length; i++) {
+			MYGAME.lasers[i].update(MYGAME.elapsedTime);
+			MYGAME.lasers[i].render();
 		}
 		
 		if (!cancelNextRequest) {

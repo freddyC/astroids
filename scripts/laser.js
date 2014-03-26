@@ -16,6 +16,7 @@ MYGAME.laser = function(spec, graphics) {
 			},
 			speed : spec.speed,
 			direction : spec.direction,
+			rotation : spec.direction,
 			lifetime : spec.lifetime
 		};
 	

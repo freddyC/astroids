@@ -20,6 +20,8 @@ window.addEventListener('load', function() {
 	var i, load;
 	load = [
 		    'preload!scripts/random.js',
+		    'preload!scripts/utils.js',
+		    'preload!scripts/collision.js',
 		    'preload!scripts/particle-system.js',
 			'preload!scripts/renderer.js',
 			'preload!scripts/playership.js',

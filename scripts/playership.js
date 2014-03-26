@@ -6,7 +6,9 @@ MYGAME.playerShip = function(spec, graphics) {
 		isTurningLeft = false,
 		isTurningRight = false,
 		isPlayingRocketSound = false,
+		shouldTryToFireLaser = false,
 		rocketSoundSecondsPlayed = 0,
+		secondsSinceLastLaserFired = 100, // Just some really big number to allow it to fire right away
 		engineSpec,
 		engine1,
 		engine2,
@@ -32,6 +34,30 @@ MYGAME.playerShip = function(spec, graphics) {
 		
 		shipShouldTurnLeft = function(elapsedTime) {
 			isTurningLeft = true;
+		},
+		
+		fireLaserKeyPressed = function() {
+			shouldTryToFireLaser = true;
+		},
+		
+		laserHandler = function(elapsedTime) {
+			secondsSinceLastLaserFired += (elapsedTime / 1000);
+			if (shouldTryToFireLaser) {
+				shouldTryToFireLaser = false;
+				if (MYGAME.lasers.length < 4) {
+					if (secondsSinceLastLaserFired >= .5) {
+						secondsSinceLastLaserFired = 0;
+						var laserSpec = { image: MYGAME.images['images/pew.png'],
+									  	  size: { width: 6, height: 34 },
+									  	  center: { x: ship.center.x , y: ship.center.y },
+									  	  speed: 300 + (ship.speed * Angles.halfAngleRatio(ship.direction, ship.rotation)),
+									  	  direction: ship.rotation,
+									  	  lifetime: 3
+										};
+						MYGAME.lasers.push(MYGAME.laser(laserSpec, MYGAME.graphics));
+					}
+				}
+			}
 		},
 		
 		moveShip = function(elapsedTime) {
@@ -82,7 +108,7 @@ MYGAME.playerShip = function(spec, graphics) {
 				engine2.create(eSpec);
 				
 			} else {
-				ship.speed = ship.speed - ship.acceleration * elapsedSeconds / 8;
+				//ship.speed = ship.speed - ship.acceleration * elapsedSeconds / 8;
 				if (ship.speed < 0) {
 					ship.speed = 0;
 				}
@@ -117,6 +143,7 @@ MYGAME.playerShip = function(spec, graphics) {
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_W, shipShouldAccel);
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
+	myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, fireLaserKeyPressed);
 		
 	that.update = function(elapsedTime) {
 		// Update ship code here
@@ -148,6 +175,8 @@ MYGAME.playerShip = function(spec, graphics) {
 				rocketSnd.play();
 			}
 		}
+		
+		laserHandler(elapsedTime);
 		
 	};
 	
