@@ -10,7 +10,8 @@ MYGAME.asteroid = function(spec, graphics) {
 				 	 center: {x: spec.center.x, y: spec.center.y},
 				 	 speed: spec.speed,
 				 	 direction: Math.random()*2*Math.PI,
-				 	 rotation: Math.random()*2*Math.PI
+				 	 rotation: Math.random()*2*Math.PI,
+				 	 radius: spec.radius
 				 	};
 		
 	that.update = function(elapsedTime) {
@@ -41,6 +42,9 @@ MYGAME.asteroid = function(spec, graphics) {
 		}
 		
 	};
+	
+	that.center = asteroid.center;
+	that.radius = asteroid.radius;
 	
 	that.render = function() {
 		graphics.drawImage(asteroid);

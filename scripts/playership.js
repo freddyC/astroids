@@ -22,7 +22,8 @@ MYGAME.playerShip = function(spec, graphics) {
 				 acceleration: spec.acceleration,
 				 direction: 0,
 				 speed: 0,
-				 rotation: 0 },
+				 rotation: 0,
+				 polyPoints: spec.polyPoints},
 				 
 		shipShouldAccel = function() {
 			isAccelerating = true;
@@ -59,6 +60,8 @@ MYGAME.playerShip = function(spec, graphics) {
 				}
 			}
 		},
+		
+		
 		
 		moveShip = function(elapsedTime) {
 			
@@ -144,7 +147,18 @@ MYGAME.playerShip = function(spec, graphics) {
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, fireLaserKeyPressed);
-		
+	
+	that.getShipPolygon = function() {
+		var poly = [], i, x, y;
+		for(i = 0; i < ship.polyPoints.length;i++ ) {
+			x = ship.center.x + Math.sin(ship.rotation + ship.polyPoints[i].angle) * ship.polyPoints[i].distance;
+			y = ship.center.y + Math.cos(ship.rotation + ship.polyPoints[i].angle) * ship.polyPoints[i].distance;
+			poly.push({x:x,y:y});
+		}
+		//console.log('x: ' + poly[0].x + '  y: ' + poly[0].y);
+		return poly;
+	};
+	
 	that.update = function(elapsedTime) {
 		// Update ship code here
 		isAccelerating = false;

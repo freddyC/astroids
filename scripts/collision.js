@@ -45,9 +45,20 @@ function isLineSegmentInCircle (p1, p2, circle) {
 	return isPointInCircle(intercept, circle) && isPointInSection(intercept, p1, p2);
 };
 
-var p1 = {x:1,y:7};
-var p2 = {x:0,y:5};
-var circle = {point:{x:2,y:2},radius:2};
+function isPolygonInCircle(poly, circle) {
+	if (poly.length < 3) {
+		return false;
+	}
+	var i, p1, p2;
+	for (i = 0; i < poly.length - 1; i++) {
+		p1 = poly[i];
+		p2 = poly[i+1];
+		if (isLineSegmentInCircle (p1, p2, circle)) {
+			return true;
+		}
+	}
+	return isLineSegmentInCircle (poly[0], poly[poly.length-1], circle);
+};
 
 
 

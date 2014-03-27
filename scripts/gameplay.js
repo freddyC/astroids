@@ -79,6 +79,23 @@ MYGAME.screens['game-play'] = (function() {
 			MYGAME.lasers[i].render();
 		}
 		
+		var shipPoly = playerShip.getShipPolygon();
+		
+		
+		for (i = 0; i < mediumAsteroids.length; i++) {
+			if (isPolygonInCircle(shipPoly, {point: mediumAsteroids[i].center, radius: mediumAsteroids[i].radius})) {
+				console.log('Collision with medium asteroid!');
+			}
+		}
+		
+		for (i = 0; i < largeAsteroids.length; i++) {
+			if (isPolygonInCircle(shipPoly, {point: largeAsteroids[i].center, radius: largeAsteroids[i].radius})) {
+				console.log('Collision with large asteroid!');
+			}
+		}
+
+		
+		
 		if (!cancelNextRequest) {
 			requestAnimationFrame(gameLoop);
 		}
@@ -102,7 +119,13 @@ MYGAME.screens['game-play'] = (function() {
 				 //width: 400,
 				 //height: 510,
 				 acceleration: 10,
-				 center: { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+				 center: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+				 polyPoints : [{angle: 0, distance: 38},
+				               {angle: Math.PI / 2, distance: 32.5},
+				               {angle: Math.PI - 0.7156, distance: 47},
+				               {angle: Math.PI + 0.7156, distance: 47},
+				               {angle: Math.PI * 3 / 2, distance: 32.5}
+				              ]
 		};
 		
 		playerShip = MYGAME.playerShip(shipSpec, MYGAME.graphics);
@@ -122,6 +145,7 @@ MYGAME.screens['game-play'] = (function() {
 		for (i = 0; i < 8; i++) {
 			asteroidSpec = { imageArray: mediumAsteroidImageArray,
 							  size: { width: 52, height: 52 },
+							  radius: 21,
 							  center: { x: Random.nextRange(0, window.innerWidth) , y: Random.nextRange(0, window.innerHeight) },
 							  speed: Random.nextRange(100, 300),
 							  secondsToCycle: (Math.random() + 1)
@@ -139,6 +163,7 @@ MYGAME.screens['game-play'] = (function() {
 		for (i = 0; i < 5; i++) {
 			asteroidSpec = { imageArray: largeAsteroidImageArray,
 							  size: { width: 110, height: 110 },
+							  radius: 55,
 							  center: { x: Random.nextRange(0, window.innerWidth) , y: Random.nextRange(0, window.innerHeight) },
 							  speed: Random.nextRange(100, 300),
 							  secondsToCycle: (Math.random() + 1)
