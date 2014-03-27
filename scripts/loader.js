@@ -26,6 +26,7 @@ window.addEventListener('load', function() {
 			'preload!scripts/renderer.js',
 			'preload!scripts/playership.js',
 			'preload!scripts/playershipengine.js',
+			'preload!scripts/shipexplosion.js',
 			'preload!scripts/asteroid.js',
 			'preload!scripts/laser.js',
 			'preload!scripts/input.js',

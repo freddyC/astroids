@@ -148,6 +148,12 @@ MYGAME.playerShip = function(spec, graphics) {
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
 	myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, fireLaserKeyPressed);
 	
+	that.getShipCenter = function () {
+		return JSON.parse(JSON.stringify(ship.center));
+	};
+		
+		
+	
 	that.getShipPolygon = function() {
 		var poly = [], i, x, y;
 		for(i = 0; i < ship.polyPoints.length;i++ ) {

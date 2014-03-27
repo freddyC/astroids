@@ -64,6 +64,8 @@ MYGAME.graphics = (function() {
 	}
 	
 	function drawParticle(spec) {
+		//console.log(spec);
+		
 		context.save();
 		context.translate(spec.center.x, spec.center.y);
 		context.rotate(spec.rotation);

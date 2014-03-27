@@ -9,7 +9,9 @@ MYGAME.screens['game-play'] = (function() {
 		mediumAsteroids = [],
 		largeAsteroids = [],
 		backgroundSnd = new Audio('sounds/background.mp3'),
-		soundSecondsPlayed = 0;
+		soundSecondsPlayed = 0,
+		shipExploder,
+		timeSinceLastCollision = 100;
 	
 	window.onscroll = function () { window.scrollTo(0, 0); };
 	
@@ -23,6 +25,8 @@ MYGAME.screens['game-play'] = (function() {
 		document.getElementById('canvas-main').style.width = '100%';
 
 		MYGAME.lasers = [];
+		
+		shipExploder = MYGAME.shipexplosion();
 		
 		/*
 		myMouse.registerCommand('mouseup', function(e) {
@@ -81,20 +85,28 @@ MYGAME.screens['game-play'] = (function() {
 		
 		var shipPoly = playerShip.getShipPolygon();
 		
+		timeSinceLastCollision += MYGAME.elapsedTime/1000;
 		
 		for (i = 0; i < mediumAsteroids.length; i++) {
 			if (isPolygonInCircle(shipPoly, {point: mediumAsteroids[i].center, radius: mediumAsteroids[i].radius})) {
-				console.log('Collision with medium asteroid!');
+				if (timeSinceLastCollision >= 2) {
+					timeSinceLastCollision = 0;
+					shipExploder.explode(playerShip.getShipCenter());
+				}
 			}
 		}
 		
 		for (i = 0; i < largeAsteroids.length; i++) {
 			if (isPolygonInCircle(shipPoly, {point: largeAsteroids[i].center, radius: largeAsteroids[i].radius})) {
-				console.log('Collision with large asteroid!');
+				if (timeSinceLastCollision >= 2) {
+					timeSinceLastCollision = 0;
+					shipExploder.explode(playerShip.getShipCenter());
+				}
 			}
 		}
 
-		
+		shipExploder.update(MYGAME.elapsedTime);
+		shipExploder.render();
 		
 		if (!cancelNextRequest) {
 			requestAnimationFrame(gameLoop);

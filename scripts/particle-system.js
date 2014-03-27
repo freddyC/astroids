@@ -6,23 +6,27 @@ function particleSystem(spec, graphics) {
 		nextName = 1,	// unique identifier for the next particle
 		particles = {};	// Set of all active particles
 
+	console.log(spec);
+	
 	//------------------------------------------------------------------
 	//
 	// This creates one new particle
 	//
 	//------------------------------------------------------------------
-	that.create = function() {
-		var p = {
+	that.create = function(point) {
+		var	size =  Random.nextGaussian(10, 4),
+		p = {
 				image: spec.image,
-				size: Random.nextGaussian(10, 4),
-				center: {x: spec.center.x, y: spec.center.y},
+				height: size, 
+				width: size,
+				center: point,
 				direction: Random.nextCircleVector(),
 				speed: Random.nextGaussian(spec.speed.mean, spec.speed.stdev), // pixels per second
 				rotation: 0,
 				lifetime: Random.nextGaussian(spec.lifetime.mean, spec.lifetime.stdev),	// How long the particle should live, in seconds
 				alive: 0	// How long the particle has been alive, in seconds
 			};
-		
+		//console.log(p.image);
 		//
 		// Ensure we have a valid size - gaussian numbers can be negative
 		p.size = Math.max(1, p.size);
@@ -89,7 +93,7 @@ function particleSystem(spec, graphics) {
 		for (value in particles) {
 			if (particles.hasOwnProperty(value)) {
 				particle = particles[value];
-				graphics.drawImage(particle);
+				graphics.drawParticle(particle);
 			}
 		}
 	};
