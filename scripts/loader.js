@@ -25,6 +25,7 @@ window.addEventListener('load', function() {
       'preload!scripts/playership.js',
       'preload!scripts/playershipengine.js',
       'preload!scripts/shipexplosion.js',
+      'preload!scripts/asteroidexplosion.js',
       'preload!scripts/asteroid.js',
       'preload!scripts/laser.js',
       'preload!scripts/input.js',
@@ -42,9 +43,15 @@ window.addEventListener('load', function() {
       'preload!images/pew.png',
       'preload!images/klingon_raptor.png'
     ];
+
+  for (i = 1; i <= 19; i++) {
+    load.push('preload!images/asteroid_small/small' + i + '.png');
+  }
+
   for (i = 1; i <= 64; i++) {
     load.push('preload!images/asteroid_medium/medium' + i + '.png');
   }
+
   for (i = 1; i <= 60; i++) {
     load.push('preload!images/asteroid_large/large' + i + '.png');
   }
