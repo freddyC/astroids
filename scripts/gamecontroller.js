@@ -1,19 +1,19 @@
 // 0.7155849933187
 
 MYGAME.gameController = (function() {
-	'use strict';
-	var that = {
-    playerShip: null,
-    shipExploder: null,
-    lasers: null
-  }
-    , mediumAsteroids
+  'use strict';
+  var mediumAsteroids
     , largeAsteroids
     , backgroundSnd
     , soundSecondsPlayed
     , timeSinceLastCollision
+    , that = {
+        playerShip: null,
+        shipExploder: null,
+        lasers: null
+      }
     ;
-  
+
   that.startNewGame = function () {
     backgroundSnd = new Audio('sounds/background.mp3');
     soundSecondsPlayed = 0;
@@ -31,7 +31,7 @@ MYGAME.gameController = (function() {
   that.update = function (elapsedTime) {
     that.playerShip.update(elapsedTime);
     that.shipExploder.update(elapsedTime);
-    
+
     updateSound(elapsedTime);
     updateAsteroids(elapsedTime);
     updateLasers(elapsedTime);
