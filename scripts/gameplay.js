@@ -5,6 +5,7 @@ MYGAME.screens['game-play'] = (function() {
 	
 	var myMouse = MYGAME.input.Mouse()
 		, cancelNextRequest = false
+		, lastTimeStamp
 		;
 		// playerShip = null,
 		// mediumAsteroids = [],
@@ -53,26 +54,40 @@ MYGAME.screens['game-play'] = (function() {
 	// This is the Game Loop function!
 	//
 	//------------------------------------------------------------------
-	function gameLoop(time) {
-		MYGAME.elapsedTime = time - MYGAME.lastTimeStamp;
-		MYGAME.lastTimeStamp = time;
+  function gameLoop(time) {
+    var elapsedTime = time - lastTimeStamp;
+    lastTimeStamp = time;
+
+    update(elapsedTime);
+  }
+
+  function update (elapsedTime) {
+    MYGAME.gameController.update(elapsedTime);
+    render();
+  }
+
+  function render () {
+    MYGAME.graphics.clear();
+    MYGAME.gameController.render();
+
+    if (!cancelNextRequest) {
+      requestAnimationFrame(gameLoop);
+    }
+  }
+
+
+
 
 		//myMouse.update(MYGAME.elapsedTime);
 
-		MYGAME.gameController.updateSound(MYGAME.elapsedTime);
 		// backgroundSound(MYGAME.elapsedTime / 1000);
 		
-		MYGAME.graphics.clear();
 		
 		// Do updates and render here
-		MYGAME.gameController.update
 
-		MYGAME.gameController.playerShip.update(MYGAME.elapsedTime);
-		MYGAME.gameController.playerShip.render();
 		// playerShip.update(MYGAME.elapsedTime);
 		// playerShip.render();
 		
-		MYGAME.gameController.updateAsteroids();
 		// var i;
 		// for (i = 0; i < mediumAsteroids.length; i++) {
 		// 	mediumAsteroids[i].update(MYGAME.elapsedTime);
@@ -84,7 +99,6 @@ MYGAME.screens['game-play'] = (function() {
 		// 	largeAsteroids[i].render();
 		// }
 		
-		MYGAME.gameController.updateLaser();
 		// for (i = 0; i < MYGAME.lasers.length; i++) {
 		// 	MYGAME.lasers[i].update(MYGAME.elapsedTime);
 		// 	MYGAME.lasers[i].render();
@@ -112,17 +126,15 @@ MYGAME.screens['game-play'] = (function() {
 		// 	}
 		// }
 
-		MYGAME.gameController.shipExploder.update(MYGAME.elapsedTime);
-		MYGAME.gameController.shipExploder.render();
-		
-		if (!cancelNextRequest) {
-			requestAnimationFrame(gameLoop);
-		}
-	}
 	
 	function run() {
-		MYGAME.lastTimeStamp = performance.now();
+		lastTimeStamp = performance.now();
 		MYGAME.gameController.startNewGame();
+
+		cancelNextRequest = false;
+		requestAnimationFrame(gameLoop);
+ 	}
+
 		//Create the new game here
 		/*
 		var spec = { image: MYGAME.images['images/enterprise.png'],
@@ -194,9 +206,6 @@ MYGAME.screens['game-play'] = (function() {
 		// backgroundSnd.play();
 		
 		// Start the animation loop
-		cancelNextRequest = false;
-		requestAnimationFrame(gameLoop);
-	}
 	
 	return {
 		initialize : initialize,

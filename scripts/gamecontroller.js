@@ -28,7 +28,24 @@ MYGAME.gameController = (function() {
     that.playerShip = initPlayerShip();
   };
 
-  that.updateSound = function (elapsedSeconds) {
+  that.update = function (elapsedTime) {
+    that.playerShip.update(elapsedTime);
+    that.shipExploder.update(elapsedTime);
+    
+    updateSound(elapsedTime);
+    updateAsteroids(elapsedTime);
+    updateLasers(elapsedTime);
+    updateShipCollision(elapsedTime);
+  }
+
+  that.render = function () {
+    that.playerShip.render();
+    that.shipExploder.render();
+    renderLasers();
+    renderAsteroids();
+  }
+
+  var updateSound = function (elapsedSeconds) {
     elapsedSeconds /= 1000;
     soundSecondsPlayed += elapsedSeconds;
     if (soundSecondsPlayed >= 70) {
@@ -39,32 +56,46 @@ MYGAME.gameController = (function() {
     } 
   };
 
-  that.updateAsteroids = function () {
+  var updateAsteroids = function (elapsedTime) {
     var i;
     for (i = 0; i < mediumAsteroids.length; i++) {
-      mediumAsteroids[i].update(MYGAME.elapsedTime);
+      mediumAsteroids[i].update(elapsedTime);
+    }
+
+    for (i = 0; i < largeAsteroids.length; i++) {
+      largeAsteroids[i].update(elapsedTime);
+    }
+  };
+
+  var renderAsteroids = function () {
+    var i;
+    for (i = 0; i < mediumAsteroids.length; i++) {
       mediumAsteroids[i].render();
     }
 
     for (i = 0; i < largeAsteroids.length; i++) {
-      largeAsteroids[i].update(MYGAME.elapsedTime);
       largeAsteroids[i].render();
     }
   };
 
-  that.updateLaser = function () {
+  var updateLasers = function (elapsedTime) {
     for (var i = 0; i < that.lasers.length; i++) {
-      that.lasers[i].update(MYGAME.elapsedTime);
+      that.lasers[i].update(elapsedTime);
+    }
+  };
+
+  var renderLasers = function () {
+    for (var i = 0; i < that.lasers.length; i++) {
       that.lasers[i].render();
     }
   };
 
-  that.updateShip = function () {
+  var updateShipCollision = function (elapsedTime) {
     var shipPoly = that.playerShip.getShipPolygon();
 
-    timeSinceLastCollision += MYGAME.elapsedTime/1000;
+    timeSinceLastCollision += elapsedTime/1000;
 
-    for (i = 0; i < mediumAsteroids.length; i++) {
+    for (var i = 0; i < mediumAsteroids.length; i++) {
       if (isPolygonInCircle(shipPoly, {point: mediumAsteroids[i].center, radius: mediumAsteroids[i].radius})) {
         if (timeSinceLastCollision >= 2) {
           timeSinceLastCollision = 0;
@@ -73,7 +104,7 @@ MYGAME.gameController = (function() {
       }
     }
 
-    for (i = 0; i < largeAsteroids.length; i++) {
+    for (var i = 0; i < largeAsteroids.length; i++) {
       if (isPolygonInCircle(shipPoly, {point: largeAsteroids[i].center, radius: largeAsteroids[i].radius})) {
         if (timeSinceLastCollision >= 2) {
           timeSinceLastCollision = 0;
