@@ -32,6 +32,7 @@ window.addEventListener('load', function() {
 			'preload!scripts/input.js',
 			'preload!scripts/game.js',
 			'preload!scripts/mainmenu.js',
+			'preload!scripts/gamecontroller.js',
 			'preload!scripts/gameplay.js',
 			'preload!scripts/configurecontrols.js',
 			'preload!scripts/highscores.js',

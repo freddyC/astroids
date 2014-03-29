@@ -45,7 +45,7 @@ MYGAME.playerShip = function(spec, graphics) {
 			secondsSinceLastLaserFired += (elapsedTime / 1000);
 			if (shouldTryToFireLaser) {
 				shouldTryToFireLaser = false;
-				if (MYGAME.lasers.length < 4) {
+				if (MYGAME.gameController.lasers.length < 4) {
 					if (secondsSinceLastLaserFired >= .5) {
 						secondsSinceLastLaserFired = 0;
 						var laserSpec = { image: MYGAME.images['images/pew.png'],
@@ -55,7 +55,7 @@ MYGAME.playerShip = function(spec, graphics) {
 									  	  direction: ship.rotation,
 									  	  lifetime: 3
 										};
-						MYGAME.lasers.push(MYGAME.laser(laserSpec, MYGAME.graphics));
+						MYGAME.gameController.lasers.push(MYGAME.laser(laserSpec, MYGAME.graphics));
 					}
 				}
 			}
