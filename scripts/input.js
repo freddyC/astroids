@@ -101,7 +101,7 @@ MYGAME.input = (function() {
     // Allows the client to invoke all the handlers for the registered key/handlers.
     // ------------------------------------------------------------------
     that.update = function(elapsedTime) {
-      for (key = 0; key < that.handlers.length; key++) {
+      for (var key = 0; key < that.handlers.length; key++) {
         if (typeof that.keys[that.handlers[key].key] !== 'undefined') {
           that.handlers[key].handler(elapsedTime);
         }

@@ -1,22 +1,41 @@
 MYGAME.laser = function(spec, graphics) {
   'use strict';
 
+
+  var that = {},
+    elapsedSeconds = 0,
+    laser = {
+      image : spec.image,
+      size : {
+        width : spec.size.width,
+        height : spec.size.height
+      },
+      center : {
+        x : spec.center.x,
+        y : spec.center.y
+      },
+      speed : spec.speed,
+      direction : spec.direction,
+      rotation : spec.direction,
+      lifetime : spec.lifetime
+    };
+
   var that = {}
     , elapsedSeconds = 0
-    , speed : spec.speed
-    , direction : spec.direction
-    , rotation : spec.direction
-    , lifetime : spec.lifetime
     , laser = {
-        image : spec.image,
-        size : {
-          width : spec.size.width,
-          height : spec.size.height
+        speed: spec.speed,
+        direction: spec.direction,
+        rotation: spec.direction,
+        lifetime: spec.lifetime,
+        image: spec.image,
+        size: {
+          width: spec.size.width,
+          height: spec.size.height
         },
-        center : {
-          x : spec.center.x,
-          y : spec.center.y
-        },
+        center: {
+          x: spec.center.x,
+          y: spec.center.y
+        }
       }
     ;
 
