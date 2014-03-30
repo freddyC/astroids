@@ -56,6 +56,7 @@ MYGAME.gameController = (function() {
     updateAsteroids(elapsedTime);
     updateLasers(elapsedTime);
     updateShipCollision(elapsedTime);
+    updateAsteroidCollision(elapsedTime);
   }
 
   that.render = function () {
@@ -184,6 +185,7 @@ MYGAME.gameController = (function() {
       // Get Center 
       // explode from center
       // create 3 new medium asteroids from the center
+        // use createMediumAsteroid and send in center
       // remove the original asteroid from astroid arr
   }
 
@@ -192,6 +194,7 @@ MYGAME.gameController = (function() {
       // Get Center 
       // explode from center
       // create 4 new small asteroids from the center
+        // use createSmallAsteroid and send in center
       // remove the original asteroid from astroid arr
   }
 

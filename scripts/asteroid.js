@@ -1,8 +1,6 @@
 MYGAME.asteroid = function(spec, graphics) {
   'use strict';
 
-  //console.log(spec.imageArray);
-
   var that = {}
     , elapsedSeconds = 0
     , asteroid = { 
