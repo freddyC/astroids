@@ -4,6 +4,7 @@
   <meta charset = "UTF-8">
   <title>Asteroids</title>
   <link rel = "stylesheet" type = "text/css" href = "/styles/game.css">
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src = "scripts/modernizr.js"></script>
   <script src = "scripts/loader.js"></script>
 </head>
@@ -23,14 +24,30 @@
     </div>
     <div id = "configure-controls" class = "screen">
       <h1>Configure Controls</h1>
-      <p>Coming soon</p>
+      <ul class = "menu">
+        <li><p>Accelerate: <input id = "set-accelerate" type = "text/javascript"></input></p></li>
+        <li><p>Left Turn: <input id = "set-left-turn" type = "text/javascript"></input></p></li>
+        <li><p>Right Turn: <input id = "set-right-turn" type = "text/javascript"></input></p></li>
+        <li><p>Shoot Laser: <input id = "set-shoot" type = "text/javascript"></input></p></li>
+        <li><p>Hyper Shift: <input id = "set-hyper-shift" type = "text/javascript"></input></p></li>
+        <li>
+          <button style="width: 100px;margin: 0 30px;" onclick = "MYGAME.input.updateInput()">Save</button>
+          <button style="width: 100px;margin: 0 30px;" onclick = "MYGAME.input.resetInput()">Reset</button>
+        </li>
+      </ul>
       <ul class = "menu">
         <li><button id = "id-controls-back">Back</button></li>
       </ul>
     </div>
     <div id = "high-scores" class = "screen">
       <h1>High Scores</h1>
-        <p>Coming Soon</p>
+      <table id="scores-table" style="overflow:auto; height: 58%;">
+        <tr>
+          <th>Name</th>
+          <th>Score</th>
+          <th>Date</th>
+        </tr>
+      </table>
       <ul class = "menu">
         <li><button id = "id-high-scores-back">Back</button></li>
       </ul>
