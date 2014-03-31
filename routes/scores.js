@@ -12,7 +12,7 @@ var fs       = require('fs')
 // Report all scores back to the requester.
 //------------------------------------------------------------------
 exports.all = function(request, response) {
-  console.log('find all scores called');
+  console.log('Fetching score history');
   var scores = fs.readFileSync(filename)
   scores = JSON.parse(scores);
 
@@ -24,11 +24,8 @@ exports.all = function(request, response) {
 
   scores.forEach(function (s) {
     var t = moment(s.when).calendar();
-    console.log(t);
     s.when = t
   })
-
-  console.log('t');
 
   response.writeHead(200, {'content-type': 'application/json'});
   response.end(JSON.stringify(scores));
@@ -38,7 +35,6 @@ exports.all = function(request, response) {
 // Add a new score to the server data.
 //------------------------------------------------------------------
 exports.add = function(request, response) {
-  console.log('add new score called');
   var scores = fs.readFileSync(filename)
   scores = JSON.parse(scores);
 
@@ -51,6 +47,8 @@ exports.add = function(request, response) {
   scores.push(newScore);
 
   fs.writeFileSync(filename, JSON.stringify(scores));
+
+  console.log('New Score of', newScore.score, 'by', newScore.name, 'was added');
 
   response.writeHead(200);
   response.end();
