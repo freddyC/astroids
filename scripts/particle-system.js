@@ -14,7 +14,7 @@ function particleSystem(spec, graphics) {
 	//
 	//------------------------------------------------------------------
 	that.create = function(point) {
-		var	size =  Random.nextGaussian(10, 4),
+		var	size =  Random.nextGaussian(spec.size.mean, spec.size.stdev),
 		p = {
 				image: spec.image,
 				height: size, 

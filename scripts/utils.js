@@ -13,18 +13,24 @@ var Angles = (function() {
 	}
 	
 	function halfAngleRatio(angleA, angleB) {
-		var diffOfAngles = Math.abs(normalizer(angleB) - normalizer(angleA));
+		var uX = Math.sin(angleA),
+			uY = Math.cos(angleA),
+			vX = Math.sin(angleB),
+			vY = Math.cos(angleB),
+			dotProduct = (uX * vX) + (uY * vY),
+			divisor = Math.sqrt(Math.pow(uX, 2) + Math.pow(uY, 2)) * Math.sqrt(Math.pow(vX, 2) + Math.pow(vY, 2)),
+			angleDiff = dotProduct/divisor,
+			angle;
 		
-		console.log('angleA: ' + normalizer(angleA));
-		console.log('angleB: ' + normalizer(angleB));
+			if (angleDiff > 1) {
+				angle = Math.acos(1);
+			} else if (angleDiff < -1) {
+				angle = Math.acos(-1);
+			} else {
+				angle = Math.acos(angleDiff);
+			}
 		
-		
-		if (diffOfAngles < (Math.PI / 2)) {
-			console.log(diffOfAngles / Math.PI / 2);
-			return diffOfAngles / Math.PI / 2;
-		}
-		
-		return 0;
+			return (Math.PI / 2 - angle) / (Math.PI / 2);
 	}
 	
 	return {

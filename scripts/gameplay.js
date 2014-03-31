@@ -156,8 +156,8 @@ MYGAME.screens['game-play'] = (function() {
 		
 		for (i = 0; i < 8; i++) {
 			asteroidSpec = { imageArray: mediumAsteroidImageArray,
-							  size: { width: 52, height: 52 },
-							  radius: 21,
+							  size: { width: 64, height: 64 },
+							  radius: 32,
 							  center: { x: Random.nextRange(0, window.innerWidth) , y: Random.nextRange(0, window.innerHeight) },
 							  speed: Random.nextRange(100, 300),
 							  secondsToCycle: (Math.random() + 1)
@@ -174,8 +174,8 @@ MYGAME.screens['game-play'] = (function() {
 		
 		for (i = 0; i < 5; i++) {
 			asteroidSpec = { imageArray: largeAsteroidImageArray,
-							  size: { width: 110, height: 110 },
-							  radius: 55,
+							  size: { width: 120, height: 120 },
+							  radius: 60,
 							  center: { x: Random.nextRange(0, window.innerWidth) , y: Random.nextRange(0, window.innerHeight) },
 							  speed: Random.nextRange(100, 300),
 							  secondsToCycle: (Math.random() + 1)

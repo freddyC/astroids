@@ -44,14 +44,15 @@ MYGAME.playerShip = function(spec, graphics) {
 		laserHandler = function(elapsedTime) {
 			secondsSinceLastLaserFired += (elapsedTime / 1000);
 			if (shouldTryToFireLaser) {
+				console.log('ratio: ' + Angles.halfAngleRatio(ship.direction, ship.rotation));
 				shouldTryToFireLaser = false;
-				if (MYGAME.lasers.length < 4) {
-					if (secondsSinceLastLaserFired >= .5) {
+				if (MYGAME.lasers.length < 40) {
+					if (secondsSinceLastLaserFired >= .25) {
 						secondsSinceLastLaserFired = 0;
 						var laserSpec = { image: MYGAME.images['images/pew.png'],
 									  	  size: { width: 6, height: 34 },
 									  	  center: { x: ship.center.x , y: ship.center.y },
-									  	  speed: 300 + (ship.speed * Angles.halfAngleRatio(ship.direction, ship.rotation)),
+									  	  speed: 600 + (ship.speed * 50 * Angles.halfAngleRatio(ship.direction, ship.rotation)),
 									  	  direction: ship.rotation,
 									  	  lifetime: 3
 										};
@@ -68,11 +69,11 @@ MYGAME.playerShip = function(spec, graphics) {
 			var elapsedSeconds = elapsedTime / 1000;
 			
 			if (isTurningLeft) {
-				ship.rotation -= elapsedSeconds * 4;
+				ship.rotation -= elapsedSeconds * 5;
 			}
 			
 			if (isTurningRight) {
-				ship.rotation += elapsedSeconds * 4;
+				ship.rotation += elapsedSeconds * 5;
 			}
 			
 			if (isAccelerating) {
@@ -117,6 +118,10 @@ MYGAME.playerShip = function(spec, graphics) {
 				}
 			}
 			
+			if (ship.speed > 10) {
+				ship.speed = 10;
+			}
+			
 			ship.center.x += Math.sin(ship.direction) * ship.speed;
 			ship.center.y -= Math.cos(ship.direction) * ship.speed;
 			
@@ -152,7 +157,9 @@ MYGAME.playerShip = function(spec, graphics) {
 		return JSON.parse(JSON.stringify(ship.center));
 	};
 		
-		
+	that.getShipSpeed = function () {
+		return JSON.parse(JSON.stringify(ship.speed));
+	};
 	
 	that.getShipPolygon = function() {
 		var poly = [], i, x, y;
