@@ -57,7 +57,7 @@ MYGAME.playerShip = function(spec, graphics) {
           secondsSinceLastLaserFired = 0;
           var laserSpec = {
             image: MYGAME.images['images/pew.png'],
-            speed: 300 + (ship.speed * Angles.halfAngleRatio(ship.direction, ship.rotation)),
+            speed: 600 + (ship.speed * 50 * Angles.halfAngleRatio(ship.direction, ship.rotation)),
             direction: ship.rotation,
             lifetime: 3,
             size: {
@@ -104,7 +104,7 @@ MYGAME.playerShip = function(spec, graphics) {
       eSpec = {
         shipFacing: ship.rotation,
         speed: {
-          mean: 100,
+          mean: 100 - (ship.speed * 10 * Angles.halfAngleRatio(ship.direction, ship.rotation)),
           stdev: 25
         },
         center: {
@@ -120,7 +120,7 @@ MYGAME.playerShip = function(spec, graphics) {
       eSpec = {
         shipFacing: ship.rotation,
         speed: {
-          mean: 100,
+          mean: 100 - (ship.speed * 10 * Angles.halfAngleRatio(ship.direction, ship.rotation)),
           stdev: 25
         },
         center: {
@@ -139,6 +139,10 @@ MYGAME.playerShip = function(spec, graphics) {
         ship.speed = 0;
       }
     }
+    
+    if (ship.speed > 10) {
+		ship.speed = 10;
+	}
 
     ship.center.x += Math.sin(ship.direction) * ship.speed;
     ship.center.y -= Math.cos(ship.direction) * ship.speed;

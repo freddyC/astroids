@@ -41,7 +41,8 @@ window.addEventListener('load', function() {
       'preload!images/enterprise.png',
       'preload!images/blue.png',
       'preload!images/pew.png',
-      'preload!images/klingon_raptor.png'
+      'preload!images/klingon_raptor.png',
+      'preload!images/redstar.png'
     ];
 
   for (i = 1; i <= 19; i++) {
