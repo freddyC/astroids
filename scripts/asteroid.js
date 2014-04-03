@@ -50,7 +50,10 @@ MYGAME.asteroid = function(spec, graphics) {
 
   that.center = asteroid.center;
   that.radius = asteroid.radius;
-
+  that.getAsteroidCenter = function() {
+	  return JSON.parse(JSON.stringify(asteroid.center));
+  };
+  
   that.render = function() {
     graphics.drawImage(asteroid);
   };

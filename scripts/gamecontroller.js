@@ -282,7 +282,32 @@ MYGAME.gameController = (function() {
   var updateAsteroidCollision = function (elapsedTime) {
     // TODO:
       // Check each asteroid to each laser
-      // if laser hits astroid blow it up
+      // if laser hits asteroid blow it up
+	  var i, j, poly;
+	  for (i = 0; i < that.lasers.length; i++) {
+		  poly = that.lasers[i].getLaserRect();
+		  for (j = 0; j < largeAsteroids.length; j++) {
+			  if (!that.lasers[i].shouldBeDeleted && isPolygonInCircle(poly, {point: largeAsteroids[i].center, radius: largeAsteroids[i].radius})) {
+				  that.lasers[i].shouldBeDeleted = true;
+				  // delete the asteroid here
+				  that.shipExploder.explode(largeAsteroids[i].getAsteroidCenter());
+			  }
+		  }
+		  for (j = 0; j < mediumAsteroids.length; j++) {
+			  if (!that.lasers[i].shouldBeDeleted && isPolygonInCircle(poly, {point: mediumAsteroids[i].center, radius: mediumAsteroids[i].radius})) {
+				  that.lasers[i].shouldBeDeleted = true;
+				  // delete the asteroid here
+				  that.shipExploder.explode(mediumAsteroids[i].getAsteroidCenter());
+			  }
+		  }
+		  for (j = 0; j < smallAsteroids.length; j++) {
+			  if (!that.lasers[i].shouldBeDeleted && isPolygonInCircle(poly, {point: smallAsteroids[i].center, radius: smallAsteroids[i].radius})) {
+				  that.lasers[i].shouldBeDeleted = true;
+				  // delete the asteroid here
+				  that.shipExploder.explode(smallAsteroids[i].getAsteroidCenter());
+			  }
+		  }
+	  }
   };
 
   var initAsteroids = function () {

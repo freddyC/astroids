@@ -2,12 +2,12 @@ MYGAME.shipexplosion = function() {
   'use strict';
 
   var explosionPoints = [],
-	blueParticles = particleSystem( {
-		image : MYGAME.images['images/blue.png'],
+	yellowParticles = particleSystem( {
+		image : MYGAME.images['images/yellowstar.png'],
 		center: {x: 300, y: 300},
 		size: {mean: 12, stdev: 3},
-		speed: {mean: 300, stdev: 75},
-		lifetime: {mean: .6, stdev: .2}
+		speed: {mean: 600, stdev: 150},
+		lifetime: {mean: .3, stdev: .1}
 	},
 	MYGAME.graphics ),
 	redParticles = particleSystem( {
@@ -15,7 +15,7 @@ MYGAME.shipexplosion = function() {
 		center: {x: 300, y: 300},
 		size: {mean: 9, stdev: 2},
 		speed: {mean: 100, stdev: 30},
-		lifetime: {mean: .4, stdev: .15}
+		lifetime: {mean: .3, stdev: .15}
 	},
 	MYGAME.graphics )
 
@@ -26,12 +26,12 @@ function explode(point) {
 function update(time){
 	var elapsedSeconds = time / 1000, i, j, stillAlive = [];
 	
-	blueParticles.update(elapsedSeconds);
+	yellowParticles.update(elapsedSeconds);
 	redParticles.update(elapsedSeconds);
 	
 	for (i = 0; i < explosionPoints.length; i++) {
-		for (j = 0; j < 50; j++) {
-			blueParticles.create(JSON.parse(JSON.stringify(explosionPoints[i].point)));
+		for (j = 0; j < 30; j++) {
+			yellowParticles.create(JSON.parse(JSON.stringify(explosionPoints[i].point)));
 		}
 		for (j = 0; j < 20; j++) {
 			redParticles.create(JSON.parse(JSON.stringify(explosionPoints[i].point)));
@@ -45,7 +45,7 @@ function update(time){
 };
 
 function render(){
-	blueParticles.render();
+	yellowParticles.render();
 	redParticles.render();
 };
 

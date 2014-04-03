@@ -101,10 +101,16 @@ MYGAME.playerShip = function(spec, graphics) {
         ship.direction = ship.direction + Math.PI;
       }
 
+      var speedOffset = 0;
+      
+      if (Angles.halfAngleRatio(ship.direction, ship.rotation) < 0) {
+    	  speedOffset = (ship.speed * 50 * Angles.halfAngleRatio(ship.direction, ship.rotation));
+      }
+      
       eSpec = {
         shipFacing: ship.rotation,
         speed: {
-          mean: 100 - (ship.speed * 10 * Angles.halfAngleRatio(ship.direction, ship.rotation)),
+          mean: 100 - speedOffset,
           stdev: 25
         },
         center: {
@@ -120,7 +126,7 @@ MYGAME.playerShip = function(spec, graphics) {
       eSpec = {
         shipFacing: ship.rotation,
         speed: {
-          mean: 100 - (ship.speed * 10 * Angles.halfAngleRatio(ship.direction, ship.rotation)),
+          mean: 100 - speedOffset,
           stdev: 25
         },
         center: {
