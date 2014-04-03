@@ -83,7 +83,7 @@ MYGAME.gameController = (function() {
     var timeInterval = 5000; // TODO: make a function for this to get harder as game goes on
     if (timeSinceLastAddedAsteroid < timeInterval) return;
     var type = Math.random();
-    // Chances for astroid types:
+    // Chances for asteroid types:
       // 50% large
       // 30% medium
       // 20% small
@@ -180,28 +180,17 @@ MYGAME.gameController = (function() {
     timeSinceLastAddedAsteroid = 0;
   }
 
-  var explodeLargeAsteroid = function (originalAsterioid) {
-    // TODO
-      // Get Center 
-      // explode from center
-      // create 3 new medium asteroids from the center
-        // use createMediumAsteroid and send in center
-      // remove the original asteroid from astroid arr
+  var explodeLargeAsteroid = function (center) {
+    createMediumAsteroid(center);
+    createMediumAsteroid(center);
+    createMediumAsteroid(center);
   }
 
-  var explodeMediumAsteroid = function (originalAsterioid) {
-    // TODO
-      // Get Center 
-      // explode from center
-      // create 4 new small asteroids from the center
-        // use createSmallAsteroid and send in center
-      // remove the original asteroid from astroid arr
-  }
-
-  var explodeSmallAsteroid = function (originalAsterioid) {
-    // TODO
-      // explode from center
-      // remove the original asteroid from astroid arr
+  var explodeMediumAsteroid = function (center) {
+    createSmallAsteroid(center);
+    createSmallAsteroid(center);
+    createSmallAsteroid(center);
+    createSmallAsteroid(center);
   }
 
   var updateAsteroids = function (elapsedTime) {
@@ -279,35 +268,55 @@ MYGAME.gameController = (function() {
     }
   };
 
+  function checkAstroidLaserCollision (laser, poly, asteroid) {
+    var obj = {
+      point: asteroid.center,
+      radius: asteroid.radius
+    };
+    if (!laser.shouldBeDeleted && isPolygonInCircle(poly, obj)) {
+      laser.shouldBeDeleted = true;
+      asteroid.shouldBeDeleted = true;
+      that.asteroidExploder.explode(asteroid.getAsteroidCenter());
+    }
+  }
+
   var updateAsteroidCollision = function (elapsedTime) {
-    // TODO:
-      // Check each asteroid to each laser
-      // if laser hits asteroid blow it up
-	  var i, j, poly;
-	  for (i = 0; i < that.lasers.length; i++) {
-		  poly = that.lasers[i].getLaserRect();
-		  for (j = 0; j < largeAsteroids.length; j++) {
-			  if (!that.lasers[i].shouldBeDeleted && isPolygonInCircle(poly, {point: largeAsteroids[i].center, radius: largeAsteroids[i].radius})) {
-				  that.lasers[i].shouldBeDeleted = true;
-				  // delete the asteroid here
-				  that.shipExploder.explode(largeAsteroids[i].getAsteroidCenter());
-			  }
-		  }
-		  for (j = 0; j < mediumAsteroids.length; j++) {
-			  if (!that.lasers[i].shouldBeDeleted && isPolygonInCircle(poly, {point: mediumAsteroids[i].center, radius: mediumAsteroids[i].radius})) {
-				  that.lasers[i].shouldBeDeleted = true;
-				  // delete the asteroid here
-				  that.shipExploder.explode(mediumAsteroids[i].getAsteroidCenter());
-			  }
-		  }
-		  for (j = 0; j < smallAsteroids.length; j++) {
-			  if (!that.lasers[i].shouldBeDeleted && isPolygonInCircle(poly, {point: smallAsteroids[i].center, radius: smallAsteroids[i].radius})) {
-				  that.lasers[i].shouldBeDeleted = true;
-				  // delete the asteroid here
-				  that.shipExploder.explode(smallAsteroids[i].getAsteroidCenter());
-			  }
-		  }
-	  }
+      that.lasers.forEach(function (laser) {
+        var poly = laser.getLaserRect();
+        largeAsteroids.forEach(function (asteroid) {
+          checkAstroidLaserCollision(laser, poly, asteroid);
+        })
+
+        mediumAsteroids.forEach(function (asteroid) {
+          checkAstroidLaserCollision(laser, poly, asteroid);
+        })
+
+        smallAsteroids.forEach(function (asteroid) {
+          checkAstroidLaserCollision(laser, poly, asteroid);
+        })
+      })
+
+      that.lasers = that.lasers.filter(function (laser) {
+        return !laser.shouldBeDeleted;
+      })
+
+      largeAsteroids = largeAsteroids.filter(function (asteroid) {
+        if (asteroid.shouldBeDeleted) {
+          explodeLargeAsteroid(asteroid.center);
+        }
+        return !asteroid.shouldBeDeleted;
+      })
+
+      mediumAsteroids = mediumAsteroids.filter(function (asteroid) {
+        if (asteroid.shouldBeDeleted) {
+          explodeMediumAsteroid(asteroid.center);
+        }
+        return !asteroid.shouldBeDeleted;
+      })
+
+      smallAsteroids = smallAsteroids.filter(function (asteroid) {
+        return !asteroid.shouldBeDeleted;
+      })
   };
 
   var initAsteroids = function () {

@@ -59,7 +59,3 @@ function isPolygonInCircle(poly, circle) {
   }
   return isLineSegmentInCircle (poly[0], poly[poly.length-1], circle);
 };
-
-
-
-
