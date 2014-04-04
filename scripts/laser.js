@@ -37,33 +37,33 @@ MYGAME.laser = function(spec, graphics) {
           y: spec.center.y
         }
       }
-  	, polyPoints = [
-  	    {
-  	      angle: 0.174532925,
-  	      distance: spec.size.width / 20.0 * 58
-  	    }, {
-  	      angle: Math.PI - 0.174532925,
-    	  distance: spec.size.width / 20.0 * 58
-  	    }, {
-    	  angle: Math.PI + 0.174532925,
+  var polyPoints = [
+        {
+          angle: 0.174532925,
           distance: spec.size.width / 20.0 * 58
-      	}, {
-    	  angle: 2.0 * Math.PI - 0.174532925,
+        }, {
+          angle: Math.PI - 0.174532925,
           distance: spec.size.width / 20.0 * 58
-      	}
-  	  ]
+        }, {
+          angle: Math.PI + 0.174532925,
+          distance: spec.size.width / 20.0 * 58
+        }, {
+          angle: 2.0 * Math.PI - 0.174532925,
+          distance: spec.size.width / 20.0 * 58
+        }
+      ]
     ;
 
   that.shouldBeDeleted = false;
 
   that.getLaserRect = function() {
-	  var poly = [], i, x, y;
-	    for(i = 0; i < polyPoints.length;i++ ) {
-	      x = laser.center.x + Math.sin(laser.rotation + polyPoints[i].angle) * polyPoints[i].distance;
-	      y = laser.center.y + Math.cos(laser.rotation + polyPoints[i].angle) * polyPoints[i].distance;
-	      poly.push({x:x,y:y});
-	    }
-	    return poly;
+    var poly = [], i, x, y;
+      for(i = 0; i < polyPoints.length;i++ ) {
+        x = laser.center.x + Math.sin(laser.rotation + polyPoints[i].angle) * polyPoints[i].distance;
+        y = laser.center.y + Math.cos(laser.rotation + polyPoints[i].angle) * polyPoints[i].distance;
+        poly.push({x:x,y:y});
+      }
+      return poly;
   };
 
 

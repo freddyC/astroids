@@ -150,12 +150,12 @@ MYGAME.gameController = (function() {
     var asteroidSpec = {
       imageArray: (reverse) ? reverseLargeAsteroidImageArray : largeAsteroidImageArray,
       size: {
-        width: 130,
-        height: 130
+        width: 155,
+        height: 155
       },
-      radius: 66,
+      radius: 78,
       center: center,
-      speed: Random.nextRange(75, 200),
+      speed: Random.nextRange(50, 150),
       secondsToCycle: (Math.random() + 1)
     };
 
@@ -178,12 +178,12 @@ MYGAME.gameController = (function() {
     var asteroidSpec = {
       imageArray: (reverse) ? reverseMediumAsteroidImageArray : mediumAsteroidImageArray,
       size: {
-        width: 60,
-        height: 60
+        width: 85,
+        height: 85
       },
-      radius: 30,
+      radius: 43,
       center: center,
-      speed: Random.nextRange(100, 300),
+      speed: Random.nextRange(100, 175),
       secondsToCycle: (Math.random() + 0.75)
     };
 
@@ -206,12 +206,12 @@ MYGAME.gameController = (function() {
     var asteroidSpec = {
       imageArray: (reverse) ? reverseSmallAsteroidImageArray : smallAsteroidImageArray,
       size: {
-        width: 30,
-        height: 30
+        width: 45,
+        height: 45
       },
-      radius: 15,
+      radius: 23,
       center: center,
-      speed: Random.nextRange(200, 375),
+      speed: Random.nextRange(150, 200),
       secondsToCycle: (Math.random() + 0.25)
     };
 

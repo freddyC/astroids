@@ -2,7 +2,7 @@
 /*global MYGAME, console, KeyEvent, requestAnimationFrame, performance */
 MYGAME.screens['game-play'] = (function() {
   'use strict';
-  
+
   var myMouse = MYGAME.input.Mouse()
     , cancelNextRequest = false
     , lastTimeStamp
@@ -27,11 +27,11 @@ MYGAME.screens['game-play'] = (function() {
     lastTimeStamp = time;
 
     update(elapsedTime);
-    
+
     if(MYGAME.gameController.gameInProgress) {
-    	render();
+      render();
     } else {
-    	MYGAME.game.showScreen('main-menu');
+      MYGAME.game.showScreen('main-menu');
     }
     if (!cancelNextRequest) {
         requestAnimationFrame(gameLoop);

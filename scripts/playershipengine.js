@@ -15,7 +15,7 @@ MYGAME.playerShipEngine = function (spec, graphics) {
       , p
       ;
 
-    scale =  Random.nextGaussian(8, 2);
+    scale =  Random.nextGaussian(10, 2);
 
     p = {
       image: spec.image,
@@ -38,7 +38,7 @@ MYGAME.playerShipEngine = function (spec, graphics) {
   };
 
   //------------------------------------------------------------------
-  // Update the state of all particles.  This includes remove any that 
+  // Update the state of all particles.  This includes remove any that
   // have exceeded their lifetime.
   //------------------------------------------------------------------
   that.update = function(elapsedTime) {
