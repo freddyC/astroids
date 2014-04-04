@@ -49,6 +49,11 @@ MYGAME.graphics = (function() {
 	//------------------------------------------------------------------
 	function drawImage(spec) {
 		context.save();
+		
+		if (spec.fade) {
+			context.globalAlpha = spec.fade;
+		}
+		
 		context.translate(spec.center.x, spec.center.y);
 		context.rotate(spec.rotation);
 		context.translate(-spec.center.x, -spec.center.y);

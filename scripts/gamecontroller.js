@@ -7,27 +7,42 @@ MYGAME.gameController = (function() {
     , largeAsteroids
     , backgroundSnd
     , soundSecondsPlayed
-    , timeSinceLastCollision
     , timeSinceLastAddedAsteroid
+    , timeSinceShipWasDestroyed
     , smallAsteroidImageArray
     , reverseSmallAsteroidImageArray
     , mediumAsteroidImageArray
     , reverseMediumAsteroidImageArray
     , largeAsteroidImageArray
     , reverseLargeAsteroidImageArray
+    , remainingShips
     , that = {
         playerShip: null,
+        playerShipIsInvincible: null,
+        playerShipShouldAppear: null,
         shipExploder: null,
         lasers: null,
-        asteroidExploder: null
+        asteroidExploder: null,
+        gameInProgress: null
       }
     ;
+
+  function clearGame () {
+    backgroundSnd.pause();
+    timeSinceLastAddedAsteroid = 5000;
+    timeSinceShipWasDestroyed = 0;
+    smallAsteroids = [];
+    mediumAsteroids = [];
+    largeAsteroids = [];
+    that.lasers = [];
+    that.playerShip = initPlayerShip();
+  }
 
   that.startNewGame = function () {
     backgroundSnd = new Audio('sounds/background.mp3');
     soundSecondsPlayed = 0;
-    timeSinceLastCollision = 100;
     timeSinceLastAddedAsteroid = 5000;
+    timeSinceShipWasDestroyed = 0;
     smallAsteroids = [];
     mediumAsteroids = [];
     largeAsteroids = [];
@@ -37,6 +52,7 @@ MYGAME.gameController = (function() {
     reverseSmallAsteroidImageArray = [];
     reverseMediumAsteroidImageArray = [];
     reverseLargeAsteroidImageArray = [];
+    remainingShips = 3;
 
     initAsteroids();
     backgroundSnd.play();
@@ -44,20 +60,31 @@ MYGAME.gameController = (function() {
     that.shipExploder = MYGAME.shipexplosion();
     that.asteroidExploder = MYGAME.asteroidexplosion();
     that.playerShip = initPlayerShip();
+    that.playerShipIsInvincible = false;
+    that.playerShipShouldAppear = true;
+    that.gameInProgress = true;
   };
 
   that.update = function (elapsedTime) {
+    if (remainingShips < 0) {
+      that.gameInProgress = false;
+      clearGame();
+      return;
+    }
     that.playerShip.update(elapsedTime);
     that.shipExploder.update(elapsedTime);
     that.asteroidExploder.update(elapsedTime);
 
     addAsteroid(elapsedTime);
+    updateDestroyedShip(elapsedTime);
     updateSound(elapsedTime);
     updateAsteroids(elapsedTime);
     updateLasers(elapsedTime);
-    updateShipCollision(elapsedTime);
+    if (!that.playerShipIsInvincible) {
+      updateShipCollision(elapsedTime);
+    }
     updateAsteroidCollision(elapsedTime);
-  }
+  };
 
   that.render = function () {
     that.playerShip.render();
@@ -65,7 +92,19 @@ MYGAME.gameController = (function() {
     renderAsteroids();
     that.asteroidExploder.render();
     that.shipExploder.render();
-  }
+    drawRemainingShips();
+  };
+
+  var updateDestroyedShip = function (elapsedSeconds) {
+    elapsedSeconds /= 1000;
+    timeSinceShipWasDestroyed += elapsedSeconds;
+    if (timeSinceShipWasDestroyed >= 1) {
+      that.playerShipShouldAppear = true;
+    }
+    if (timeSinceShipWasDestroyed >= 4) {
+      that.playerShipIsInvincible = false;
+    }
+  };
 
   var updateSound = function (elapsedSeconds) {
     elapsedSeconds /= 1000;
@@ -235,35 +274,38 @@ MYGAME.gameController = (function() {
     }
   };
 
-  var updateShipCollision = function (elapsedTime) {
-    var shipPoly = that.playerShip.getShipPolygon();
+  var destroyPlayerShip = function() {
+    remainingShips -= 1;
+    timeSinceShipWasDestroyed = 0;
+    that.playerShipIsInvincible = true;
+    that.playerShipShouldAppear = false;
+    that.playerShip.resetShip();
+  };
 
-    timeSinceLastCollision += elapsedTime/1000;
+  var updateShipCollision = function (elapsedTime) {
+    if (that.playerShipIsInvincible) {
+      return;
+    }
+    var shipPoly = that.playerShip.getShipPolygon();
 
     for (var i = 0; i < smallAsteroids.length; i++) {
       if (isPolygonInCircle(shipPoly, {point: smallAsteroids[i].center, radius: smallAsteroids[i].radius})) {
-        if (timeSinceLastCollision >= 2) {
-          timeSinceLastCollision = 0;
           that.shipExploder.explode(that.playerShip.getShipCenter());
-        }
+          destroyPlayerShip();
       }
     }
 
     for (var i = 0; i < mediumAsteroids.length; i++) {
       if (isPolygonInCircle(shipPoly, {point: mediumAsteroids[i].center, radius: mediumAsteroids[i].radius})) {
-        if (timeSinceLastCollision >= 2) {
-          timeSinceLastCollision = 0;
           that.shipExploder.explode(that.playerShip.getShipCenter());
-        }
+          destroyPlayerShip();
       }
     }
 
     for (var i = 0; i < largeAsteroids.length; i++) {
       if (isPolygonInCircle(shipPoly, {point: largeAsteroids[i].center, radius: largeAsteroids[i].radius})) {
-        if (timeSinceLastCollision >= 2) {
-          timeSinceLastCollision = 0;
           that.shipExploder.explode(that.playerShip.getShipCenter());
-        }
+          destroyPlayerShip();
       }
     }
   };
@@ -346,6 +388,27 @@ MYGAME.gameController = (function() {
     reverseLargeAsteroidImageArray = largeAsteroidImageArray.concat([]).reverse();
   }
 
+  var drawRemainingShips = function () {
+    var center = {x: 20, y: 22};
+    var i = 0;
+    for (i = 0; i < remainingShips; i++) {
+      center.x += i;
+
+      var spec = {
+        image: MYGAME.images['images/klingon_raptor.png'],
+        center: center,
+        size: {
+          width: 20,
+          height: 24
+        },
+        rotation: 0
+      };
+
+      MYGAME.graphics.drawImage(spec);
+
+      center.x += 30;
+    }
+  };
 
 
   var initPlayerShip = function () {

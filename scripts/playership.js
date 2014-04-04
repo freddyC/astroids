@@ -28,7 +28,8 @@ MYGAME.playerShip = function(spec, graphics) {
         center: {
           x: spec.center.x,
           y: spec.center.y
-        }
+        },
+        fade: 1.0
       }
     ;
 
@@ -52,14 +53,14 @@ MYGAME.playerShip = function(spec, graphics) {
     secondsSinceLastLaserFired += (elapsedTime / 1000);
     if (shouldTryToFireLaser) {
       shouldTryToFireLaser = false;
-      if (MYGAME.gameController.lasers.length < 4) {
-        if (secondsSinceLastLaserFired >= 0.5) {
+      if (!MYGAME.gameController.playerShipIsInvincible && MYGAME.gameController.lasers.length < 6) {
+        if (secondsSinceLastLaserFired >= 0.3) {
           secondsSinceLastLaserFired = 0;
           var laserSpec = {
             image: MYGAME.images['images/pew.png'],
-            speed: 600 + (ship.speed * 50 * Angles.halfAngleRatio(ship.direction, ship.rotation)),
+            speed: 700 + (ship.speed * 50 * Angles.halfAngleRatio(ship.direction, ship.rotation)),
             direction: ship.rotation,
-            lifetime: 3,
+            lifetime: 2,
             size: {
               width: 6,
               height: 34
@@ -187,7 +188,14 @@ MYGAME.playerShip = function(spec, graphics) {
     return JSON.parse(JSON.stringify(ship.center));
   };
 
-
+  that.resetShip = function() {
+	ship.rotation = 0;
+	ship.direction = 0;
+	ship.speed = 0;
+	ship.center = { x: window.innerWidth / 2,
+	        		y: window.innerHeight / 2
+	    		  };
+  };
 
   that.getShipPolygon = function() {
     var poly = [], i, x, y;
@@ -201,6 +209,10 @@ MYGAME.playerShip = function(spec, graphics) {
   };
 
   that.update = function(elapsedTime) {
+	  if(!MYGAME.gameController.playerShipShouldAppear) {
+		  return;
+	  }
+	  
     // Update ship code here
     isAccelerating = false;
     isTurningLeft = false;
@@ -235,9 +247,16 @@ MYGAME.playerShip = function(spec, graphics) {
   };
 
   that.render = function() {
-    graphics.drawImage(ship);
-    engine1.render();
-    engine2.render();
+	if (MYGAME.gameController.playerShipShouldAppear) {
+	  if (MYGAME.gameController.playerShipIsInvincible) {
+		ship.fade = 0.5;
+	  } else {
+		ship.fade = 1.0;
+	  }
+      graphics.drawImage(ship);
+      engine1.render();
+      engine2.render();
+	}
   };
 
   return that;
