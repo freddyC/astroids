@@ -27,20 +27,24 @@ MYGAME.screens['game-play'] = (function() {
     lastTimeStamp = time;
 
     update(elapsedTime);
+    
+    if(MYGAME.gameController.gameInProgress) {
+    	render();
+    } else {
+    	MYGAME.game.showScreen('main-menu');
+    }
+    if (!cancelNextRequest) {
+        requestAnimationFrame(gameLoop);
+      }
   }
 
   function update (elapsedTime) {
     MYGAME.gameController.update(elapsedTime);
-    render();
   }
 
   function render () {
     MYGAME.graphics.clear();
     MYGAME.gameController.render();
-
-    if (!cancelNextRequest) {
-      requestAnimationFrame(gameLoop);
-    }
   }
 
   function run() {
