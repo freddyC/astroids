@@ -61,10 +61,10 @@ MYGAME.gameController = (function() {
 
   that.render = function () {
     that.playerShip.render();
-    that.shipExploder.render();
-    that.asteroidExploder.render();
     renderLasers();
     renderAsteroids();
+    that.asteroidExploder.render();
+    that.shipExploder.render();
   }
 
   var updateSound = function (elapsedSeconds) {
@@ -75,7 +75,7 @@ MYGAME.gameController = (function() {
       backgroundSnd.pause();
       backgroundSnd.currentTime = 0;
       backgroundSnd.play();
-    } 
+    }
   };
 
   var addAsteroid = function (elapsedTime) {
@@ -138,7 +138,7 @@ MYGAME.gameController = (function() {
 
     var asteroidSpec = {
       imageArray: (reverse) ? reverseMediumAsteroidImageArray : mediumAsteroidImageArray,
-      size: { 
+      size: {
         width: 60,
         height: 60
       },
@@ -349,7 +349,7 @@ MYGAME.gameController = (function() {
 
 
   var initPlayerShip = function () {
-    var shipSpec = { 
+    var shipSpec = {
       image: MYGAME.images['images/klingon_raptor.png'],
       width: 65,
       height: 76,
