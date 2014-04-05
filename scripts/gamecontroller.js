@@ -330,7 +330,7 @@ MYGAME.gameController = (function() {
           babyRoids = babyRoids.concat(explodeMediumAsteroid(asteroid.center));
         } else {
           addPointsToScore(200);
-
+        }
       }
       return !asteroid.shouldBeDeleted;
     })
