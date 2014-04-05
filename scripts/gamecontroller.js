@@ -266,6 +266,9 @@ MYGAME.gameController = (function() {
     that.playerShipIsInvincible = true;
     that.playerShipShouldAppear = false;
     that.playerShip.resetShip();
+    var shipBoomSound = new Audio('sounds/bang.mp3');
+    shipBoomSound.volume = 0.7;
+    shipBoomSound.play();
   };
 
   var updateShipCollision = function (elapsedTime) {
@@ -295,6 +298,9 @@ MYGAME.gameController = (function() {
       laser.shouldBeDeleted = true;
       asteroid.shouldBeDeleted = true;
       that.asteroidExploder.explode(asteroid.getAsteroidCenter());
+      var asteroidBoomSound = new Audio('sounds/asteroid-bang.mp3');
+      asteroidBoomSound.volume = 0.8;
+      asteroidBoomSound.play();
     }
   }
 
