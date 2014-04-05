@@ -5,9 +5,11 @@ MYGAME.playerShip = function(spec, graphics) {
     , isAccelerating = false
     , isTurningLeft = false
     , isTurningRight = false
+    , shouldTryToHyperJump = false
     , isPlayingRocketSound = false
     , shouldTryToFireLaser = false
     , rocketSoundSecondsPlayed = 0
+    , timeSinceLastJump = 0
     , secondsSinceLastLaserFired = 100 // Just some really big number to allow it to fire right away
     , engineSpec
     , engine1
@@ -47,6 +49,12 @@ MYGAME.playerShip = function(spec, graphics) {
 
   var fireLaserKeyPressed = function() {
     shouldTryToFireLaser = true;
+  };
+
+  var hyperJumpKeyPressed = function () {
+    if (timeSinceLastJump > 3) {
+      shouldTryToHyperJump = true;
+    }
   };
 
   var laserHandler = function(elapsedTime) {
@@ -186,6 +194,7 @@ MYGAME.playerShip = function(spec, graphics) {
   myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
   myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
   myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, fireLaserKeyPressed);
+  myKeyboard.registerCommand(KeyEvent.DOM_VK_S, hyperJumpKeyPressed);
 
   that.getShipCenter = function () {
     // copy an object content to new object
@@ -224,6 +233,15 @@ MYGAME.playerShip = function(spec, graphics) {
     moveShip(elapsedTime);
     engine1.update(elapsedTime/1000);
     engine2.update(elapsedTime/1000);
+    timeSinceLastJump += elapsedTime/1000;
+
+    if (shouldTryToHyperJump && timeSinceLastJump > 3) {
+      shouldTryToHyperJump = false;
+      timeSinceLastJump = 0;
+      ship.speed = 0;
+      hyperdriveHandler();
+    }
+
 
     if (isAccelerating !== isPlayingRocketSound) {
       isPlayingRocketSound = isAccelerating;
@@ -248,6 +266,10 @@ MYGAME.playerShip = function(spec, graphics) {
 
     laserHandler(elapsedTime);
   };
+
+  var hyperdriveHandler = function () {
+    ship.center = MYGAME.HyperJump.whereToJump();
+  }
 
   that.render = function() {
   if (MYGAME.gameController.playerShipShouldAppear) {

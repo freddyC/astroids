@@ -35,6 +35,7 @@ MYGAME.asteroid = function(spec, graphics) {
 
     asteroid.center.x += Math.sin(asteroid.direction) * asteroid.speed * elapsedTime / 1000;
     asteroid.center.y -= Math.cos(asteroid.direction) * asteroid.speed * elapsedTime / 1000;
+
     asteroid.futureCenter.x += Math.sin(asteroid.direction) * asteroid.speed * elapsedTime * 2 / 1000;
     asteroid.futureCenter.y -= Math.cos(asteroid.direction) * asteroid.speed * elapsedTime * 2 / 1000;
 
@@ -55,8 +56,12 @@ MYGAME.asteroid = function(spec, graphics) {
   that.center = asteroid.center;
   that.radius = asteroid.radius;
   that.getAsteroidCenter = function() {
-	  return JSON.parse(JSON.stringify(asteroid.center));
+    return JSON.parse(JSON.stringify(asteroid.center));
   };
+
+  that.getAsteroidFuture = function () {
+    return JSON.parse(JSON.stringify(asteroid.futureCenter));
+  }
 
   that.render = function() {
     graphics.drawImage(asteroid);

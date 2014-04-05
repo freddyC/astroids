@@ -18,7 +18,7 @@ MYGAME.gameController = (function() {
     , reverseLargeAsteroidImageArray
     , remainingShips
     , that = {
-        asteroids: asteroids,
+        asteroids: null,
         wave: 0,
         playerShip: null,
         playerShipIsInvincible: null,
@@ -63,6 +63,7 @@ MYGAME.gameController = (function() {
     remainingShips = 3;
     backgroundSnd.play();
     that.lasers = [];
+    that.asteroids = asteroids;
     that.playerShipIsInvincible = false;
     that.playerShipShouldAppear = true;
     that.gameInProgress = true;

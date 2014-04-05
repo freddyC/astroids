@@ -28,6 +28,7 @@ window.addEventListener('load', function() {
       'preload!scripts/asteroidexplosion.js',
       'preload!scripts/asteroid.js',
       'preload!scripts/laser.js',
+      'preload!scripts/hyper-drive.js',
       'preload!scripts/input.js',
       'preload!scripts/game.js',
       'preload!scripts/mainmenu.js',

@@ -1,7 +1,9 @@
-MYGAME.HyperJump = function(spec  , graphics) {
+MYGAME.HyperJump = (function () {
   'use strict';
 
-  var WherToJump = function () {
+  var persicion = 10;
+
+  var whereToJump = function () {
     var grid = getGrid();
     fillgrid(grid);
     return findSafest(grid);
@@ -21,10 +23,13 @@ MYGAME.HyperJump = function(spec  , graphics) {
         }
       }
     }
-    return {
-      x:maxX,
-      y:maxY
+
+    var c = {
+      x: (maxX * persicion) + (persicion/2),
+      y: (maxY * persicion) + (persicion/2)
     };
+    console.log(c);
+    return c;
   }
 
 
@@ -32,22 +37,28 @@ MYGAME.HyperJump = function(spec  , graphics) {
     for (var x = 0; x < grid.length; ++x) {
       for (var y = 0; y < grid[x].length; ++y) {
         var me = {
-          x: x,
-          y: y
+          x: (x * persicion) + (persicion/2),
+          y: (y * persicion) + (persicion/2)
         }
         MYGAME.gameController.asteroids.forEach(function (asteroid) {
-          grid[x,y] += distanceBetweenPoints(me, asteroid.futureCenter)
+          // console.log('me', me);
+          // console.log('asteroid future center', asteroid.getAsteroidFuture())
+          // console.log('center', asteroid.getAsteroidCenter())
+          grid[x][y] += distanceBetweenPoints(me, asteroid.getAsteroidCenter())
         })
       }
     }
   }
 
   var getGrid = function () {
-    var height = window.innerHeight / 10
-      , width  = window.innerWidth / 10
+    var canvas = $('#canvas-main')[0]
+      , width = canvas.width / persicion
+      , height = canvas.height / persicion
       , grid   = []
       , row    = []
       ;
+
+    console.log(width, height);
 
     for (var y = 0; y < width; ++y) {
       row.push(0);
@@ -60,6 +71,6 @@ MYGAME.HyperJump = function(spec  , graphics) {
   }
 
   return {
-    WherToJump: jump
+    whereToJump: whereToJump
   };
-};
+}());
