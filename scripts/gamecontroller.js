@@ -41,6 +41,7 @@ MYGAME.gameController = (function() {
 
   that.init = function () {
     backgroundSnd = new Audio('sounds/background.mp3');
+    backgroundSnd.volume = 0.5;
     smallAsteroidImageArray = [];
     mediumAsteroidImageArray = [];
     largeAsteroidImageArray = [];
@@ -267,7 +268,7 @@ MYGAME.gameController = (function() {
     that.playerShipShouldAppear = false;
     that.playerShip.resetShip();
     var shipBoomSound = new Audio('sounds/bang.mp3');
-    shipBoomSound.volume = 0.7;
+    shipBoomSound.volume = 0.6;
     shipBoomSound.play();
   };
 

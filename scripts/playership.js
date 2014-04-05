@@ -172,11 +172,11 @@ MYGAME.playerShip = function(spec, graphics) {
   };
 
   rocketSnd = new Audio('sounds/rocket.mp3');
-  rocketSnd.volume = 0.3;
+  rocketSnd.volume = 0.4;
 
   engineSpec = {
     image: MYGAME.images['images/blue.png'],
-    lifetime: { mean: 1.25, stdev: 0.5 }
+    lifetime: { mean: 1.0, stdev: 0.5 }
   };
 
   engine1 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
