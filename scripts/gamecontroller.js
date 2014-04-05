@@ -323,19 +323,26 @@ MYGAME.gameController = (function() {
     asteroids = asteroids.filter(function (asteroid) {
       if (asteroid.shouldBeDeleted) {
         if (asteroid.radius == largeAsteroidRadius) {
-          that.score += 100;
+          addPointsToScore(100);
           babyRoids = babyRoids.concat(explodeLargeAsteroid(asteroid.center));
         } else if (asteroid.radius == mediumAsteroidRadius) {
-          that.score += 200;
+          addPointsToScore(200);
           babyRoids = babyRoids.concat(explodeMediumAsteroid(asteroid.center));
         } else {
-          that.score += 200;
-        }
+          addPointsToScore(200);
+
       }
       return !asteroid.shouldBeDeleted;
     })
     asteroids = asteroids.concat(babyRoids);
   };
+
+  var addPointsToScore = function (points) {
+    if (((that.score % 10000) + points) > 10000) {
+      remainingShips += 1;
+    }
+    that.score += points;
+  }
 
   var initAsteroidsImgs = function () {
     var i
