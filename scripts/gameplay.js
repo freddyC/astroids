@@ -13,10 +13,10 @@ MYGAME.screens['game-play'] = (function() {
   };
 
   function initialize() {
-    document.getElementById('canvas-main').height = window.innerHeight;
-    document.getElementById('canvas-main').width = window.innerWidth;
-    document.getElementById('canvas-main').style.height = '100%';
-    document.getElementById('canvas-main').style.width = '100%';
+    $('#canvas-main').height = window.innerHeight;
+    $('#canvas-main').width = window.innerWidth;
+    $('#canvas-main').style.height = '100%';
+    $('#canvas-main').style.width = '100%';
     MYGAME.gameController.init();
   }
 

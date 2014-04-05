@@ -18,6 +18,7 @@ MYGAME.gameController = (function() {
     , reverseLargeAsteroidImageArray
     , remainingShips
     , that = {
+        asteroids: asteroids,
         wave: 0,
         playerShip: null,
         playerShipIsInvincible: null,

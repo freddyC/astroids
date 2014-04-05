@@ -3,7 +3,7 @@ MYGAME.asteroid = function(spec, graphics) {
 
   var that = {}
     , elapsedSeconds = 0
-    , asteroid = { 
+    , asteroid = {
         image: spec.imageArray[0],
         speed: spec.speed,
         direction: Math.random()*2*Math.PI,
@@ -16,7 +16,8 @@ MYGAME.asteroid = function(spec, graphics) {
         center: {
           x: spec.center.x,
           y: spec.center.y
-        }
+        },
+        futureCenter: {}
       }
     ;
 
@@ -34,6 +35,9 @@ MYGAME.asteroid = function(spec, graphics) {
 
     asteroid.center.x += Math.sin(asteroid.direction) * asteroid.speed * elapsedTime / 1000;
     asteroid.center.y -= Math.cos(asteroid.direction) * asteroid.speed * elapsedTime / 1000;
+    asteroid.futureCenter.x += Math.sin(asteroid.direction) * asteroid.speed * elapsedTime * 2 / 1000;
+    asteroid.futureCenter.y -= Math.cos(asteroid.direction) * asteroid.speed * elapsedTime * 2 / 1000;
+
 
     if (asteroid.center.y - asteroid.size.height/2 >= window.innerHeight) {
       asteroid.center.y =  -asteroid.size.height/2;
@@ -53,7 +57,7 @@ MYGAME.asteroid = function(spec, graphics) {
   that.getAsteroidCenter = function() {
 	  return JSON.parse(JSON.stringify(asteroid.center));
   };
-  
+
   that.render = function() {
     graphics.drawImage(asteroid);
   };
