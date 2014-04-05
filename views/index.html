@@ -1,45 +1,45 @@
 <!DOCTYPE HTML>
-<html lang = "en-US">
+<html lang="en-US">
 <head>
-  <meta charset = "UTF-8">
+  <meta charset="UTF-8">
   <title>Asteroids</title>
-  <link rel = "stylesheet" type = "text/css" href = "/styles/game.css">
+  <link rel="stylesheet" type="text/css" href="/styles/game.css">
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src = "scripts/modernizr.js"></script>
-  <script src = "scripts/loader.js"></script>
+  <script src="scripts/modernizr.js"></script>
+  <script src="scripts/loader.js"></script>
 </head>
 <body>
-  <div id = "game">
-    <div id = "main-menu" class = "screen">
-      <ul class = "menu">
-        <li><button id = "id-new-game">New&nbsp;Game</button></li>
-        <li><button id = "id-controls">Configure Controls</button></li>
-        <li><button id = "id-high-scores">High&nbsp;Scores</button></li>
-        <li><button id = "id-help">Help</button></li>
-        <li><button id = "id-about">Credits</button></li>
+  <div id="game">
+    <div id="main-menu" class="screen">
+      <ul class="menu">
+        <li><button id="id-new-game">New&nbsp;Game</button></li>
+        <li><button id="id-controls">Configure Controls</button></li>
+        <li><button id="id-high-scores">High&nbsp;Scores</button></li>
+        <li><button id="id-help">Help</button></li>
+        <li><button id="id-about">Credits</button></li>
       </ul>
     </div>
-    <div id = "game-play" class = "screen">
-      <canvas id = "canvas-main"></canvas>
+    <div id="game-play" class="screen">
+      <canvas id="canvas-main"></canvas>
     </div>
-    <div id = "configure-controls" class = "screen">
+    <div id="configure-controls" class="screen">
       <h1>Configure Controls</h1>
-      <ul class = "menu">
-        <li><p>Accelerate: <input id = "set-accelerate" type = "text/javascript"></input></p></li>
-        <li><p>Left Turn: <input id = "set-left-turn" type = "text/javascript"></input></p></li>
-        <li><p>Right Turn: <input id = "set-right-turn" type = "text/javascript"></input></p></li>
-        <li><p>Shoot Laser: <input id = "set-shoot" type = "text/javascript"></input></p></li>
-        <li><p>Hyper Shift: <input id = "set-hyper-shift" type = "text/javascript"></input></p></li>
+      <ul class="menu">
+        <li><p>Accelerate: <input id="set-accelerate" type="text/javascript"></input></p></li>
+        <li><p>Left Turn: <input id="set-left-turn" type="text/javascript"></input></p></li>
+        <li><p>Right Turn: <input id="set-right-turn" type="text/javascript"></input></p></li>
+        <li><p>Shoot Laser: <input id="set-shoot" type="text/javascript"></input></p></li>
+        <li><p>Hyper Shift: <input id="set-hyper-shift" type="text/javascript"></input></p></li>
         <li>
-          <button style="width: 100px;margin: 0 30px;" onclick = "MYGAME.input.updateInput()">Save</button>
-          <button style="width: 100px;margin: 0 30px;" onclick = "MYGAME.input.resetInput()">Reset</button>
+          <button style="width: 100px;margin: 0 30px;" onclick="MYGAME.input.updateInput()">Save</button>
+          <button style="width: 100px;margin: 0 30px;" onclick="MYGAME.input.resetInput()">Reset</button>
         </li>
       </ul>
-      <ul class = "menu">
-        <li><button id = "id-controls-back">Back</button></li>
+      <ul class="menu">
+        <li><button id="id-controls-back">Back</button></li>
       </ul>
     </div>
-    <div id = "high-scores" class = "screen">
+    <div id="high-scores" class="screen">
       <h1>High Scores</h1>
       <table id="scores-table" style="overflow:auto; height: 58%;">
         <tr>
@@ -48,24 +48,39 @@
           <th>Date</th>
         </tr>
       </table>
-      <ul class = "menu">
-        <li><button id = "id-high-scores-back">Back</button></li>
+      <ul class="menu">
+        <li><button id="id-high-scores-back">Back</button></li>
       </ul>
     </div>
-    <div id = "help" class = "screen">
+    <div id="help" class="screen">
       <h1>Help</h1>
-      <p>Coming soon</p>
-      <ul class = "menu">
-        <li><button id = "id-help-back">Back</button></li>
+      <h6>The objective of the game is to get points.  The only way to get points is by shooting astroids and UFOs.  Here is the point break down:</h6>
+      <p>Large Astroid: 100 points</p>
+      <p>Medium Astroid: 200 points</p>
+      <p>Small Astroid: 300 points</p>
+      <p>Large UFO: 500 points</p>
+      <p>Small UFO: 1000 points</p>
+      <ul class="menu">
+        <li><button id="id-help-back">Back</button></li>
       </ul>
     </div>
-    <div id = "about" class = "screen">
+    <div id="get-player" class="screen">
+      <h1>AND ... your dead</h1>
+      <ul class="menu">
+        <li><p id="players-score"></p></li>
+        <li><p>Your Name: <input id="player-name" type="text"></input></p></li>
+      </ul>
+      <ul class="menu">
+        <li><button id="submit-score-button">Submit</button></li>
+      </ul>
+    </div>
+    <div id="about" class="screen">
       <h1>Credits</h1>
       <p>Game developed by:</p>
       <p>Jesse Rogers</p>
       <p>Fred Christensen</p>
-      <ul class = "menu">
-        <li><button id = "id-about-back">Back</button></li>
+      <ul class="menu">
+        <li><button id="id-about-back">Back</button></li>
       </ul>
     </div>
   </div>

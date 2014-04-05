@@ -17,6 +17,7 @@ MYGAME.screens['game-play'] = (function() {
     document.getElementById('canvas-main').width = window.innerWidth;
     document.getElementById('canvas-main').style.height = '100%';
     document.getElementById('canvas-main').style.width = '100%';
+    MYGAME.gameController.init();
   }
 
   //------------------------------------------------------------------
@@ -26,30 +27,31 @@ MYGAME.screens['game-play'] = (function() {
     var elapsedTime = time - lastTimeStamp;
     lastTimeStamp = time;
 
-    update(elapsedTime);
-
-    if(MYGAME.gameController.gameInProgress) {
-      render();
-    } else {
-      MYGAME.game.showScreen('main-menu');
-    }
-    if (!cancelNextRequest) {
-        requestAnimationFrame(gameLoop);
+    update(elapsedTime, function () {
+      if(MYGAME.gameController.gameInProgress) {
+        render(function () {
+          requestAnimationFrame(gameLoop);
+        });
+      } else {
+        MYGAME.game.showScreen('get-player');
       }
+    });
   }
 
-  function update (elapsedTime) {
+  function update (elapsedTime, cb) {
     MYGAME.gameController.update(elapsedTime);
+    cb();
   }
 
-  function render () {
+  function render (cb) {
     MYGAME.graphics.clear();
     MYGAME.gameController.render();
+    cb();
   }
 
   function run() {
     lastTimeStamp = performance.now();
-    MYGAME.gameController.startNewGame();
+    MYGAME.gameController.run();
 
     cancelNextRequest = false;
     requestAnimationFrame(gameLoop);

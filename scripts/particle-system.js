@@ -6,7 +6,6 @@ function particleSystem(spec, graphics) {
     nextName = 1,  // unique identifier for the next particle
     particles = {};  // Set of all active particles
 
-  console.log(spec);
 
   //------------------------------------------------------------------
   // This creates one new particle
@@ -24,7 +23,6 @@ function particleSystem(spec, graphics) {
         lifetime: Random.nextGaussian(spec.lifetime.mean, spec.lifetime.stdev),  // How long the particle should live, in seconds
         alive: 0  // How long the particle has been alive, in seconds
       };
-    //console.log(p.image);
       // Ensure we have a valid size - gaussian numbers can be negative
     p.size = Math.max(1, p.size);
       // Same thing with lifetime

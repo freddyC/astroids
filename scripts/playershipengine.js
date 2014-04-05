@@ -15,13 +15,13 @@ MYGAME.playerShipEngine = function (spec, graphics) {
       , p
       ;
 
-    scale =  Random.nextGaussian(10, 2);
+    scale =  Random.nextGaussian(14, 2);
 
     p = {
       image: spec.image,
       width: scale,
       height: scale,
-      direction: Random.nextGaussian(((engineInfo.shipFacing + Math.PI) % (2*Math.PI)), (Math.PI / 32)),
+      direction: Random.nextGaussian(((engineInfo.shipFacing + Math.PI) % (2*Math.PI)), (Math.PI / 20)),
       speed: Random.nextGaussian(engineInfo.speed.mean, engineInfo.speed.stdev), // pixels per second
       rotation: 0,
       lifetime: Random.nextGaussian(spec.lifetime.mean, spec.lifetime.stdev),  // How long the particle should live, in seconds

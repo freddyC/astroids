@@ -13,11 +13,11 @@ MYGAME.asteroidexplosion = function () {
           stdev: 3
         },
         speed: {
-          mean: 600,
-          stdev: 150
+          mean: 300,
+          stdev: 70
         },
         lifetime: {
-          mean: 0.3,
+          mean: 0.25,
           stdev: 0.1
         }
       }, MYGAME.graphics
@@ -36,11 +36,11 @@ MYGAME.asteroidexplosion = function () {
           stdev: 2
         },
         speed: {
-          mean: 100,
+          mean: 140,
           stdev: 30
         },
         lifetime: {
-          mean: 0.3,
+          mean: 0.2,
           stdev: 0.15
         }
       }, MYGAME.graphics

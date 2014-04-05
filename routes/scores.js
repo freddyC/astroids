@@ -13,18 +13,17 @@ var fs       = require('fs')
 //------------------------------------------------------------------
 exports.all = function(request, response) {
   console.log('Fetching score history');
-  var scores = fs.readFileSync(filename)
+  var scores = [];
+  scores = fs.readFileSync(filename);
   scores = JSON.parse(scores);
 
   scores.sort(function (a, b) {
-    if (a.score > b.score) return -1;
-    if (a.score < b.score) return 1;
-    return 0;
+    return (parseInt(a.score) < parseInt(b.score));
   });
 
-  scores.forEach(function (s) {
-    var t = moment(s.when).calendar();
-    s.when = t
+  scores.forEach(function (score) {
+    var t = moment(score.when).calendar();
+    score.when = t
   })
 
   response.writeHead(200, {'content-type': 'application/json'});
@@ -38,13 +37,19 @@ exports.add = function(request, response) {
   var scores = fs.readFileSync(filename)
   scores = JSON.parse(scores);
 
-  newScores =  {
+  var newScore =  {
     name : request.query.name,
     score : request.query.score,
     when : Date.now()
   };
 
   scores.push(newScore);
+
+  scores.sort(function (a, b) {
+    return (parseInt(a.score) < parseInt(b.score));
+  });
+
+  scores = scores.slice(0, 10);
 
   fs.writeFileSync(filename, JSON.stringify(scores));
 

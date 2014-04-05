@@ -6,23 +6,30 @@ MYGAME.screens['high-scores'] = (function() {
   function initialize() {
     document.getElementById('id-high-scores-back').addEventListener(
       'click',
-      function() { 
+      function() {
         MYGAME.game.showScreen('main-menu');
         $('#game').css('overflow', 'initial');
       },
       false);
   }
 
+
   function addScore() {
-    var name = $('#id-playerName').val(),
-      score = $('#id-playerScore').val();
-    
+    var name = $('#player-name').val()
+      , score = MYGAME.gameController.score
+      ;
+
     $.ajax({
       url: 'http://localhost:3000/v1/high-scores?name=' + name + '&score=' + score,
       type: 'POST',
-      error: function() { alert('POST failed'); },
-      success: function() {
-        showScores();
+      error: function() {
+        alert('POST failed, score not saved');
+      },
+      success: function(err, res) {
+        if (err) {
+          console.log(err);
+        }
+        MYGAME.game.showScreen('high-scores');
       }
     });
   }
@@ -38,9 +45,9 @@ MYGAME.screens['high-scores'] = (function() {
       error: function() { alert('GET failed'); },
       success: function(data) {
         var table = $('#scores-table')[0];
-
-        console.log(data.length);
-        console.log(data);
+        for (var i = table.rows.length -1; i > 0; --i) {
+          table.deleteRow(i);
+        }
 
         for (var i = 0; i < data.length; i++) {
           var row   = table.insertRow(1 + i)

@@ -35,6 +35,7 @@ window.addEventListener('load', function() {
       'preload!scripts/gameplay.js',
       'preload!scripts/configurecontrols.js',
       'preload!scripts/highscores.js',
+      'preload!scripts/score-save.js',
       'preload!scripts/help.js',
       'preload!scripts/about.js',
       'preload!images/ship.png',
@@ -75,7 +76,6 @@ window.addEventListener('load', function() {
 // * Tracks how many have been loaded
 // * Places images into the 'images' object
 yepnope.addPrefix('preload', function(resource) {
-  console.log('preloading: ' + resource.url);
 
   MYGAME.status.preloadRequest += 1;
   var isImage = /.+\.(jpg|png|gif)$/i.test(resource.url);

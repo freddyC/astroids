@@ -14,7 +14,7 @@ MYGAME.playerShip = function(spec, graphics) {
     , engine2
     , rocketSnd
     , myKeyboard = MYGAME.input.Keyboard()
-    , ship = { 
+    , ship = {
         image: spec.image,
         acceleration: spec.acceleration,
         direction: 0,
@@ -80,11 +80,11 @@ MYGAME.playerShip = function(spec, graphics) {
     var elapsedSeconds = elapsedTime / 1000;
 
     if (isTurningLeft) {
-      ship.rotation -= elapsedSeconds * 4;
+      ship.rotation -= elapsedSeconds * 5;
     }
 
     if (isTurningRight) {
-      ship.rotation += elapsedSeconds * 4;
+      ship.rotation += elapsedSeconds * 5;
     }
 
     if (isAccelerating) {
@@ -103,11 +103,11 @@ MYGAME.playerShip = function(spec, graphics) {
       }
 
       var speedOffset = 0;
-      
+
       if (Angles.halfAngleRatio(ship.direction, ship.rotation) < 0) {
-    	  speedOffset = (ship.speed * 50 * Angles.halfAngleRatio(ship.direction, ship.rotation));
+        speedOffset = (ship.speed * 50 * Angles.halfAngleRatio(ship.direction, ship.rotation));
       }
-      
+
       eSpec = {
         shipFacing: ship.rotation,
         speed: {
@@ -120,9 +120,9 @@ MYGAME.playerShip = function(spec, graphics) {
         }
       };
 
-      engine1.create(eSpec);
-      engine1.create(eSpec);
-      engine1.create(eSpec);
+      for (var i = 0; i < 15; ++i) {
+        engine1.create(eSpec);
+      }
 
       eSpec = {
         shipFacing: ship.rotation,
@@ -136,9 +136,9 @@ MYGAME.playerShip = function(spec, graphics) {
         }
       };
 
-      engine2.create(eSpec);
-      engine2.create(eSpec);
-      engine2.create(eSpec);
+      for (var i = 0; i < 15; ++i) {
+        engine2.create(eSpec);
+      }
 
     } else {
       //ship.speed = ship.speed - ship.acceleration * elapsedSeconds / 8;
@@ -146,10 +146,10 @@ MYGAME.playerShip = function(spec, graphics) {
         ship.speed = 0;
       }
     }
-    
+
     if (ship.speed > 10) {
-		ship.speed = 10;
-	}
+    ship.speed = 10;
+  }
 
     ship.center.x += Math.sin(ship.direction) * ship.speed;
     ship.center.y -= Math.cos(ship.direction) * ship.speed;
@@ -172,7 +172,7 @@ MYGAME.playerShip = function(spec, graphics) {
 
   engineSpec = {
     image: MYGAME.images['images/blue.png'],
-    lifetime: { mean: 2, stdev: .5 }
+    lifetime: { mean: 1.25, stdev: 0.5 }
   };
 
   engine1 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
@@ -189,12 +189,12 @@ MYGAME.playerShip = function(spec, graphics) {
   };
 
   that.resetShip = function() {
-	ship.rotation = 0;
-	ship.direction = 0;
-	ship.speed = 0;
-	ship.center = { x: window.innerWidth / 2,
-	        		y: window.innerHeight / 2
-	    		  };
+  ship.rotation = 0;
+  ship.direction = 0;
+  ship.speed = 0;
+  ship.center = { x: window.innerWidth / 2,
+              y: window.innerHeight / 2
+            };
   };
 
   that.getShipPolygon = function() {
@@ -204,15 +204,14 @@ MYGAME.playerShip = function(spec, graphics) {
       y = ship.center.y + Math.cos(ship.rotation + ship.polyPoints[i].angle) * ship.polyPoints[i].distance;
       poly.push({x:x,y:y});
     }
-    //console.log('x: ' + poly[0].x + '  y: ' + poly[0].y);
     return poly;
   };
 
   that.update = function(elapsedTime) {
-	  if(!MYGAME.gameController.playerShipShouldAppear) {
-		  return;
-	  }
-	  
+    if(!MYGAME.gameController.playerShipShouldAppear) {
+      return;
+    }
+
     // Update ship code here
     isAccelerating = false;
     isTurningLeft = false;
@@ -247,16 +246,16 @@ MYGAME.playerShip = function(spec, graphics) {
   };
 
   that.render = function() {
-	if (MYGAME.gameController.playerShipShouldAppear) {
-	  if (MYGAME.gameController.playerShipIsInvincible) {
-		ship.fade = 0.5;
-	  } else {
-		ship.fade = 1.0;
-	  }
+  if (MYGAME.gameController.playerShipShouldAppear) {
+    if (MYGAME.gameController.playerShipIsInvincible) {
+    ship.fade = 0.5;
+    } else {
+    ship.fade = 1.0;
+    }
       graphics.drawImage(ship);
       engine1.render();
       engine2.render();
-	}
+  }
   };
 
   return that;

@@ -2,12 +2,13 @@
 
 MYGAME.gameController = (function() {
   'use strict';
-  var smallAsteroids
-    , mediumAsteroids
-    , largeAsteroids
+
+  var asteroids
+    , largeAsteroidRadius
+    , mediumAsteroidRadius
+    , smallAsteroidRadius
     , backgroundSnd
     , soundSecondsPlayed
-    , timeSinceLastAddedAsteroid
     , timeSinceShipWasDestroyed
     , smallAsteroidImageArray
     , reverseSmallAsteroidImageArray
@@ -17,52 +18,53 @@ MYGAME.gameController = (function() {
     , reverseLargeAsteroidImageArray
     , remainingShips
     , that = {
+        wave: 0,
         playerShip: null,
         playerShipIsInvincible: null,
         playerShipShouldAppear: null,
         shipExploder: null,
         lasers: null,
         asteroidExploder: null,
-        gameInProgress: null
+        gameInProgress: null,
+        score: 0
       }
     ;
 
   function clearGame () {
     backgroundSnd.pause();
-    timeSinceLastAddedAsteroid = 5000;
     timeSinceShipWasDestroyed = 0;
-    smallAsteroids = [];
-    mediumAsteroids = [];
-    largeAsteroids = [];
+    asteroids = [];
     that.lasers = [];
     that.playerShip = initPlayerShip();
+    that.wave = 0;
   }
 
-  that.startNewGame = function () {
+  that.init = function () {
     backgroundSnd = new Audio('sounds/background.mp3');
-    soundSecondsPlayed = 0;
-    timeSinceLastAddedAsteroid = 5000;
-    timeSinceShipWasDestroyed = 0;
-    smallAsteroids = [];
-    mediumAsteroids = [];
-    largeAsteroids = [];
     smallAsteroidImageArray = [];
     mediumAsteroidImageArray = [];
     largeAsteroidImageArray = [];
     reverseSmallAsteroidImageArray = [];
     reverseMediumAsteroidImageArray = [];
     reverseLargeAsteroidImageArray = [];
-    remainingShips = 3;
-
-    initAsteroids();
-    backgroundSnd.play();
-    that.lasers = [];
+    initAsteroidsImgs();
     that.shipExploder = MYGAME.shipexplosion();
     that.asteroidExploder = MYGAME.asteroidexplosion();
     that.playerShip = initPlayerShip();
+  }
+
+  that.run = function () {
+    soundSecondsPlayed = 0;
+    timeSinceShipWasDestroyed = 0;
+    asteroids = [];
+
+    remainingShips = 3;
+    backgroundSnd.play();
+    that.lasers = [];
     that.playerShipIsInvincible = false;
     that.playerShipShouldAppear = true;
     that.gameInProgress = true;
+    that.wave = 0;
   };
 
   that.update = function (elapsedTime) {
@@ -71,26 +73,26 @@ MYGAME.gameController = (function() {
       clearGame();
       return;
     }
+    if (asteroids.length == 0) {
+      addAsteroid();
+    }
+
     that.playerShip.update(elapsedTime);
     that.shipExploder.update(elapsedTime);
     that.asteroidExploder.update(elapsedTime);
-
-    addAsteroid(elapsedTime);
     updateDestroyedShip(elapsedTime);
     updateSound(elapsedTime);
     updateAsteroids(elapsedTime);
     updateLasers(elapsedTime);
-    if (!that.playerShipIsInvincible) {
-      updateShipCollision(elapsedTime);
-    }
+    updateShipCollision(elapsedTime);
     updateAsteroidCollision(elapsedTime);
   };
 
   that.render = function () {
     that.playerShip.render();
     renderLasers();
-    renderAsteroids();
     that.asteroidExploder.render();
+    renderAsteroids();
     that.shipExploder.render();
     drawRemainingShips();
   };
@@ -117,149 +119,133 @@ MYGAME.gameController = (function() {
     }
   };
 
-  var addAsteroid = function (elapsedTime) {
-    timeSinceLastAddedAsteroid += elapsedTime;
-    var timeInterval = 5000; // TODO: make a function for this to get harder as game goes on
-    if (timeSinceLastAddedAsteroid < timeInterval) return;
-    var type = Math.random();
-    // Chances for asteroid types:
-      // 50% large
-      // 30% medium
-      // 20% small
-    if (type > 0.5) {
-      createLargeAsteroid();
-    } else if (type > 0.2) {
-      createMediumAsteroid();
-    } else {
-      createSmallAsteroid();
+  var addAsteroid = function () {
+    ++that.wave;
+    for (var i = 0; i < that.wave + that.wave/2; ++i) {
+      asteroids.push(createLargeAsteroid());
     }
   }
 
   var createLargeAsteroid = function (center) {
     var fromTop = (Math.random() < 0.5)
       , reverse = (Math.random() < 0.5)
+      , sideLength = 175
+      , radius = sideLength / 2
       ;
+
+    largeAsteroidRadius = radius;
 
     if (!center) {
       center = {
-        x: (fromTop) ? Random.nextRange(0, window.innerWidth) : 0 - 65,
-        y: (fromTop) ? 0 - 65: Random.nextRange(0, window.innerHeight)
+        x: (fromTop) ? Random.nextRange(0, window.innerWidth) : 0 - radius,
+        y: (fromTop) ? 0 - radius: Random.nextRange(0, window.innerHeight)
       };
     }
 
     var asteroidSpec = {
       imageArray: (reverse) ? reverseLargeAsteroidImageArray : largeAsteroidImageArray,
       size: {
-        width: 155,
-        height: 155
+        width: sideLength,
+        height: sideLength
       },
-      radius: 78,
+      radius: radius,
       center: center,
-      speed: Random.nextRange(50, 150),
+      speed: Random.nextRange(50, 125),
       secondsToCycle: (Math.random() + 1)
     };
 
-    largeAsteroids.push(MYGAME.asteroid(asteroidSpec, MYGAME.graphics));
-    timeSinceLastAddedAsteroid = 0;
+    return MYGAME.asteroid(asteroidSpec, MYGAME.graphics);
   }
 
   var createMediumAsteroid = function (center) {
     var fromTop = (Math.random() < 0.5)
       , reverse = (Math.random() < 0.5)
+      , sideLength = 85
+      , radius = sideLength / 2
       ;
+
+    mediumAsteroidRadius = radius;
 
     if (!center) {
       center = {
-        x: (fromTop) ? Random.nextRange(0, window.innerWidth) : 0 - 29,
-        y: (fromTop) ? 0 - 29: Random.nextRange(0, window.innerHeight)
+        x: (fromTop) ? Random.nextRange(0, window.innerWidth) : 0 - radius,
+        y: (fromTop) ? 0 - radius: Random.nextRange(0, window.innerHeight)
       };
     }
 
     var asteroidSpec = {
       imageArray: (reverse) ? reverseMediumAsteroidImageArray : mediumAsteroidImageArray,
       size: {
-        width: 85,
-        height: 85
+        width: sideLength,
+        height: sideLength
       },
-      radius: 43,
+      radius: radius,
       center: center,
       speed: Random.nextRange(100, 175),
-      secondsToCycle: (Math.random() + 0.75)
+      secondsToCycle: (Math.random() + 0.8)
     };
 
-    mediumAsteroids.push(MYGAME.asteroid(asteroidSpec, MYGAME.graphics));
-    timeSinceLastAddedAsteroid = 0;
+    return MYGAME.asteroid(asteroidSpec, MYGAME.graphics);
   }
 
   var createSmallAsteroid = function (center) {
     var fromTop = (Math.random() < 0.5)
       , reverse = (Math.random() < 0.5)
+      , sideLength = 45
+      , radius = sideLength / 2
       ;
+
+    smallAsteroidRadius = radius;
 
     if (!center) {
       center = {
-        x: (fromTop) ? Random.nextRange(0, window.innerWidth) : 0 - 14,
-        y: (fromTop) ? 0 - 14: Random.nextRange(0, window.innerHeight)
+        x: (fromTop) ? Random.nextRange(0, window.innerWidth) : 0 - radius,
+        y: (fromTop) ? 0 - radius: Random.nextRange(0, window.innerHeight)
       };
     }
 
     var asteroidSpec = {
       imageArray: (reverse) ? reverseSmallAsteroidImageArray : smallAsteroidImageArray,
       size: {
-        width: 45,
-        height: 45
+        width: sideLength,
+        height: sideLength
       },
-      radius: 23,
+      radius: radius,
       center: center,
       speed: Random.nextRange(150, 200),
       secondsToCycle: (Math.random() + 0.25)
     };
 
-    smallAsteroids.push(MYGAME.asteroid(asteroidSpec, MYGAME.graphics));
-    timeSinceLastAddedAsteroid = 0;
+    return MYGAME.asteroid(asteroidSpec, MYGAME.graphics);
   }
 
   var explodeLargeAsteroid = function (center) {
-    createMediumAsteroid(center);
-    createMediumAsteroid(center);
-    createMediumAsteroid(center);
+    var a = [];
+    a.push(createMediumAsteroid(center));
+    a.push(createMediumAsteroid(center));
+    a.push(createMediumAsteroid(center));
+    return a;
   }
 
   var explodeMediumAsteroid = function (center) {
-    createSmallAsteroid(center);
-    createSmallAsteroid(center);
-    createSmallAsteroid(center);
-    createSmallAsteroid(center);
+    var a = [];
+    a.push(createSmallAsteroid(center));
+    a.push(createSmallAsteroid(center));
+    a.push(createSmallAsteroid(center));
+    a.push(createSmallAsteroid(center));
+    return a;
   }
 
   var updateAsteroids = function (elapsedTime) {
-    var i;
-    for (i = 0; i < smallAsteroids.length; i++) {
-      smallAsteroids[i].update(elapsedTime);
-    }
-
-    for (i = 0; i < mediumAsteroids.length; i++) {
-      mediumAsteroids[i].update(elapsedTime);
-    }
-
-    for (i = 0; i < largeAsteroids.length; i++) {
-      largeAsteroids[i].update(elapsedTime);
-    }
+    asteroids.forEach(function (asteroid) {
+      asteroid.update(elapsedTime);
+    })
   };
 
   var renderAsteroids = function () {
-    var i;
-    for (i = 0; i < smallAsteroids.length; i++) {
-      smallAsteroids[i].render();
-    }
-
-    for (i = 0; i < mediumAsteroids.length; i++) {
-      mediumAsteroids[i].render();
-    }
-
-    for (i = 0; i < largeAsteroids.length; i++) {
-      largeAsteroids[i].render();
-    }
+    asteroids.forEach(function (asteroid) {
+      asteroid.render();
+    })
   };
 
   var updateLasers = function (elapsedTime) {
@@ -288,29 +274,19 @@ MYGAME.gameController = (function() {
     }
     var shipPoly = that.playerShip.getShipPolygon();
 
-    for (var i = 0; i < smallAsteroids.length; i++) {
-      if (isPolygonInCircle(shipPoly, {point: smallAsteroids[i].center, radius: smallAsteroids[i].radius})) {
-          that.shipExploder.explode(that.playerShip.getShipCenter());
-          destroyPlayerShip();
+    asteroids.forEach(function (asteroid) {
+      var specs = {
+        point: asteroid.center,
+        radius: asteroid.radius
+      };
+      if ( isPolygonInCircle(shipPoly, specs) ) {
+        that.shipExploder.explode(that.playerShip.getShipCenter());
+        destroyPlayerShip();
       }
-    }
-
-    for (var i = 0; i < mediumAsteroids.length; i++) {
-      if (isPolygonInCircle(shipPoly, {point: mediumAsteroids[i].center, radius: mediumAsteroids[i].radius})) {
-          that.shipExploder.explode(that.playerShip.getShipCenter());
-          destroyPlayerShip();
-      }
-    }
-
-    for (var i = 0; i < largeAsteroids.length; i++) {
-      if (isPolygonInCircle(shipPoly, {point: largeAsteroids[i].center, radius: largeAsteroids[i].radius})) {
-          that.shipExploder.explode(that.playerShip.getShipCenter());
-          destroyPlayerShip();
-      }
-    }
+    })
   };
 
-  function checkAstroidLaserCollision (laser, poly, asteroid) {
+  function checkAsteroidLaserCollision (laser, poly, asteroid) {
     var obj = {
       point: asteroid.center,
       radius: asteroid.radius
@@ -323,45 +299,37 @@ MYGAME.gameController = (function() {
   }
 
   var updateAsteroidCollision = function (elapsedTime) {
-      that.lasers.forEach(function (laser) {
-        var poly = laser.getLaserRect();
-        largeAsteroids.forEach(function (asteroid) {
-          checkAstroidLaserCollision(laser, poly, asteroid);
-        })
-
-        mediumAsteroids.forEach(function (asteroid) {
-          checkAstroidLaserCollision(laser, poly, asteroid);
-        })
-
-        smallAsteroids.forEach(function (asteroid) {
-          checkAstroidLaserCollision(laser, poly, asteroid);
-        })
+    that.lasers.forEach(function (laser) {
+      var poly = laser.getLaserRect();
+      asteroids.forEach(function (asteroid) {
+        checkAsteroidLaserCollision(laser, poly, asteroid);
       })
+    })
 
-      that.lasers = that.lasers.filter(function (laser) {
-        return !laser.shouldBeDeleted;
-      })
+    that.lasers = that.lasers.filter(function (laser) {
+      return !laser.shouldBeDeleted;
+    })
 
-      largeAsteroids = largeAsteroids.filter(function (asteroid) {
-        if (asteroid.shouldBeDeleted) {
-          explodeLargeAsteroid(asteroid.center);
+    var babyRoids = [];
+
+    asteroids = asteroids.filter(function (asteroid) {
+      if (asteroid.shouldBeDeleted) {
+        if (asteroid.radius == largeAsteroidRadius) {
+          that.score += 100;
+          babyRoids = babyRoids.concat(explodeLargeAsteroid(asteroid.center));
+        } else if (asteroid.radius == mediumAsteroidRadius) {
+          that.score += 200;
+          babyRoids = babyRoids.concat(explodeMediumAsteroid(asteroid.center));
+        } else {
+          that.score += 200;
         }
-        return !asteroid.shouldBeDeleted;
-      })
-
-      mediumAsteroids = mediumAsteroids.filter(function (asteroid) {
-        if (asteroid.shouldBeDeleted) {
-          explodeMediumAsteroid(asteroid.center);
-        }
-        return !asteroid.shouldBeDeleted;
-      })
-
-      smallAsteroids = smallAsteroids.filter(function (asteroid) {
-        return !asteroid.shouldBeDeleted;
-      })
+      }
+      return !asteroid.shouldBeDeleted;
+    })
+    asteroids = asteroids.concat(babyRoids);
   };
 
-  var initAsteroids = function () {
+  var initAsteroidsImgs = function () {
     var i
       , asteroidSpec
       , imageName
@@ -382,16 +350,18 @@ MYGAME.gameController = (function() {
       largeAsteroidImageArray.push(MYGAME.images[imageName]);
     }
 
-    // concatting to not reverse the old objects
+    // concatting to not reverse the original objects
     reverseSmallAsteroidImageArray = smallAsteroidImageArray.concat([]).reverse();
     reverseMediumAsteroidImageArray = mediumAsteroidImageArray.concat([]).reverse();
     reverseLargeAsteroidImageArray = largeAsteroidImageArray.concat([]).reverse();
   }
 
   var drawRemainingShips = function () {
-    var center = {x: 20, y: 22};
-    var i = 0;
-    for (i = 0; i < remainingShips; i++) {
+    var center = {
+      x: 20,
+      y: 22
+    };
+    for (var i = 0; i < remainingShips; i++) {
       center.x += i;
 
       var spec = {
@@ -405,7 +375,6 @@ MYGAME.gameController = (function() {
       };
 
       MYGAME.graphics.drawImage(spec);
-
       center.x += 30;
     }
   };
