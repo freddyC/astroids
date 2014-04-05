@@ -111,7 +111,7 @@ MYGAME.gameController = (function() {
   var updateSound = function (elapsedSeconds) {
     elapsedSeconds /= 1000;
     soundSecondsPlayed += elapsedSeconds;
-    if (soundSecondsPlayed >= 70) {
+    if (soundSecondsPlayed >= 74) {
       soundSecondsPlayed = 0;
       backgroundSnd.pause();
       backgroundSnd.currentTime = 0;

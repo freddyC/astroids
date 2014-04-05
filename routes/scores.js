@@ -13,8 +13,7 @@ var fs       = require('fs')
 //------------------------------------------------------------------
 exports.all = function(request, response) {
   console.log('Fetching score history');
-  var scores = [];
-  scores = fs.readFileSync(filename);
+  var scores = fs.readFileSync(filename);
   scores = JSON.parse(scores);
 
   scores.sort(function (a, b) {
