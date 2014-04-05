@@ -39,6 +39,8 @@ window.addEventListener('load', function() {
       'preload!scripts/score-save.js',
       'preload!scripts/help.js',
       'preload!scripts/about.js',
+      'preload!scripts/alienship.js',
+      'preload!scripts/alienpew.js',
       'preload!images/ship.png',
       'preload!images/enterprise.png',
       'preload!images/blue.png',
@@ -46,7 +48,9 @@ window.addEventListener('load', function() {
       'preload!images/klingon_raptor.png',
       'preload!images/yellowstar.png',
       'preload!images/redstar.png',
-      'preload!images/blueblow.png'
+      'preload!images/blueblow.png',
+      'preload!images/greencircle.png',
+      'preload!images/ufo1.png'
     ];
 
   for (i = 1; i <= 19; i++) {

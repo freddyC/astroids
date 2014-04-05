@@ -23,8 +23,10 @@ MYGAME.gameController = (function() {
         playerShip: null,
         playerShipIsInvincible: null,
         playerShipShouldAppear: null,
+        alienShips: null,
         shipExploder: null,
         lasers: null,
+        alienLasers: null,
         asteroidExploder: null,
         gameInProgress: null,
         score: 0
@@ -53,13 +55,15 @@ MYGAME.gameController = (function() {
     that.shipExploder = MYGAME.shipexplosion();
     that.asteroidExploder = MYGAME.asteroidexplosion();
     that.playerShip = initPlayerShip();
-  }
+    that.alienShips = [];
+    that.alienLasers = [];
+    createSmallAlienShip();
+  };
 
   that.run = function () {
     soundSecondsPlayed = 0;
     timeSinceShipWasDestroyed = 0;
     asteroids = [];
-
     remainingShips = 3;
     backgroundSnd.play();
     that.lasers = [];
@@ -87,8 +91,10 @@ MYGAME.gameController = (function() {
     updateSound(elapsedTime);
     updateAsteroids(elapsedTime);
     updateLasers(elapsedTime);
+    updateAlienPews(elapsedTime);
     updateShipCollision(elapsedTime);
     updateAsteroidCollision(elapsedTime);
+    updateAlienShips(elapsedTime);
   };
 
   that.render = function () {
@@ -97,6 +103,8 @@ MYGAME.gameController = (function() {
     that.asteroidExploder.render();
     renderAsteroids();
     that.shipExploder.render();
+    renderAlienShips();
+    renderAlienPews();
     drawRemainingShips();
   };
 
@@ -122,6 +130,71 @@ MYGAME.gameController = (function() {
     }
   };
 
+  var updateAlienPews = function (elapsedTime) {
+	  that.alienLasers.forEach(function (alienLaser) {
+		  alienLaser.update(elapsedTime);
+	    });
+	  that.alienLasers = that.alienLasers.filter(function (pew) {
+	      return !pew.shouldBeDeleted;
+	    });
+  };
+  
+  var renderAlienPews = function () {
+	  that.alienLasers.forEach(function (alienLasers) {
+		  alienLasers.render();
+	    });
+  };
+  
+  var updateAlienShips = function (elapsedTime) {
+	  that.alienShips.forEach(function (alienShip) {
+		  alienShip.update(elapsedTime);
+	    });
+  };
+  
+  var renderAlienShips = function () {
+	  that.alienShips.forEach(function (alienShip) {
+		  alienShip.render();
+	    });
+  };
+  
+  var createSmallAlienShip = function () {
+
+	  var spec = {
+                   image: MYGAME.images['images/ufo1.png'],
+			       size: {
+                	   width: 60,
+                	   height: 30
+                   },
+                   center: {
+                	   x: (that.playerShip.getShipCenter().x >= window.innerWidth / 2) ?  40 : (window.innerWidth - 40),
+                       y: (that.playerShip.getShipCenter().y >= window.innerHeight / 2) ? (window.innerHeight - 60) : 60
+                   },
+                   direction: (that.playerShip.getShipCenter().x >= window.innerWidth / 2) ? (Math.PI / 2) : (Math.PI * 3 / 2),
+                   rotation: 0,
+                   speed: 100,
+                   shotFreqency: {
+                	   mean: 3,  
+                	   stdDev: 1
+                   },
+                   shotAccuracy: {
+                	   mean: 0,  
+                	   stdDev: Math.PI / 32
+                   },
+                   collisionCircles: [
+                	   {
+                		 angle: Math.PI / 2,
+                		 distance: 15,
+                		 radius: 17
+                	   }, {
+                		 angle: Math.PI * 3 / 2,
+                		 distance: 15,
+                		 radius: 17
+                	   }
+                   ]
+	            };
+      that.alienShips.push(MYGAME.alienShip(spec, MYGAME.graphics));
+  };
+  
   var addAsteroid = function () {
     ++that.wave;
     for (var i = 0; i < that.wave + that.wave/2; ++i) {
