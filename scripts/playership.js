@@ -74,8 +74,8 @@ MYGAME.playerShip = function(spec, graphics) {
               height: 34
             },
             center: {
-              x: ship.center.x,
-              y: ship.center.y
+              x: ship.center.x + (Math.sin(ship.rotation) * (ship.size.width / 2 + 3)),
+              y: ship.center.y - (Math.cos(ship.rotation) * (ship.size.height / 2 + 14))
             }
           };
           MYGAME.gameController.lasers.push(MYGAME.laser(laserSpec, MYGAME.graphics));
@@ -222,6 +222,8 @@ MYGAME.playerShip = function(spec, graphics) {
 
   that.update = function(elapsedTime) {
     if(!MYGAME.gameController.playerShipShouldAppear) {
+    	engine1.update(elapsedTime/1000);
+        engine2.update(elapsedTime/1000);
       return;
     }
 
@@ -279,9 +281,10 @@ MYGAME.playerShip = function(spec, graphics) {
     ship.fade = 1.0;
     }
       graphics.drawImage(ship);
-      engine1.render();
-      engine2.render();
+      
   }
+  engine1.render();
+  engine2.render();
   };
 
   return that;
