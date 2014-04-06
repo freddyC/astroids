@@ -41,10 +41,11 @@ MYGAME.HyperJump = (function () {
           y: (y * persicion) + (persicion/2)
         }
         MYGAME.gameController.asteroids.forEach(function (asteroid) {
-          // console.log('me', me);
-          // console.log('asteroid future center', asteroid.getAsteroidFuture())
-          // console.log('center', asteroid.getAsteroidCenter())
-          grid[x][y] += distanceBetweenPoints(me, asteroid.getAsteroidCenter())
+          var pos = distanceBetweenPoints(me, asteroid.getAsteroidCenter())
+          me.x *= -1;
+          me.y *= -1;
+          var neg = distanceBetweenPoints(me, asteroid.getAsteroidCenter())
+          grid[x][y] += Math.min(pos, neg);
         })
       }
     }
