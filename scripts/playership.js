@@ -74,8 +74,8 @@ MYGAME.playerShip = function(spec, graphics) {
               height: 34
             },
             center: {
-              x: ship.center.x,
-              y: ship.center.y
+              x: ship.center.x + (Math.sin(ship.rotation) * (ship.size.width / 2 + 3)),
+              y: ship.center.y - (Math.cos(ship.rotation) * (ship.size.height / 2 + 14))
             }
           };
           MYGAME.gameController.lasers.push(MYGAME.laser(laserSpec, MYGAME.graphics));
