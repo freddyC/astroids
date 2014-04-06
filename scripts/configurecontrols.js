@@ -11,6 +11,7 @@ MYGAME.screens['configure-controls'] = (function() {
   }
 
   function run() {
+
     //check for saved controlles in local storage
       // if none set to default
 

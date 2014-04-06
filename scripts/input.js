@@ -115,9 +115,41 @@ MYGAME.input = (function() {
     return that;
   }
 
+'#set-accelerate'
+'#set-left-turn'
+'#set-right-turn'
+'#set-shoot'
+'#set-hyper-shift'
+
+  var updateInput = function () {
+    var accelerate = $('#set-accelerate').val()
+      , left       = $('#set-left-turn').val()
+      , right      = $('#set-right-turn').val()
+      , shoot      = $('#set-shoot').val()
+      , hyper      = $('#set-hyper-shift').val()
+      ;
+  }
+  var resetInput = function () {
+    $('#set-accelerate').val(KeyEvent.DOM_VK_W);
+    $('#set-left-turn').val(KeyEvent.DOM_VK_A);
+    $('#set-right-turn').val(KeyEvent.DOM_VK_D);
+    $('#set-shoot').val(KeyEvent.DOM_VK_SPACE);
+    $('#set-hyper-shift').val(KeyEvent.DOM_VK_S);
+
+ that.registerCommand(KeyEvent.DOM_VK_W     , shipShouldAccel);
+ that.registerCommand(KeyEvent.DOM_VK_A     , shipShouldTurnLeft);
+ that.registerCommand(KeyEvent.DOM_VK_D     , shipShouldTurnRight);
+ that.registerCommand(KeyEvent.DOM_VK_SPACE , fireLaserKeyPressed);
+ that.registerCommand(KeyEvent.DOM_VK_S     , hyperJumpKeyPressed);
+
+  }
+
+
   return {
     Keyboard : Keyboard,
-    Mouse : Mouse
+    Mouse : Mouse,
+    updateInput: updateInput,
+    resetInput: resetInput
   };
 }());
 
