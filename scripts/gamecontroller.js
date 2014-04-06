@@ -107,8 +107,20 @@ MYGAME.gameController = (function() {
     renderAlienShips();
     renderAlienPews();
     drawRemainingShips();
+    renderGameInfo();
   };
 
+  var renderGameInfo = function () {
+	  var scoreSpec = {
+		 text: 'Score: ' + that.score + '   Level: ' + that.wave,
+		 font: '20pt Calibri',
+		 color: '#7CFC00',
+		 x: remainingShips * 30 + 20,
+		 y: 40
+	  };
+	  MYGAME.graphics.drawText(scoreSpec);
+  };
+  
   var updateDestroyedShip = function (elapsedSeconds) {
     elapsedSeconds /= 1000;
     timeSinceShipWasDestroyed += elapsedSeconds;
@@ -472,7 +484,7 @@ MYGAME.gameController = (function() {
   var drawRemainingShips = function () {
     var center = {
       x: 20,
-      y: 22
+      y: 30
     };
     for (var i = 0; i < remainingShips; i++) {
       center.x += i;
