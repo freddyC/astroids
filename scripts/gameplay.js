@@ -62,7 +62,7 @@ MYGAME.screens['game-play'] = (function() {
   function stopAttractMode () {
 	  console.log('input detected!');
 	  stopInputListeners ();
-	  // Stop the game here
+	  MYGAME.gameController.clearGame();
 	  MYGAME.gameController.gameInProgress = false;
 	  MYGAME.game.showScreen('main-menu');
   }

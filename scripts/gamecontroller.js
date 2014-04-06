@@ -38,8 +38,9 @@ MYGAME.gameController = (function() {
       }
     ;
 
-  function clearGame () {
+  that.clearGame = function () {
     backgroundSnd.pause();
+    that.playerShip.stopSound();
     timeSinceShipWasDestroyed = 0;
     asteroids = [];
     that.lasers = [];
@@ -89,7 +90,7 @@ MYGAME.gameController = (function() {
   that.update = function (elapsedTime) {
     if (alldone > 80) {
       that.gameInProgress = false;
-      clearGame();
+      that.clearGame();
     }
     if (remainingShips < 0) {
       ++alldone;
