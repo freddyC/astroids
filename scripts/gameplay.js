@@ -38,11 +38,35 @@ MYGAME.screens['game-play'] = (function() {
           requestAnimationFrame(gameLoop);
         });
       } else {
-        MYGAME.game.showScreen('get-player');
+    	if (humanPlayer) {
+    		MYGAME.game.showScreen('get-player');
+    	}
       }
     });
   }
+  
+  function startInputListeners () {
+	  window.onkeypress = function(){ stopAttractMode(); };
+	  window.onmousemove = function(){ stopAttractMode(); };
+	  window.mousedown = function(){ stopAttractMode(); };
+	  window.mouseup = function(){ stopAttractMode(); };
+  }
 
+  function stopInputListeners () {
+	  window.onkeypress = null;
+      window.onmousemove = null;
+	  window.mousedown = null;
+      window.mouseup = null;
+  }
+  
+  function stopAttractMode () {
+	  console.log('input detected!');
+	  stopInputListeners ();
+	  // Stop the game here
+	  MYGAME.gameController.gameInProgress = false;
+	  MYGAME.game.showScreen('main-menu');
+  }
+  
   function update (elapsedTime, cb) {
     MYGAME.gameController.update(elapsedTime);
     cb();
@@ -53,9 +77,14 @@ MYGAME.screens['game-play'] = (function() {
     MYGAME.gameController.render();
     cb();
   }
-
+  
+  
+  
   function run() {
     lastTimeStamp = performance.now();
+    if (!humanPlayer) {
+    	startInputListeners ();
+    }
     MYGAME.gameController.run(humanPlayer);
     cancelNextRequest = false;
     requestAnimationFrame(gameLoop);
