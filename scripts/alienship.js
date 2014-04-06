@@ -30,6 +30,8 @@ MYGAME.alienShip = function(spec, graphics) {
     		angleToPlayerShip = angleFromTwoPoints(ship.center, MYGAME.gameController.playerShip.getShipCenter()) + Math.PI;
     	}
     	
+    	angleToPlayerShip += (Math.random() * ship.shotAccuracy) - (ship.shotAccuracy / 2);
+    	
     	var shotSpec = {
     			image: MYGAME.images['images/greencircle.png'],
     			radius: 5,

@@ -176,10 +176,7 @@ MYGAME.gameController = (function() {
                 	   mean: 3,  
                 	   stdDev: 1
                    },
-                   shotAccuracy: {
-                	   mean: 0,  
-                	   stdDev: Math.PI / 32
-                   },
+                   shotAccuracy: Math.PI / 8,
                    collisionCircles: [
                 	   {
                 		 angle: Math.PI / 2,
@@ -362,7 +359,16 @@ MYGAME.gameController = (function() {
         that.shipExploder.explode(that.playerShip.getShipCenter());
         destroyPlayerShip();
       }
-    })
+    });
+    
+    that.alienLasers.forEach(function (pew) {
+    	if (isPolygonInCircle(shipPoly, pew.getPewCircle()) || isPointInPolygon(pew.getPewCenter(), shipPoly)) {
+    		pew.shouldBeDeleted = true;
+    		that.shipExploder.explode(that.playerShip.getShipCenter());
+            destroyPlayerShip();
+    	}
+    });
+    
   };
 
   function checkAsteroidLaserCollision (laser, poly, asteroid) {

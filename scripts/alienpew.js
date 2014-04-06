@@ -29,6 +29,9 @@ MYGAME.alienPew = function(spec, graphics) {
     return circle;
   };
 
+  that.getPewCenter = function() {
+	  return JSON.parse(JSON.stringify(pew.center));
+  };
 
   that.update = function(elapsedTime) {
     elapsedSeconds += elapsedTime / 1000;
