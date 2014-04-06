@@ -11,7 +11,9 @@ MYGAME.screens['main-menu'] = (function() {
     // Setup each of menu events for the screens
     document.getElementById('id-new-game').addEventListener(
       'click',
-      function() { MYGAME.game.showScreen('game-play'); },
+      function() { 
+    	  MYGAME.screens['game-play'].setHumanPlayer(true);
+    	  MYGAME.game.showScreen('game-play'); },
       false);
 
     document.getElementById('id-controls').addEventListener('click', function() {
@@ -43,6 +45,7 @@ MYGAME.screens['main-menu'] = (function() {
 		window.onmousemove = null;
 		window.mousedown = null;
 		window.mouseup = null;
+		MYGAME.screens['game-play'].setHumanPlayer(false);
 		MYGAME.game.showScreen('game-play');
 	}
   }

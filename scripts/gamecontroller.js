@@ -20,6 +20,7 @@ MYGAME.gameController = (function() {
     , remainingShips
     , pointsSinceLastAlien
     , alienBoomSnd
+    , isHumanPlayer
     , that = {
         asteroids: null,
         wave: 0,
@@ -64,9 +65,12 @@ MYGAME.gameController = (function() {
     that.alienShips = [];
     that.alienLasers = [];
     pointsSinceLastAlien = 0;
+    isHumanPlayer = true;
   };
 
-  that.run = function () {
+  that.run = function (humanPlayer) {
+	isHumanPlayer = humanPlayer;
+	that.playerShip.setInputListeners(isHumanPlayer);
     alldone = 0;
     that.score = 0;
     soundSecondsPlayed = 0;

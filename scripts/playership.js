@@ -190,11 +190,15 @@ MYGAME.playerShip = function(spec, graphics) {
   engine1 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
   engine2 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
 
-  myKeyboard.registerCommand(KeyEvent.DOM_VK_W, shipShouldAccel);
-  myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
-  myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
-  myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, fireLaserKeyPressed);
-  myKeyboard.registerCommand(KeyEvent.DOM_VK_S, hyperJumpKeyPressed);
+  that.setInputListeners = function (isHumanPlayer) {
+    if (isHumanPlayer) {
+      myKeyboard.registerCommand(KeyEvent.DOM_VK_W, shipShouldAccel);
+      myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
+      myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
+      myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, fireLaserKeyPressed);
+      myKeyboard.registerCommand(KeyEvent.DOM_VK_S, hyperJumpKeyPressed);
+    }
+  };
 
   that.getShipCenter = function () {
     // copy an object content to new object

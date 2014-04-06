@@ -6,12 +6,17 @@ MYGAME.screens['game-play'] = (function() {
   var myMouse = MYGAME.input.Mouse()
     , cancelNextRequest = false
     , lastTimeStamp
+    , humanPlayer = true
     ;
 
   window.onscroll = function () {
     window.scrollTo(0, 0);
   };
 
+  function setHumanPlayer (isHuman) {
+	  humanPlayer = isHuman;
+  }
+  
   function initialize() {
     document.getElementById('canvas-main').height = window.innerHeight;
     document.getElementById('canvas-main').width = window.innerWidth;
@@ -51,14 +56,14 @@ MYGAME.screens['game-play'] = (function() {
 
   function run() {
     lastTimeStamp = performance.now();
-    MYGAME.gameController.run();
-
+    MYGAME.gameController.run(humanPlayer);
     cancelNextRequest = false;
     requestAnimationFrame(gameLoop);
   }
 
   return {
     initialize : initialize,
-    run : run
+    run : run,
+    setHumanPlayer : setHumanPlayer
   };
 }());
