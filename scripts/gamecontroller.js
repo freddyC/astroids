@@ -95,6 +95,7 @@ MYGAME.gameController = (function() {
     updateShipCollision(elapsedTime);
     updateAsteroidCollision(elapsedTime);
     updateAlienShips(elapsedTime);
+    updateAlienCollision();
   };
 
   that.render = function () {
@@ -148,6 +149,9 @@ MYGAME.gameController = (function() {
   var updateAlienShips = function (elapsedTime) {
 	  that.alienShips.forEach(function (alienShip) {
 		  alienShip.update(elapsedTime);
+	    });
+	  that.alienShips = that.alienShips.filter(function (alien) {
+	      return !alien.shouldBeDeleted;
 	    });
   };
   
@@ -371,6 +375,20 @@ MYGAME.gameController = (function() {
     
   };
 
+  var updateAlienCollision = function () {
+	  that.lasers.forEach(function (laser) {
+	      var poly = laser.getLaserRect();
+	      that.alienShips.forEach(function (alien) {
+	    	  alien.getShipCollisionCircles().forEach(function (circle) {
+		    	  if(isPolygonInCircle(poly, circle)) {
+		    		  that.shipExploder.explode(alien.getShipCenter());
+		    		  alien.shouldBeDeleted = true;
+		    	  }
+		      });
+	      });
+	    });
+	  };
+  
   function checkAsteroidLaserCollision (laser, poly, asteroid) {
     var obj = {
       point: asteroid.center,

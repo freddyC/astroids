@@ -16,7 +16,9 @@ MYGAME.alienShip = function(spec, graphics) {
       }
     , originalCenter = JSON.parse(JSON.stringify(spec.center))
    ;
-
+  
+  that.shouldBeDeleted = false;
+  
   var pewHandler = function(elapsedTime) {
 	  secondsSinceLastFire += (elapsedTime / 1000);
     if (secondsSinceLastFire >= secondsToNextFire) {
@@ -61,7 +63,7 @@ MYGAME.alienShip = function(spec, graphics) {
 
   that.getShipCollisionCircles = function() {
     var circles = [], i, x, y;
-    for(i = 0; i < ship.polyPoints.length;i++ ) {
+    for(i = 0; i < ship.collisionCircles.length;i++ ) {
       x = ship.center.x + Math.sin(ship.rotation + ship.collisionCircles[i].angle) * ship.collisionCircles[i].distance;
       y = ship.center.y + Math.cos(ship.rotation + ship.collisionCircles[i].angle) * ship.collisionCircles[i].distance;
       circles.push({point:{x:x,y:y},radius:ship.collisionCircles[i].radius});
