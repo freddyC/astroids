@@ -6,7 +6,7 @@ function equationFromTwoPoints (p1, p2) {
 };
 
 function angleFromTwoPoints (p1, p2) {
-	return Math.atan(-1/((p2.y - p1.y)/(p2.x - p1.x)));
+  return Math.atan(-1/((p2.y - p1.y)/(p2.x - p1.x)));
 };
 
 function perpendicularSlopeToEquation (equation) {
@@ -44,33 +44,34 @@ function isPointInSection (p0, p1, p2) {
 function isLineSegmentInCircle (p1, p2, circle) {
   var equationForSegment = equationFromTwoPoints(p1, p2)
     , equationForCircle  = equationFromPointSlope(circle.point, perpendicularSlopeToEquation(equationForSegment))
-    , intercept          = interceptOfEquations(equationForSegment, equationForCircle);
+    , intercept          = interceptOfEquations(equationForSegment, equationForCircle)
+    ;
 
   return isPointInCircle(intercept, circle) && isPointInSection(intercept, p1, p2);
 };
 
 function isPointInPolygon(point, poly) {
-	  var c = false
-	    , i
-	    , p1
-	    , p2
-	    ;
-	  
-	  for (i = 0; i < poly.length - 1; i++) {
-	    p1 = poly[i];
-	    p2 = poly[i+1];
-	    if(((p1.y >= point.y ) != (p2.y >= point.y)) && (point.x <= ((p2.x - p1.x) * (point.y - p1.y) / (p2.y - p1.y) + p1.x))) {
-	    	c = !c;
-	    }
-	  }
-	  
-	  p1 = poly[0];
-	  p2 = poly[poly.length-1];
-	  if( ((p1.y >= point.y ) != (p2.y >= point.y)) &&  (point.x <= ((p2.x - p1.x) * (point.y - p1.y) / (p2.y - p1.y) + p1.x)) ) {
-	    	c = !c;
-	    }
+    var c = false
+      , i
+      , p1
+      , p2
+      ;
 
-	  return c;
+    for (i = 0; i < poly.length - 1; i++) {
+      p1 = poly[i];
+      p2 = poly[i+1];
+      if(((p1.y >= point.y ) != (p2.y >= point.y)) && (point.x <= ((p2.x - p1.x) * (point.y - p1.y) / (p2.y - p1.y) + p1.x))) {
+        c = !c;
+      }
+    }
+
+    p1 = poly[0];
+    p2 = poly[poly.length-1];
+    if( ((p1.y >= point.y ) != (p2.y >= point.y)) &&  (point.x <= ((p2.x - p1.x) * (point.y - p1.y) / (p2.y - p1.y) + p1.x)) ) {
+        c = !c;
+      }
+
+    return c;
 };
 
 function isPolygonInCircle(poly, circle) {
