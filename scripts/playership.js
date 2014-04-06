@@ -199,19 +199,29 @@ MYGAME.playerShip = function(spec, graphics) {
       myKeyboard.registerCommand(KeyEvent.DOM_VK_S, hyperJumpKeyPressed);
     }
   };
-
+  
+  that.stopSound = function() {
+	  isAccelerating = false;
+	  isPlayingRocketSound = false;
+      rocketSnd.pause();
+      rocketSnd.currentTime = 0;
+      rocketSoundSecondsPlayed = 0;
+  };
+  
   that.getShipCenter = function () {
     // copy an object content to new object
     return JSON.parse(JSON.stringify(ship.center));
   };
 
   that.resetShip = function() {
-  ship.rotation = 0;
-  ship.direction = 0;
-  ship.speed = 0;
-  ship.center = { x: window.innerWidth / 2,
-              y: window.innerHeight / 2
-            };
+	that.stopSound();
+	ship.rotation = 0;
+    ship.direction = 0;
+    ship.speed = 0;
+    ship.center = {
+    		x: window.innerWidth / 2,
+            y: window.innerHeight / 2
+          };
   };
 
   that.getShipPolygon = function() {
