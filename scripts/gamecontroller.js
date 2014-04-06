@@ -95,6 +95,7 @@ MYGAME.gameController = (function() {
     updateShipCollision(elapsedTime);
     updateAsteroidCollision(elapsedTime);
     updateAlienShips(elapsedTime);
+    updateAlienCollision();
   };
 
   that.render = function () {
@@ -106,8 +107,20 @@ MYGAME.gameController = (function() {
     renderAlienShips();
     renderAlienPews();
     drawRemainingShips();
+    renderGameInfo();
   };
 
+  var renderGameInfo = function () {
+	  var scoreSpec = {
+		 text: 'Score: ' + that.score + '   Level: ' + that.wave,
+		 font: '20pt Calibri',
+		 color: '#7CFC00',
+		 x: remainingShips * 30 + 20,
+		 y: 40
+	  };
+	  MYGAME.graphics.drawText(scoreSpec);
+  };
+  
   var updateDestroyedShip = function (elapsedSeconds) {
     elapsedSeconds /= 1000;
     timeSinceShipWasDestroyed += elapsedSeconds;
@@ -149,6 +162,9 @@ MYGAME.gameController = (function() {
 	  that.alienShips.forEach(function (alienShip) {
 		  alienShip.update(elapsedTime);
 	    });
+	  that.alienShips = that.alienShips.filter(function (alien) {
+	      return !alien.shouldBeDeleted;
+	    });
   };
   
   var renderAlienShips = function () {
@@ -176,10 +192,7 @@ MYGAME.gameController = (function() {
                 	   mean: 3,  
                 	   stdDev: 1
                    },
-                   shotAccuracy: {
-                	   mean: 0,  
-                	   stdDev: Math.PI / 32
-                   },
+                   shotAccuracy: Math.PI / 8,
                    collisionCircles: [
                 	   {
                 		 angle: Math.PI / 2,
@@ -362,9 +375,32 @@ MYGAME.gameController = (function() {
         that.shipExploder.explode(that.playerShip.getShipCenter());
         destroyPlayerShip();
       }
-    })
+    });
+    
+    that.alienLasers.forEach(function (pew) {
+    	if (isPolygonInCircle(shipPoly, pew.getPewCircle()) || isPointInPolygon(pew.getPewCenter(), shipPoly)) {
+    		pew.shouldBeDeleted = true;
+    		that.shipExploder.explode(that.playerShip.getShipCenter());
+            destroyPlayerShip();
+    	}
+    });
+    
   };
 
+  var updateAlienCollision = function () {
+	  that.lasers.forEach(function (laser) {
+	      var poly = laser.getLaserRect();
+	      that.alienShips.forEach(function (alien) {
+	    	  alien.getShipCollisionCircles().forEach(function (circle) {
+		    	  if(isPolygonInCircle(poly, circle)) {
+		    		  that.shipExploder.explode(alien.getShipCenter());
+		    		  alien.shouldBeDeleted = true;
+		    	  }
+		      });
+	      });
+	    });
+	  };
+  
   function checkAsteroidLaserCollision (laser, poly, asteroid) {
     var obj = {
       point: asteroid.center,
@@ -448,7 +484,7 @@ MYGAME.gameController = (function() {
   var drawRemainingShips = function () {
     var center = {
       x: 20,
-      y: 22
+      y: 30
     };
     for (var i = 0; i < remainingShips; i++) {
       center.x += i;

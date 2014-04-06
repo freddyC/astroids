@@ -44,6 +44,20 @@ MYGAME.graphics = (function() {
   //------------------------------------------------------------------
   // Expose an ability to draw an image/texture on the canvas.
   //------------------------------------------------------------------
+  function drawText(spec) {
+	    context.save();
+
+	    if (spec.fade) {
+	      context.globalAlpha = spec.fade;
+	    }
+	    context.font = spec.font;
+	    context.fillStyle = spec.color;
+	    context.fillText(spec.text, spec.x, spec.y);
+	
+	    context.restore();
+
+	  }
+  
   function drawImage(spec) {
     context.save();
 
@@ -85,6 +99,7 @@ MYGAME.graphics = (function() {
     clear : clear,
     DrawObject : DrawObject,
     drawImage : drawImage,
-    drawParticle : drawParticle
+    drawParticle : drawParticle,
+    drawText : drawText
   };
 }());
