@@ -2,7 +2,11 @@
 /*global MYGAME */
 MYGAME.screens['main-menu'] = (function() {
   'use strict';
-
+  
+  var secondsIdle
+  , lastTimeStamp
+  ;
+  
   function initialize() {
     // Setup each of menu events for the screens
     document.getElementById('id-new-game').addEventListener(
@@ -27,8 +31,35 @@ MYGAME.screens['main-menu'] = (function() {
     }, false);
   }
 
+  function idleLoop(time) {
+	  
+	secondsIdle += (time - lastTimeStamp) / 1000;
+	lastTimeStamp = time;
+	
+	if (secondsIdle <  10) {
+		requestAnimationFrame(idleLoop);
+	} else {
+		window.onkeypress = null;
+		window.onmousemove = null;
+		window.mousedown = null;
+		window.mouseup = null;
+		MYGAME.game.showScreen('game-play');
+	}
+  }
+  
+  
   function run() {
     // I know this is empty, there isn't anything to do.
+	  secondsIdle = 0;
+	  lastTimeStamp = performance.now();
+	  
+	  window.onkeypress = function(){ secondsIdle = 0; };
+	  window.onmousemove = function(){ secondsIdle = 0; };
+	  window.mousedown = function(){ secondsIdle = 0; };
+	  window.mouseup = function(){ secondsIdle = 0; };
+	  
+	  requestAnimationFrame(idleLoop);
+	 // MYGAME.game.showScreen('game-play');
   }
 
   return {
