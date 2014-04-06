@@ -45,6 +45,9 @@ MYGAME.alienShip = function(spec, graphics) {
     	};
     	
     	MYGAME.gameController.alienLasers.push(MYGAME.alienPew(shotSpec, graphics));
+    	MYGAME.gameController.alienPewSound.pause();
+    	MYGAME.gameController.alienPewSound.currentTime = 0;
+    	MYGAME.gameController.alienPewSound.play();
 
     }
   };

@@ -18,6 +18,7 @@ MYGAME.gameController = (function() {
     , reverseLargeAsteroidImageArray
     , remainingShips
     , pointsSinceLastAlien
+    , alienBoomSnd
     , that = {
         asteroids: null,
         wave: 0,
@@ -30,7 +31,8 @@ MYGAME.gameController = (function() {
         alienLasers: null,
         asteroidExploder: null,
         gameInProgress: null,
-        score: 0
+        score: 0,
+        alienPewSound: null
       }
     ;
 
@@ -46,6 +48,8 @@ MYGAME.gameController = (function() {
   that.init = function () {
     backgroundSnd = new Audio('sounds/background.mp3');
     backgroundSnd.volume = 0.5;
+    that.alienPewSound = new Audio('sounds/alienshot.mp3');
+    alienBoomSnd = new Audio('sounds/alienboom.mp3');
     smallAsteroidImageArray = [];
     mediumAsteroidImageArray = [];
     largeAsteroidImageArray = [];
@@ -451,6 +455,9 @@ MYGAME.gameController = (function() {
 		    		  that.shipExploder.explode(alien.getShipCenter());
 		    		  addPointsToScore(alien.points);
 		    		  alien.shouldBeDeleted = true;
+		    		  alienBoomSnd.pause();
+		    		  alienBoomSnd.currentTime = 0;
+		    		  alienBoomSnd.play();
 		    	  }
 		      });
 	      });
