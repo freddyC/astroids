@@ -271,6 +271,10 @@ MYGAME.gameController = (function() {
     that.alienShips.push(MYGAME.alienShip(spec, MYGAME.graphics));
   };
 
+  that.getAsteroids = function () {
+	return asteroids;  
+  };
+  
   var addAsteroid = function () {
     ++that.wave;
     for (var i = 0; i < that.wave + that.wave/2; ++i) {

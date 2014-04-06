@@ -270,8 +270,8 @@ MYGAME.playerShip = function(spec, graphics) {
   };
 
   var hyperdriveHandler = function () {
-    ship.center = MYGAME.HyperJump.whereToJump();
-  }
+    ship.center = MYGAME.HyperJump.whereToJump(ship.size.length > ship.size.width ? ship.size.length : ship.size.width);
+  };
 
   that.render = function() {
   if (MYGAME.gameController.playerShipShouldAppear) {
