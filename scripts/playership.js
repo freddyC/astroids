@@ -222,6 +222,8 @@ MYGAME.playerShip = function(spec, graphics) {
 
   that.update = function(elapsedTime) {
     if(!MYGAME.gameController.playerShipShouldAppear) {
+    	engine1.update(elapsedTime/1000);
+        engine2.update(elapsedTime/1000);
       return;
     }
 
@@ -279,9 +281,10 @@ MYGAME.playerShip = function(spec, graphics) {
     ship.fade = 1.0;
     }
       graphics.drawImage(ship);
-      engine1.render();
-      engine2.render();
+      
   }
+  engine1.render();
+  engine2.render();
   };
 
   return that;
