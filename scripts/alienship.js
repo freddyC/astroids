@@ -18,6 +18,7 @@ MYGAME.alienShip = function(spec, graphics) {
    ;
   
   that.shouldBeDeleted = false;
+  that.points = spec.points;
   
   var pewHandler = function(elapsedTime) {
 	  secondsSinceLastFire += (elapsedTime / 1000);
@@ -38,9 +39,9 @@ MYGAME.alienShip = function(spec, graphics) {
     			image: MYGAME.images['images/greencircle.png'],
     			radius: 5,
     			center: that.getShipCenter(),
-    			speed: 300,
+    			speed: spec.shotSpeed,
     			direction: angleToPlayerShip,
-    			lifetime: 1
+    			lifetime: spec.shotLifetime
     	};
     	
     	MYGAME.gameController.alienLasers.push(MYGAME.alienPew(shotSpec, graphics));

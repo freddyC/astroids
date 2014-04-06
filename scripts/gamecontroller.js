@@ -17,6 +17,7 @@ MYGAME.gameController = (function() {
     , largeAsteroidImageArray
     , reverseLargeAsteroidImageArray
     , remainingShips
+    , pointsSinceLastAlien
     , that = {
         asteroids: null,
         wave: 0,
@@ -57,7 +58,7 @@ MYGAME.gameController = (function() {
     that.playerShip = initPlayerShip();
     that.alienShips = [];
     that.alienLasers = [];
-    createSmallAlienShip();
+    pointsSinceLastAlien = 0;
   };
 
   that.run = function () {
@@ -159,6 +160,15 @@ MYGAME.gameController = (function() {
   };
   
   var updateAlienShips = function (elapsedTime) {
+	  if (pointsSinceLastAlien >= 5000) {
+		  pointsSinceLastAlien = 0;
+		  if (that.score < 15000) {
+			  createLargeAlienShip();
+		  } else {
+			  createSmallAlienShip();
+		  }
+	  }
+	  
 	  that.alienShips.forEach(function (alienShip) {
 		  alienShip.update(elapsedTime);
 	    });
@@ -183,16 +193,19 @@ MYGAME.gameController = (function() {
                    },
                    center: {
                 	   x: (that.playerShip.getShipCenter().x >= window.innerWidth / 2) ?  40 : (window.innerWidth - 40),
-                       y: (that.playerShip.getShipCenter().y >= window.innerHeight / 2) ? (window.innerHeight - 60) : 60
+                       y: (that.playerShip.getShipCenter().y <= window.innerHeight / 2) ? (window.innerHeight - 60) : 60
                    },
                    direction: (that.playerShip.getShipCenter().x >= window.innerWidth / 2) ? (Math.PI / 2) : (Math.PI * 3 / 2),
                    rotation: 0,
-                   speed: 100,
+                   speed: 125,
                    shotFreqency: {
                 	   mean: 3,  
                 	   stdDev: 1
                    },
-                   shotAccuracy: Math.PI / 8,
+                   shotAccuracy: Math.PI / 16,
+                   shotSpeed: 400,
+                   shotLifetime: 1.2,
+                   points: 1000,
                    collisionCircles: [
                 	   {
                 		 angle: Math.PI / 2,
@@ -202,6 +215,48 @@ MYGAME.gameController = (function() {
                 		 angle: Math.PI * 3 / 2,
                 		 distance: 15,
                 		 radius: 17
+                	   }
+                   ]
+	            };
+      that.alienShips.push(MYGAME.alienShip(spec, MYGAME.graphics));
+  };
+  
+  var createLargeAlienShip = function () {
+
+	  var spec = {
+                   image: MYGAME.images['images/ufo2.png'],
+			       size: {
+                	   width: 150,
+                	   height: 63
+                   },
+                   center: {
+                	   x: (that.playerShip.getShipCenter().x >= window.innerWidth / 2) ?  80 : (window.innerWidth - 80),
+                       y: (that.playerShip.getShipCenter().y <= window.innerHeight / 2) ? (window.innerHeight - 80) : 80
+                   },
+                   direction: (that.playerShip.getShipCenter().x >= window.innerWidth / 2) ? (Math.PI / 2) : (Math.PI * 3 / 2),
+                   rotation: 0,
+                   speed: 75,
+                   shotFreqency: {
+                	   mean: 3,  
+                	   stdDev: 1
+                   },
+                   shotAccuracy: Math.PI / 4,
+                   shotSpeed: 300,
+                   shotLifetime: 1.4,
+                   points: 500,
+                   collisionCircles: [
+                	   {
+                		 angle: Math.PI / 1.9,
+                		 distance: 60,
+                		 radius: 20
+                	   }, {
+                		 angle: Math.PI * 1.4,
+                		 distance: 60,
+                		 radius: 20
+                	   }, {
+                		 angle: 0,
+                		 distance: 0,
+                		 radius: 30
                 	   }
                    ]
 	            };
@@ -394,6 +449,7 @@ MYGAME.gameController = (function() {
 	    	  alien.getShipCollisionCircles().forEach(function (circle) {
 		    	  if(isPolygonInCircle(poly, circle)) {
 		    		  that.shipExploder.explode(alien.getShipCenter());
+		    		  addPointsToScore(alien.points);
 		    		  alien.shouldBeDeleted = true;
 		    	  }
 		      });
@@ -451,6 +507,7 @@ MYGAME.gameController = (function() {
     if (((that.score % 10000) + points) > 10000) {
       remainingShips += 1;
     }
+    pointsSinceLastAlien += points;
     that.score += points;
   }
 

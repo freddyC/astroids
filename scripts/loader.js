@@ -50,7 +50,8 @@ window.addEventListener('load', function() {
       'preload!images/redstar.png',
       'preload!images/blueblow.png',
       'preload!images/greencircle.png',
-      'preload!images/ufo1.png'
+      'preload!images/ufo1.png',
+      'preload!images/ufo2.png'
     ];
 
   for (i = 1; i <= 19; i++) {
