@@ -35,17 +35,21 @@ MYGAME.screens['game-play'] = (function() {
     var elapsedTime = time - lastTimeStamp;
     lastTimeStamp = time;
 
-    update(elapsedTime, function () {
-      if(MYGAME.gameController.gameInProgress) {
-        render(function () {
-          requestAnimationFrame(gameLoop);
-        });
-      } else {
+    if (MYGAME.gameController.gameInProgress) {
+    	
+    	MYGAME.gameController.update(elapsedTime);
+    	
+    	MYGAME.graphics.clear();
+        MYGAME.gameController.render();
+        
+    	requestAnimationFrame(gameLoop);
+    } else {
     	if (humanPlayer) {
     		MYGAME.game.showScreen('get-player');
+    	} else {
+    		MYGAME.game.showScreen('main-menu');
     	}
-      }
-    });
+    }
   }
   
   function startInputListeners () {
@@ -80,18 +84,6 @@ MYGAME.screens['game-play'] = (function() {
 	    MYGAME.game.showScreen('main-menu');
 	  }
   }
-  
-  function update (elapsedTime, cb) {
-    MYGAME.gameController.update(elapsedTime);
-    cb();
-  }
-
-  function render (cb) {
-    MYGAME.graphics.clear();
-    MYGAME.gameController.render();
-    cb();
-  }
-  
   
   
   function run() {

@@ -58,7 +58,11 @@ MYGAME.asteroid = function(spec, graphics) {
   that.getAsteroidCenter = function() {
     return JSON.parse(JSON.stringify(asteroid.center));
   };
-
+  
+  that.getAsteroidVector = function() {
+	  return JSON.parse(JSON.stringify({direction: asteroid.direction, point: asteroid.center}));
+  };
+  
   that.getAsteroidFuture = function () {
     return JSON.parse(JSON.stringify(asteroid.futureCenter));
   }

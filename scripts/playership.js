@@ -246,6 +246,23 @@ MYGAME.playerShip = function(spec, graphics) {
     return JSON.parse(JSON.stringify(ship.center));
   };
 
+  that.getShipVector = function () {
+	    // copy an object content to new object
+	  return JSON.parse(JSON.stringify({direction: ship.direction, point: ship.center}));
+	  };
+	  
+  that.getShipRotation = function() {
+	  return JSON.parse(JSON.stringify(ship.rotation));
+  };
+  
+  that.getShipDirection = function() {
+	  return JSON.parse(JSON.stringify(ship.direction));
+  };
+  
+  that.getShipSpeed = function() {
+	  return JSON.parse(JSON.stringify(ship.speed));
+  };
+  
   that.resetShip = function() {
     that.stopSound();
     ship.rotation = 0;
@@ -275,9 +292,9 @@ MYGAME.playerShip = function(spec, graphics) {
     }
 
     // Update ship code here
-    isAccelerating = false;
-    isTurningLeft = false;
-    isTurningRight = false;
+//    isAccelerating = false;
+//    isTurningLeft = false;
+//    isTurningRight = false;
     myKeyboard.update(elapsedTime);
     moveShip(elapsedTime);
     engine1.update(elapsedTime/1000);
@@ -314,6 +331,9 @@ MYGAME.playerShip = function(spec, graphics) {
     }
 
     laserHandler(elapsedTime);
+    isAccelerating = false;
+    isTurningLeft = false;
+    isTurningRight = false;
   };
 
   var hyperdriveHandler = function () {

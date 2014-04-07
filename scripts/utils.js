@@ -2,15 +2,11 @@ var Angles = (function() {
   'use strict';
 
   function normalizer(angle) {
-    angle = angle % (2*Math.PI);
-
-    if (angle < 0) {
-      angle = angle + (2*Math.PI);
-    }
-
-    return angle;
+	  angle = angle % (2 * Math.PI); 
+	  return angle >= 0 ? angle : angle + 2 * Math.PI;
   }
-
+  
+  
   function halfAngleRatio(angleA, angleB) {
     var uX = Math.sin(angleA),
     uY = Math.cos(angleA),

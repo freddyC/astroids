@@ -1,3 +1,11 @@
+function equationFromVector (v) {
+	return equationFromPointSlope(v.point, Math.tan(v.direction));
+};
+
+function interceptOfVectors (v1, v2) {
+	return interceptOfEquations(equationFromVector(v1), equationFromVector(v2));
+}
+
 function equationFromTwoPoints (p1, p2) {
   var equation = {};
   equation.slope = (p1.y - p2.y) / (p1.x - p2.x);
