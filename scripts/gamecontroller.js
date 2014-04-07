@@ -95,6 +95,9 @@ MYGAME.gameController = (function() {
     if (remainingShips < 0) {
       ++alldone;
     }
+    if (!isHumanPlayer) {
+      AIUpdate();
+    }
     that.playerShip.update(elapsedTime);
     that.shipExploder.update(elapsedTime);
     that.asteroidExploder.update(elapsedTime);
@@ -616,7 +619,11 @@ MYGAME.gameController = (function() {
       ]
     };
     return MYGAME.playerShip(shipSpec, MYGAME.graphics);
-  }
+  };
+  
+  var AIUpdate = function () {
+	  console.log('Decisions were made.');
+  };
 
   return that;
 }());
