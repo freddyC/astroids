@@ -84,7 +84,6 @@ MYGAME.screens['game-play'] = (function() {
     }
   }
 
-
   function run() {
   inGame = true;
   mouseX = 0;

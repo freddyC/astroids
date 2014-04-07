@@ -74,7 +74,7 @@ MYGAME.input = (function() {
     return that;
   }
 
-  var Keyboard = (function Keyboard() {
+  var Keyboard = function Keyboard() {
       var keys
         , that = {
             keys : {},
@@ -114,32 +114,31 @@ MYGAME.input = (function() {
       window.addEventListener('keyup', keyRelease.bind(that));
 
       return that;
-    }())
+    }
 
   var updateInput = function () {
     console.log('you are updating input');
-    var accelerate = $('#set-accelerate').val()[0]
-      , left       = $('#set-left-turn').val()[0]
-      , right      = $('#set-right-turn').val()[0]
-      , shoot      = $('#set-shoot').val()[0]
-      , hyper      = $('#set-hyper-shift').val()[0]
+    var accel = $('#set-accelerate').val()[0].toUpperCase()
+      , left  = $('#set-left-turn').val()[0].toUpperCase()
+      , right = $('#set-right-turn').val()[0].toUpperCase()
+      , shoot = $('#set-shoot').val()[0].toUpperCase()
+      , jump  = $('#set-hyper-shift').val()[0].toUpperCase()
       ;
 
-    accelerate = accelerate.charCodeAt();
-    left = left.charCodeAt();
-    right = right.charCodeAt();
-    shoot = shoot.charCodeAt();
-    hyper = hyper.charCodeAt();
-
+    accel = (accel) ? accel.charCodeAt() : null;
+    left = (left) ? left.charCodeAt() : null;
+    right = (right) ? right.charCodeAt() : null;
+    shoot = (shoot) ? shoot.charCodeAt() : null;
+    jump = (jump) ? jump.charCodeAt() : null;
 
     var customKeys = {
-      accel: accelerate,
+      accel: accel,
       left: left,
       right: right,
       shoot: shoot,
-      hyperdrive: hyper
+      jump: jump
     }
-    MYGAME.playerShip.keys = customKeys;
+    MYGAME.keys = customKeys;
   }
 
   var resetInput = function () {
@@ -149,7 +148,6 @@ MYGAME.input = (function() {
     $('#set-shoot').val(String.fromCharCode(KeyEvent.DOM_VK_SPACE));
     $('#set-hyper-shift').val(String.fromCharCode(KeyEvent.DOM_VK_S));
   }
-
 
   return {
     Keyboard : Keyboard,

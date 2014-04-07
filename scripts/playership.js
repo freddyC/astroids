@@ -2,11 +2,6 @@ MYGAME.playerShip = function(spec, graphics) {
   'use strict';
 
   var that = {}
-    , left
-    , right
-    , accelerate
-    , shoot
-    , hyperdrive
     , isAccelerating = false
     , isTurningLeft = false
     , isTurningRight = false
@@ -14,13 +9,13 @@ MYGAME.playerShip = function(spec, graphics) {
     , isPlayingRocketSound = false
     , shouldTryToFireLaser = false
     , rocketSoundSecondsPlayed = 0
-    , timeSinceLastJump = 0
+    , timeSinceLastJump = 5
     , secondsSinceLastLaserFired = 100 // Just some really big number to allow it to fire right away
     , engineSpec
     , engine1
     , engine2
     , rocketSnd
-    , myKeyboard = MYGAME.input.Keyboard
+    , myKeyboard = MYGAME.input.Keyboard()
     , ship = {
         image: spec.image,
         acceleration: spec.acceleration,
@@ -40,24 +35,24 @@ MYGAME.playerShip = function(spec, graphics) {
       }
     ;
 
-  that.shipShouldAccel = function() {
+  var shipShouldAccel = function() {
     isAccelerating = true;
   };
 
-  that.shipShouldTurnRight = function(elapsedTime) {
+  var shipShouldTurnRight = function() {
     isTurningRight = true;
   };
 
-  that.shipShouldTurnLeft = function(elapsedTime) {
+  var shipShouldTurnLeft = function() {
     isTurningLeft = true;
   };
 
-  that.fireLaserKeyPressed = function() {
+  var fireLaserKeyPressed = function() {
     shouldTryToFireLaser = true;
   };
 
-  that.hyperJumpKeyPressed = function () {
-    if (timeSinceLastJump > 3) {
+  var hyperJumpKeyPressed = function () {
+    if (timeSinceLastJump > 5) {
       shouldTryToHyperJump = true;
     }
   };
@@ -200,37 +195,34 @@ MYGAME.playerShip = function(spec, graphics) {
     left: KeyEvent.DOM_VK_A,
     right: KeyEvent.DOM_VK_D,
     shoot: KeyEvent.DOM_VK_SPACE,
-    hyperdrive: KeyEvent.DOM_VK_S
+    jump: KeyEvent.DOM_VK_S
   }
-  that.keys = {};
 
   that.setInputListeners = function (isHumanPlayer) {
-    console.log('you are setting input listeners');
-    console.log(originalKeys);
-    if (!that.keys.accelerate) {
-      that.keys.accelerate = originalKeys.accel
+    if (!MYGAME.keys.accel) {
+      MYGAME.keys.accel = originalKeys.accel
     }
-    if (!that.keys.left) {
-      that.keys.left = originalKeys.left
+    if (!MYGAME.keys.left) {
+      MYGAME.keys.left = originalKeys.left
     }
-    if (!that.keys.right) {
-      that.keys.right = originalKeys.right
+    if (!MYGAME.keys.right) {
+      MYGAME.keys.right = originalKeys.right
     }
-    if (!that.keys.shoot) {
-      that.keys.shoot = originalKeys.shoot
+    if (!MYGAME.keys.shoot) {
+      MYGAME.keys.shoot = originalKeys.shoot
     }
-    if (!that.keys.hyperdrive) {
-      that.keys.hyperdrive = originalKeys.hyperdrive
+    if (!MYGAME.keys.jump) {
+      MYGAME.keys.jump = originalKeys.jump
     }
-    console.log(that.keys);
 
     if (isHumanPlayer) {
-      myKeyboard.registerCommand(that.keys.accelerate, that.shipShouldAccel);
-      myKeyboard.registerCommand(that.keys.left, that.shipShouldTurnLeft);
-      myKeyboard.registerCommand(that.keys.right, that.shipShouldTurnRight);
-      myKeyboard.registerCommand(that.keys.shoot, that.fireLaserKeyPressed);
-      myKeyboard.registerCommand(that.keys.hyperdrive, that.hyperJumpKeyPressed);
+      myKeyboard.registerCommand(MYGAME.keys.accel, shipShouldAccel);
+      myKeyboard.registerCommand(MYGAME.keys.left, shipShouldTurnLeft);
+      myKeyboard.registerCommand(MYGAME.keys.right, shipShouldTurnRight);
+      myKeyboard.registerCommand(MYGAME.keys.shoot, fireLaserKeyPressed);
+      myKeyboard.registerCommand(MYGAME.keys.jump, hyperJumpKeyPressed);
     }
+    console.log('the keybaord object', myKeyboard)
   };
 
   that.stopSound = function() {
@@ -250,19 +242,19 @@ MYGAME.playerShip = function(spec, graphics) {
 	    // copy an object content to new object
 	  return JSON.parse(JSON.stringify({direction: ship.direction, point: ship.center}));
 	  };
-	  
+
   that.getShipRotation = function() {
 	  return JSON.parse(JSON.stringify(ship.rotation));
   };
-  
+
   that.getShipDirection = function() {
 	  return JSON.parse(JSON.stringify(ship.direction));
   };
-  
+
   that.getShipSpeed = function() {
 	  return JSON.parse(JSON.stringify(ship.speed));
   };
-  
+
   that.resetShip = function() {
     that.stopSound();
     ship.rotation = 0;

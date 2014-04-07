@@ -1,6 +1,7 @@
 var MYGAME = {
   images : {},
   screens : {},
+  keys: {},
 
   status : {
     preloadRequest : 0,

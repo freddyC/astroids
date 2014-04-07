@@ -47,14 +47,27 @@ MYGAME.HyperJump = (function (offset) {
           y: (y * cellHeight) + (cellHeight/2)
         };
         MYGAME.gameController.getAsteroids().forEach(function (asteroid) {
-          var a = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
-          // me.x -= canvas.width;
-          // var b = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
-          // me.y -= canvas.height;
-          // var c = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
-          // me.x += canvas.width;
-          // var d = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
-          grid[x][y] += Math.min(a/*,b,c,d*/);
+          var a
+            , b = Infinity
+            , c = Infinity
+            , d = Infinity
+            , center = asteroid.getAsteroidCenter()
+            ;
+
+          a = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
+            me.x -= canvas.width;
+          if (center.x > canvas.width / 2) {
+            b = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
+          }
+          me.y -= canvas.height;
+          if (center.y > canvas.height / 2 && center.x > canvas.width / 2) {
+            c = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
+          }
+          me.x += canvas.width;
+          if (canvas.y > canvas.height / 2) {
+            d = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
+          }
+          grid[x][y] += Math.min(a,b,c,d);
         });
       }
     }
