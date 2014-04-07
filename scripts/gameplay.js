@@ -17,9 +17,9 @@ MYGAME.screens['game-play'] = (function() {
   };
 
   function setHumanPlayer (isHuman) {
-	  humanPlayer = isHuman;
+    humanPlayer = isHuman;
   }
-  
+
   function initialize() {
     document.getElementById('canvas-main').height = window.innerHeight;
     document.getElementById('canvas-main').width = window.innerWidth;
@@ -36,63 +36,62 @@ MYGAME.screens['game-play'] = (function() {
     lastTimeStamp = time;
 
     if (MYGAME.gameController.gameInProgress) {
-    	
-    	MYGAME.gameController.update(elapsedTime);
-    	
-    	MYGAME.graphics.clear();
-        MYGAME.gameController.render();
-        
-    	requestAnimationFrame(gameLoop);
+
+      MYGAME.gameController.update(elapsedTime);
+
+      MYGAME.graphics.clear();
+      MYGAME.gameController.render();
+      requestAnimationFrame(gameLoop);
     } else {
-    	if (humanPlayer) {
-    		MYGAME.game.showScreen('get-player');
-    	} else {
-    		MYGAME.game.showScreen('main-menu');
-    	}
+      if (humanPlayer) {
+        MYGAME.game.showScreen('get-player');
+      } else {
+        MYGAME.game.showScreen('main-menu');
+      }
     }
   }
-  
+
   function startInputListeners () {
-	  window.onkeypress = function(){ if(!humanPlayer){ console.log('key'); stopAttractMode();} };
-	  window.onmousemove = handleMouse;
-	  window.mousedown = function(){ if(!humanPlayer){ console.log('mouse down'); stopAttractMode();} };
-	  window.mouseup = function(){ if(!humanPlayer){ console.log('mouse up'); stopAttractMode();} };
+    window.onkeypress = function(){ if(!humanPlayer){ console.log('key'); stopAttractMode();} };
+    window.onmousemove = handleMouse;
+    window.mousedown = function(){ if(!humanPlayer){ console.log('mouse down'); stopAttractMode();} };
+    window.mouseup = function(){ if(!humanPlayer){ console.log('mouse up'); stopAttractMode();} };
   }
 
 
   function handleMouse (event) {
-	  if (humanPlayer) {
-		  return;
-	  }
-	  
-	  if (mouseX === 0 && mouseY === 0) {
-		  mouseX = event.clientX;
-		  mouseY = event.clientY;
-	  } else {
-		  if (mouseX != event.clientX && mouseY != event.clientY) {
-			  stopAttractMode();
-		  }
-	  }
+    if (humanPlayer) {
+      return;
+    }
+
+    if (mouseX === 0 && mouseY === 0) {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+    } else {
+      if (mouseX != event.clientX && mouseY != event.clientY) {
+        stopAttractMode();
+      }
+    }
   }
-  
+
   function stopAttractMode () {
-	  if (inGame) {
-	    console.log('input detected!');
-	    inGame = false;
-	    MYGAME.gameController.clearGame();
-	    MYGAME.gameController.gameInProgress = false;
-	    MYGAME.game.showScreen('main-menu');
-	  }
+    if (inGame) {
+      console.log('input detected!');
+      inGame = false;
+      MYGAME.gameController.clearGame();
+      MYGAME.gameController.gameInProgress = false;
+      MYGAME.game.showScreen('main-menu');
+    }
   }
-  
-  
+
+
   function run() {
-	inGame = true;
-	mouseX = 0;
-	mouseY = 0;
+  inGame = true;
+  mouseX = 0;
+  mouseY = 0;
     lastTimeStamp = performance.now();
     if (!humanPlayer) {
-    	startInputListeners ();
+      startInputListeners ();
     }
     MYGAME.gameController.run(humanPlayer);
     cancelNextRequest = false;
