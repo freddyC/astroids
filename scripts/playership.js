@@ -15,7 +15,7 @@ MYGAME.playerShip = function(spec, graphics) {
     , engine1
     , engine2
     , rocketSnd
-    , myKeyboard = MYGAME.input.Keyboard()
+    , myKeyboard = MYGAME.input.Keyboard
     , ship = {
         image: spec.image,
         acceleration: spec.acceleration,
@@ -35,23 +35,25 @@ MYGAME.playerShip = function(spec, graphics) {
       }
     ;
 
-  var shipShouldAccel = function() {
+  MYGAME.input.resetInput();
+
+  that.shipShouldAccel = function() {
     isAccelerating = true;
   };
 
-  var shipShouldTurnRight = function(elapsedTime) {
+  that.shipShouldTurnRight = function(elapsedTime) {
     isTurningRight = true;
   };
 
-  var shipShouldTurnLeft = function(elapsedTime) {
+  that.shipShouldTurnLeft = function(elapsedTime) {
     isTurningLeft = true;
   };
 
-  var fireLaserKeyPressed = function() {
+  that.fireLaserKeyPressed = function() {
     shouldTryToFireLaser = true;
   };
 
-  var hyperJumpKeyPressed = function () {
+  that.hyperJumpKeyPressed = function () {
     if (timeSinceLastJump > 3) {
       shouldTryToHyperJump = true;
     }
@@ -190,11 +192,11 @@ MYGAME.playerShip = function(spec, graphics) {
   engine1 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
   engine2 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
 
-  myKeyboard.registerCommand(KeyEvent.DOM_VK_W, shipShouldAccel);
-  myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
-  myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
-  myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, fireLaserKeyPressed);
-  myKeyboard.registerCommand(KeyEvent.DOM_VK_S, hyperJumpKeyPressed);
+  // myKeyboard.registerCommand(KeyEvent.DOM_VK_W, shipShouldAccel);
+  // myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
+  // myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
+  // myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, fireLaserKeyPressed);
+  // myKeyboard.registerCommand(KeyEvent.DOM_VK_S, hyperJumpKeyPressed);
 
   that.getShipCenter = function () {
     // copy an object content to new object
@@ -281,7 +283,7 @@ MYGAME.playerShip = function(spec, graphics) {
     ship.fade = 1.0;
     }
       graphics.drawImage(ship);
-      
+
   }
   engine1.render();
   engine2.render();

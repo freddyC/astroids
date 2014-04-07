@@ -9,7 +9,7 @@ MYGAME.HyperJump = (function (offset) {
     ;
 
   var whereToJump = function (off) {
-	offset = off;
+    offset = off;
     var grid = getGrid();
     fillgrid(grid);
     return findSafest(grid);
@@ -47,18 +47,25 @@ MYGAME.HyperJump = (function (offset) {
           y: (y * cellHeight) + (cellHeight/2)
         };
         MYGAME.gameController.getAsteroids().forEach(function (asteroid) {
-          grid[x][y] += distanceBetweenPoints(me, asteroid.getAsteroidCenter());
+          var a = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
+          // me.x -= canvas.width;
+          // var b = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
+          // me.y -= canvas.height;
+          // var c = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
+          // me.x += canvas.width;
+          // var d = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
+          grid[x][y] += Math.min(a/*,b,c,d*/);
         });
       }
     }
   };
 
   var getGrid = function () {
-    
-	canvas = $('#canvas-main')[0];
-	cellWidth = (canvas.width - 2 * offset) / persicion;
-	cellHeight = (canvas.height - 2 * offset) / persicion;
-	  
+
+  canvas = $('#canvas-main')[0];
+  cellWidth = (canvas.width - 2 * offset) / persicion;
+  cellHeight = (canvas.height - 2 * offset) / persicion;
+
     var grid   = []
       , row    = []
       ;

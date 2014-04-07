@@ -74,54 +74,73 @@ MYGAME.input = (function() {
     return that;
   }
 
-  function Keyboard() {
-    var keys
-      , that = {
-          keys : {},
-          handlers : []
-        }
-      ;
+  var Keyboard = (function Keyboard() {
+      var keys
+        , that = {
+            keys : {},
+            handlers : []
+          }
+        ;
 
-    function keyPress(e) {
-      that.keys[e.keyCode] = e.timeStamp;
-    }
-
-    function keyRelease(e) {
-      delete that.keys[e.keyCode];
-    }
-
-    // ------------------------------------------------------------------
-    // Allows the client code to register a keyboard handler
-    // ------------------------------------------------------------------
-    that.registerCommand = function(key, handler) {
-      that.handlers.push({ key : key, handler : handler});
-    };
-
-    // ------------------------------------------------------------------
-    // Allows the client to invoke all the handlers for the registered key/handlers.
-    // ------------------------------------------------------------------
-    that.update = function(elapsedTime) {
-      for (var key = 0; key < that.handlers.length; key++) {
-        if (typeof that.keys[that.handlers[key].key] !== 'undefined') {
-          that.handlers[key].handler(elapsedTime);
-        }
+      function keyPress(e) {
+        that.keys[e.keyCode] = e.timeStamp;
       }
-    };
 
-    // These are used to keep track of which keys are currently pressed
-    window.addEventListener('keydown', keyPress.bind(that));
-    window.addEventListener('keyup', keyRelease.bind(that));
+      function keyRelease(e) {
+        delete that.keys[e.keyCode];
+      }
 
-    return that;
+      // ------------------------------------------------------------------
+      // Allows the client code to register a keyboard handler
+      // ------------------------------------------------------------------
+      that.registerCommand = function(key, handler) {
+        that.handlers.push({ key : key, handler : handler});
+      };
+
+      // ------------------------------------------------------------------
+      // Allows the client to invoke all the handlers for the registered key/handlers.
+      // ------------------------------------------------------------------
+      that.update = function(elapsedTime) {
+        that.handlers.forEach(function (handler) {
+          if (handler.key && that.keys[handler.key] && that.keys[handler.key].key) {
+            console.log(handler)
+            handler.handler(elapsedTime);
+          }
+        })
+        // for (var key = 0; key < that.handlers.length; key++) {
+        //   if (typeof that.keys[that.handlers[key].key] !== 'undefined') {
+        //     console.log()
+        //     that.handlers[key].handler(elapsedTime);
+        //   }
+        // }
+      };
+
+      // These are used to keep track of which keys are currently pressed
+      window.addEventListener('keydown', keyPress.bind(that));
+      window.addEventListener('keyup', keyRelease.bind(that));
+
+      return that;
+    }())
+
+  var clearMovementHandlers = function () {
+    var movementHandlers = [
+      MYGAME.playerShip.shipShouldAccel,
+      MYGAME.playerShip.shipShouldTurnLeft,
+      MYGAME.playerShip.shipShouldTurnRight,
+      MYGAME.playerShip.fireLaserKeyPressed,
+      MYGAME.playerShip.hyperJumpKeyPressed
+    ];
+    Keyboard.handlers = Keyboard.handlers.filter(function (handler) {
+      if (movementHandlers.indexOf(handler.handler) !== -1) {
+        return false;
+      }
+      return true;
+    })
   }
 
-'#set-accelerate'
-'#set-left-turn'
-'#set-right-turn'
-'#set-shoot'
-'#set-hyper-shift'
 
   var updateInput = function () {
+    clearMovementHandlers();
     var accelerate = $('#set-accelerate').val()
       , left       = $('#set-left-turn').val()
       , right      = $('#set-right-turn').val()
@@ -129,19 +148,20 @@ MYGAME.input = (function() {
       , hyper      = $('#set-hyper-shift').val()
       ;
   }
+
   var resetInput = function () {
+    clearMovementHandlers();
     $('#set-accelerate').val(KeyEvent.DOM_VK_W);
     $('#set-left-turn').val(KeyEvent.DOM_VK_A);
     $('#set-right-turn').val(KeyEvent.DOM_VK_D);
     $('#set-shoot').val(KeyEvent.DOM_VK_SPACE);
     $('#set-hyper-shift').val(KeyEvent.DOM_VK_S);
 
- that.registerCommand(KeyEvent.DOM_VK_W     , shipShouldAccel);
- that.registerCommand(KeyEvent.DOM_VK_A     , shipShouldTurnLeft);
- that.registerCommand(KeyEvent.DOM_VK_D     , shipShouldTurnRight);
- that.registerCommand(KeyEvent.DOM_VK_SPACE , fireLaserKeyPressed);
- that.registerCommand(KeyEvent.DOM_VK_S     , hyperJumpKeyPressed);
-
+    Keyboard.registerCommand(KeyEvent.DOM_VK_W     , MYGAME.playerShip.shipShouldAccel);
+    Keyboard.registerCommand(KeyEvent.DOM_VK_A     , MYGAME.playerShip.shipShouldTurnLeft);
+    Keyboard.registerCommand(KeyEvent.DOM_VK_D     , MYGAME.playerShip.shipShouldTurnRight);
+    Keyboard.registerCommand(KeyEvent.DOM_VK_SPACE , MYGAME.playerShip.fireLaserKeyPressed);
+    Keyboard.registerCommand(KeyEvent.DOM_VK_S     , MYGAME.playerShip.hyperJumpKeyPressed);
   }
 
 
