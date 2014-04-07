@@ -1,99 +1,100 @@
 MYGAME.HyperJump = (function (offset) {
   'use strict';
 
-  var persicion = 50
-    , canvas
-    , cellWidth
-    , cellHeight
-    , offset
-    ;
-
   var whereToJump = function (off) {
-    offset = off;
-    var grid = getGrid();
-    fillgrid(grid);
-    return findSafest(grid);
-  };
+    var offset = off * 2;
 
-  function findSafest(grid) {
-    var max = 0
-      , maxX
-      , maxY
+    var canvas    = $('#canvas-main')[0]
+      , dangerArr = MYGAME.gameController.getAsteroids()
+      , x1        = offset
+      , y1        = offset
+      , x2        = canvas.width - offset
+      , y2        = canvas.height - offset
       ;
 
-    for (var x = 0; x < grid.length; ++x) {
-      for (var y = 0; y < grid[x].length; ++y) {
-        if (grid[x][y] > max) {
-          max = grid[x][y];
-          maxX = x;
-          maxY = y;
+    return emptiestQuad(x1, y1, x2, y2, dangerArr)
+  };
+
+
+  var emptiestQuad = function (x1, y1, x2, y2, dangerArr) {
+    console.log('passed into the function',x1, y1, x2, y2, dangerArr)
+    if (dangerArr.length == 0) {
+      console.log('results',{
+        x: (x1 + x2) / 2,
+        y: (y1 + y2) / 2
+      });
+      return {
+        x: (x1 + x2) / 2,
+        y: (y1 + y2) / 2
+      }
+    }
+
+    var xH = (x1 + x2) / 2
+      , yH = (y1 + y2) / 2
+      , points = {
+          q1: [],
+          q2: [],
+          q3: [],
+          q4: []
         }
-      }
-    }
-
-    var c = {
-      x: (maxX * cellWidth) + (cellWidth/2) + offset,
-      y: (maxY * cellHeight) + (cellHeight/2) + offset
-    };
-    return c;
-  }
-
-
-  var fillgrid = function (grid) {
-    for (var x = 0; x < grid.length; ++x) {
-      for (var y = 0; y < grid[x].length; ++y) {
-        var me = {
-          x: (x * cellWidth) + (cellWidth/2),
-          y: (y * cellHeight) + (cellHeight/2)
-        };
-        MYGAME.gameController.getAsteroids().forEach(function (asteroid) {
-          var a
-            , b = Infinity
-            , c = Infinity
-            , d = Infinity
-            , center = asteroid.getAsteroidCenter()
-            ;
-
-          a = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
-            me.x -= canvas.width;
-          if (center.x > canvas.width / 2) {
-            b = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
-          }
-          me.y -= canvas.height;
-          if (center.y > canvas.height / 2 && center.x > canvas.width / 2) {
-            c = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
-          }
-          me.x += canvas.width;
-          if (canvas.y > canvas.height / 2) {
-            d = distanceBetweenPoints(me, asteroid.getAsteroidCenter());
-          }
-          grid[x][y] += Math.min(a,b,c,d);
-        });
-      }
-    }
-  };
-
-  var getGrid = function () {
-
-  canvas = $('#canvas-main')[0];
-  cellWidth = (canvas.width - 2 * offset) / persicion;
-  cellHeight = (canvas.height - 2 * offset) / persicion;
-
-    var grid   = []
-      , row    = []
       ;
 
-    for (var y = 0; y < persicion; ++y) {
-      row.push(0);
+    var limits = {
+      q1: {
+        x1: xH,
+        x2: x2,
+        y1: y1,
+        y2: yH
+      },
+      q2: {
+        x1: x1,
+        x2: xH,
+        y1: y1,
+        y2: yH
+      },
+      q3: {
+        x1: x1,
+        x2: xH,
+        y1: yH,
+        y2: y2
+      },
+      q4: {
+        x1: xH,
+        x2: x2,
+        y1: yH,
+        y2: y2
+      }
     }
 
-    for (var x = 0; x < persicion; ++x) {
-      grid.push(row.concat([]));
+    console.log(limits);
+
+    dangerArr.forEach(function (a) {
+      if (a.center.x > xH && a.center.y < yH) {
+        points.q1.push(a);
+      } else if (a.center.x < xH && a.center.y < yH) {
+        points.q2.push(a);
+      } else if (a.center.x < xH && a.center.y > yH) {
+        points.q3.push(a);
+      } else {
+        points.q4.push(a);
+      }
+    })
+    var min = 'q1';
+    if (points.q2.length < points[min].length) {
+      min = 'q2';
     }
-    return grid;
+    if (points.q3.length < points[min].length) {
+      min = 'q3';
+    }
+    if (points.q4.length < points[min].length) {
+      min = 'q4';
+    }
+    console.log('min',min);
+    return emptiestQuad(limits[min].x1, limits[min].y1, limits[min].x2, limits[min].y2, points[min])
   };
 
   return {
     whereToJump: whereToJump
   };
+
 }());
