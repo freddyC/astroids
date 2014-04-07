@@ -10,11 +10,15 @@ MYGAME.playerShip = function(spec, graphics) {
     , shouldTryToFireLaser = false
     , rocketSoundSecondsPlayed = 0
     , timeSinceLastJump = 5
+    , hyperParticles = null
+    , hyperSpec
+    , hyperCenter
     , secondsSinceLastLaserFired = 100 // Just some really big number to allow it to fire right away
     , engineSpec
     , engine1
     , engine2
     , rocketSnd
+    , hyperSnd = new Audio('sounds/hypersound.mp3')
     , myKeyboard = MYGAME.input.Keyboard()
     , ship = {
         image: spec.image,
@@ -35,6 +39,8 @@ MYGAME.playerShip = function(spec, graphics) {
       }
     ;
 
+  hyperSnd.volume = 0.5;
+  
   that.shipShouldAccel = function() {
     isAccelerating = true;
   };
@@ -181,6 +187,9 @@ MYGAME.playerShip = function(spec, graphics) {
 
   rocketSnd = new Audio('sounds/rocket.mp3');
   rocketSnd.volume = 0.4;
+  
+  //hyperSnd = new Audio('sounds/hypersound.mp3');
+  //hyperSnd.volume = 0.6;
 
   engineSpec = {
     image: MYGAME.images['images/blue.png'],
@@ -189,6 +198,13 @@ MYGAME.playerShip = function(spec, graphics) {
 
   engine1 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
   engine2 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
+  
+  hyperParticles = {
+    image: MYGAME.images['images/whitestar.png'],
+    lifetime: { mean: .3, stdev: 0.1 }
+  };
+  
+  hyperParticles = MYGAME.hyperParticles(hyperParticles, MYGAME.graphics);
 
   var originalKeys = {
     accel: KeyEvent.DOM_VK_W,
@@ -280,6 +296,7 @@ MYGAME.playerShip = function(spec, graphics) {
     if(!MYGAME.gameController.playerShipShouldAppear) {
       engine1.update(elapsedTime/1000);
         engine2.update(elapsedTime/1000);
+        hyperParticles.update(elapsedTime/1000);
       return;
     }
 
@@ -291,15 +308,35 @@ MYGAME.playerShip = function(spec, graphics) {
     moveShip(elapsedTime);
     engine1.update(elapsedTime/1000);
     engine2.update(elapsedTime/1000);
+    hyperParticles.update(elapsedTime/1000);
     timeSinceLastJump += elapsedTime/1000;
 
     if (shouldTryToHyperJump && timeSinceLastJump > 3) {
       shouldTryToHyperJump = false;
+      hyperCenter = JSON.parse(JSON.stringify(ship.center));
+      hyperParticles.setRandDirections();
       timeSinceLastJump = 0;
       ship.speed = 0;
+      hyperSnd.play();
       hyperdriveHandler();
     }
 
+    if (timeSinceLastJump < 0.25) {
+    	var newHyperSpec = {
+    	        speed: {
+    	          mean: 600,
+    	          stdev: 100
+    	        },
+    	        center: hyperCenter
+    	      };
+
+    	      for (var i = 0; i < 60; ++i) {
+    	    	  hyperParticles.create(newHyperSpec);
+    	      }
+
+    }
+    
+    
 
     if (isAccelerating !== isPlayingRocketSound) {
       isPlayingRocketSound = isAccelerating;
@@ -344,6 +381,7 @@ MYGAME.playerShip = function(spec, graphics) {
   }
   engine1.render();
   engine2.render();
+  hyperParticles.render();
   };
 
   return that;
