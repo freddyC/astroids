@@ -203,7 +203,7 @@ MYGAME.gameController = (function() {
   var renderAlienShips = function () {
     that.alienShips.forEach(function (alienShip) {
       alienShip.render();
-      });
+    });
   };
 
   var createSmallAlienShip = function () {
