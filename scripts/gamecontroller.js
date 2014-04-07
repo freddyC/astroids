@@ -9,6 +9,8 @@ MYGAME.gameController = (function() {
     , mediumAsteroidRadius
     , smallAsteroidRadius
     , backgroundSnd
+    , shipBoomSound
+    , asteroidBoomSound
     , soundSecondsPlayed
     , timeSinceShipWasDestroyed
     , smallAsteroidImageArray
@@ -39,7 +41,8 @@ MYGAME.gameController = (function() {
     ;
 
   that.clearGame = function () {
-    backgroundSnd.pause();
+    backgroundSnd.currentTime = 0;
+	backgroundSnd.pause();
     that.playerShip.stopSound();
     timeSinceShipWasDestroyed = 0;
     asteroids = [];
@@ -53,6 +56,10 @@ MYGAME.gameController = (function() {
     backgroundSnd.volume = 0.5;
     that.alienPewSound = new Audio('sounds/alienshot.mp3');
     alienBoomSnd = new Audio('sounds/alienboom.mp3');
+    shipBoomSound = new Audio('sounds/bang.mp3');
+    shipBoomSound.volume = 0.6;
+    asteroidBoomSound = new Audio('sounds/asteroid-bang.mp3');
+    asteroidBoomSound.volume = 0.8;
     smallAsteroidImageArray = [];
     mediumAsteroidImageArray = [];
     largeAsteroidImageArray = [];
@@ -105,7 +112,9 @@ MYGAME.gameController = (function() {
     that.shipExploder.update(elapsedTime);
     that.asteroidExploder.update(elapsedTime);
     updateDestroyedShip(elapsedTime);
-    updateSound(elapsedTime);
+    if (backgroundSnd.paused) {
+    	backgroundSnd.play();
+    }
     updateAsteroids(elapsedTime);
     updateLasers(elapsedTime);
     updateAlienPews(elapsedTime);
@@ -153,17 +162,6 @@ MYGAME.gameController = (function() {
     }
     if (timeSinceShipWasDestroyed >= 4) {
       that.playerShipIsInvincible = false;
-    }
-  };
-
-  var updateSound = function (elapsedSeconds) {
-    elapsedSeconds /= 1000;
-    soundSecondsPlayed += elapsedSeconds;
-    if (soundSecondsPlayed >= 74) {
-      soundSecondsPlayed = 0;
-      backgroundSnd.pause();
-      backgroundSnd.currentTime = 0;
-      backgroundSnd.play();
     }
   };
 
@@ -437,8 +435,8 @@ MYGAME.gameController = (function() {
     that.playerShipIsInvincible = true;
     that.playerShipShouldAppear = false;
     that.playerShip.resetShip();
-    var shipBoomSound = new Audio('sounds/bang.mp3');
-    shipBoomSound.volume = 0.6;
+//    var shipBoomSound = new Audio('sounds/bang.mp3');
+//    shipBoomSound.volume = 0.6;
     shipBoomSound.play();
   };
 
@@ -496,8 +494,6 @@ MYGAME.gameController = (function() {
       laser.shouldBeDeleted = true;
       asteroid.shouldBeDeleted = true;
       that.asteroidExploder.explode(asteroid.getAsteroidCenter());
-      var asteroidBoomSound = new Audio('sounds/asteroid-bang.mp3');
-      asteroidBoomSound.volume = 0.8;
       asteroidBoomSound.play();
     }
   }

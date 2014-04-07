@@ -17,8 +17,9 @@ MYGAME.playerShip = function(spec, graphics) {
     , engineSpec
     , engine1
     , engine2
-    , rocketSnd
     , hyperSnd = new Audio('sounds/hypersound.mp3')
+    , laserSnd = new Audio('sounds/pew.mp3')
+    , rocketSnd = new Audio('sounds/rocket.mp3')
     , myKeyboard = MYGAME.input.Keyboard()
     , ship = {
         image: spec.image,
@@ -40,6 +41,8 @@ MYGAME.playerShip = function(spec, graphics) {
     ;
 
   hyperSnd.volume = 0.5;
+  laserSnd.volume = 0.3;
+  rocketSnd.volume = 0.4;
   
   that.shipShouldAccel = function() {
     isAccelerating = true;
@@ -86,8 +89,8 @@ MYGAME.playerShip = function(spec, graphics) {
           };
           MYGAME.gameController.lasers.push(MYGAME.laser(laserSpec, MYGAME.graphics));
 
-          var laserSnd = new Audio('sounds/pew.mp3');
-          laserSnd.volume = 0.3;
+          //var laserSnd = new Audio('sounds/pew.mp3');
+          //laserSnd.volume = 0.3;
           laserSnd.play();
         }
       }
@@ -184,12 +187,6 @@ MYGAME.playerShip = function(spec, graphics) {
       ship.center.x = window.innerWidth + ship.size.width/2;
     }
   };
-
-  rocketSnd = new Audio('sounds/rocket.mp3');
-  rocketSnd.volume = 0.4;
-  
-  //hyperSnd = new Audio('sounds/hypersound.mp3');
-  //hyperSnd.volume = 0.6;
 
   engineSpec = {
     image: MYGAME.images['images/blue.png'],
