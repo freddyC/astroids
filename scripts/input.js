@@ -139,6 +139,7 @@ MYGAME.input = (function() {
       jump: jump
     }
     MYGAME.keys = customKeys;
+    MYGAME.game.showScreen('main-menu');
   }
 
   var resetInput = function () {
