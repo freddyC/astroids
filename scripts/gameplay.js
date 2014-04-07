@@ -6,12 +6,20 @@ MYGAME.screens['game-play'] = (function() {
   var myMouse = MYGAME.input.Mouse()
     , cancelNextRequest = false
     , lastTimeStamp
+    , humanPlayer = true
+    , inGame
+    , mouseX
+    , mouseY
     ;
 
   window.onscroll = function () {
     window.scrollTo(0, 0);
   };
 
+  function setHumanPlayer (isHuman) {
+	  humanPlayer = isHuman;
+  }
+  
   function initialize() {
     document.getElementById('canvas-main').height = window.innerHeight;
     document.getElementById('canvas-main').width = window.innerWidth;
@@ -33,11 +41,46 @@ MYGAME.screens['game-play'] = (function() {
           requestAnimationFrame(gameLoop);
         });
       } else {
-        MYGAME.game.showScreen('get-player');
+    	if (humanPlayer) {
+    		MYGAME.game.showScreen('get-player');
+    	}
       }
     });
   }
+  
+  function startInputListeners () {
+	  window.onkeypress = function(){ if(!humanPlayer){ console.log('key'); stopAttractMode();} };
+	  window.onmousemove = handleMouse;
+	  window.mousedown = function(){ if(!humanPlayer){ console.log('mouse down'); stopAttractMode();} };
+	  window.mouseup = function(){ if(!humanPlayer){ console.log('mouse up'); stopAttractMode();} };
+  }
 
+
+  function handleMouse (event) {
+	  if (humanPlayer) {
+		  return;
+	  }
+	  
+	  if (mouseX === 0 && mouseY === 0) {
+		  mouseX = event.clientX;
+		  mouseY = event.clientY;
+	  } else {
+		  if (mouseX != event.clientX && mouseY != event.clientY) {
+			  stopAttractMode();
+		  }
+	  }
+  }
+  
+  function stopAttractMode () {
+	  if (inGame) {
+	    console.log('input detected!');
+	    inGame = false;
+	    MYGAME.gameController.clearGame();
+	    MYGAME.gameController.gameInProgress = false;
+	    MYGAME.game.showScreen('main-menu');
+	  }
+  }
+  
   function update (elapsedTime, cb) {
     MYGAME.gameController.update(elapsedTime);
     cb();
@@ -48,17 +91,25 @@ MYGAME.screens['game-play'] = (function() {
     MYGAME.gameController.render();
     cb();
   }
-
+  
+  
+  
   function run() {
+	inGame = true;
+	mouseX = 0;
+	mouseY = 0;
     lastTimeStamp = performance.now();
-    MYGAME.gameController.run();
-
+    if (!humanPlayer) {
+    	startInputListeners ();
+    }
+    MYGAME.gameController.run(humanPlayer);
     cancelNextRequest = false;
     requestAnimationFrame(gameLoop);
   }
 
   return {
     initialize : initialize,
-    run : run
+    run : run,
+    setHumanPlayer : setHumanPlayer
   };
 }());

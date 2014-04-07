@@ -2,6 +2,11 @@ MYGAME.playerShip = function(spec, graphics) {
   'use strict';
 
   var that = {}
+    , left
+    , right
+    , accelerate
+    , shoot
+    , hyperdrive
     , isAccelerating = false
     , isTurningLeft = false
     , isTurningRight = false
@@ -34,8 +39,6 @@ MYGAME.playerShip = function(spec, graphics) {
         fade: 1.0
       }
     ;
-
-  MYGAME.input.resetInput();
 
   that.shipShouldAccel = function() {
     isAccelerating = true;
@@ -192,11 +195,51 @@ MYGAME.playerShip = function(spec, graphics) {
   engine1 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
   engine2 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
 
-  // myKeyboard.registerCommand(KeyEvent.DOM_VK_W, shipShouldAccel);
-  // myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
-  // myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
-  // myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, fireLaserKeyPressed);
-  // myKeyboard.registerCommand(KeyEvent.DOM_VK_S, hyperJumpKeyPressed);
+  var originalKeys = {
+    accel: KeyEvent.DOM_VK_W,
+    left: KeyEvent.DOM_VK_A,
+    right: KeyEvent.DOM_VK_D,
+    shoot: KeyEvent.DOM_VK_SPACE,
+    hyperdrive: KeyEvent.DOM_VK_S
+  }
+  that.keys = {};
+
+  that.setInputListeners = function (isHumanPlayer) {
+    console.log('you are setting input listeners');
+    console.log(originalKeys);
+    if (!that.keys.accelerate) {
+      that.keys.accelerate = originalKeys.accel
+    }
+    if (!that.keys.left) {
+      that.keys.left = originalKeys.left
+    }
+    if (!that.keys.right) {
+      that.keys.right = originalKeys.right
+    }
+    if (!that.keys.shoot) {
+      that.keys.shoot = originalKeys.shoot
+    }
+    if (!that.keys.hyperdrive) {
+      that.keys.hyperdrive = originalKeys.hyperdrive
+    }
+    console.log(that.keys);
+
+    if (isHumanPlayer) {
+      myKeyboard.registerCommand(that.keys.accelerate, that.shipShouldAccel);
+      myKeyboard.registerCommand(that.keys.left, that.shipShouldTurnLeft);
+      myKeyboard.registerCommand(that.keys.right, that.shipShouldTurnRight);
+      myKeyboard.registerCommand(that.keys.shoot, that.fireLaserKeyPressed);
+      myKeyboard.registerCommand(that.keys.hyperdrive, that.hyperJumpKeyPressed);
+    }
+  };
+
+  that.stopSound = function() {
+    isAccelerating = false;
+    isPlayingRocketSound = false;
+    rocketSnd.pause();
+    rocketSnd.currentTime = 0;
+    rocketSoundSecondsPlayed = 0;
+  };
 
   that.getShipCenter = function () {
     // copy an object content to new object
@@ -204,12 +247,14 @@ MYGAME.playerShip = function(spec, graphics) {
   };
 
   that.resetShip = function() {
-  ship.rotation = 0;
-  ship.direction = 0;
-  ship.speed = 0;
-  ship.center = { x: window.innerWidth / 2,
-              y: window.innerHeight / 2
-            };
+    that.stopSound();
+    ship.rotation = 0;
+    ship.direction = 0;
+    ship.speed = 0;
+    ship.center = {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2
+    };
   };
 
   that.getShipPolygon = function() {
@@ -224,7 +269,7 @@ MYGAME.playerShip = function(spec, graphics) {
 
   that.update = function(elapsedTime) {
     if(!MYGAME.gameController.playerShipShouldAppear) {
-    	engine1.update(elapsedTime/1000);
+      engine1.update(elapsedTime/1000);
         engine2.update(elapsedTime/1000);
       return;
     }

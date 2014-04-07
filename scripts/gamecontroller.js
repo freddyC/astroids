@@ -20,6 +20,7 @@ MYGAME.gameController = (function() {
     , remainingShips
     , pointsSinceLastAlien
     , alienBoomSnd
+    , isHumanPlayer
     , that = {
         asteroids: null,
         wave: 0,
@@ -37,8 +38,9 @@ MYGAME.gameController = (function() {
       }
     ;
 
-  function clearGame () {
+  that.clearGame = function () {
     backgroundSnd.pause();
+    that.playerShip.stopSound();
     timeSinceShipWasDestroyed = 0;
     asteroids = [];
     that.lasers = [];
@@ -61,12 +63,17 @@ MYGAME.gameController = (function() {
     that.shipExploder = MYGAME.shipexplosion();
     that.asteroidExploder = MYGAME.asteroidexplosion();
     that.playerShip = initPlayerShip();
+  };
+
+  that.run = function (humanPlayer) {
+    that.alienShips = [];
+    that.alienLasers = [];
     that.alienShips = [];
     that.alienLasers = [];
     pointsSinceLastAlien = 0;
-  };
-
-  that.run = function () {
+    isHumanPlayer = true;
+    isHumanPlayer = humanPlayer;
+    that.playerShip.setInputListeners(isHumanPlayer);
     alldone = 0;
     that.score = 0;
     soundSecondsPlayed = 0;
@@ -85,10 +92,13 @@ MYGAME.gameController = (function() {
   that.update = function (elapsedTime) {
     if (alldone > 80) {
       that.gameInProgress = false;
-      clearGame();
+      that.clearGame();
     }
     if (remainingShips < 0) {
       ++alldone;
+    }
+    if (!isHumanPlayer) {
+      AIUpdate();
     }
     that.playerShip.update(elapsedTime);
     that.shipExploder.update(elapsedTime);
@@ -108,15 +118,19 @@ MYGAME.gameController = (function() {
   };
 
   that.render = function () {
-    that.playerShip.render();
+  if (remainingShips >= 0) {
+      that.playerShip.render();
+  }
     renderLasers();
     that.asteroidExploder.render();
     renderAsteroids();
     that.shipExploder.render();
     renderAlienShips();
     renderAlienPews();
-    drawRemainingShips();
-    renderGameInfo();
+    if (remainingShips >= 0) {
+      drawRemainingShips();
+      renderGameInfo();
+    }
   };
 
   var renderGameInfo = function () {
@@ -194,39 +208,39 @@ MYGAME.gameController = (function() {
   var createSmallAlienShip = function () {
 
     var spec = {
-                   image: MYGAME.images['images/ufo1.png'],
-             size: {
-                     width: 60,
-                     height: 30
-                   },
-                   center: {
-                     x: (that.playerShip.getShipCenter().x >= window.innerWidth / 2) ?  40 : (window.innerWidth - 40),
-                       y: (that.playerShip.getShipCenter().y <= window.innerHeight / 2) ? (window.innerHeight - 60) : 60
-                   },
-                   direction: (that.playerShip.getShipCenter().x >= window.innerWidth / 2) ? (Math.PI / 2) : (Math.PI * 3 / 2),
-                   rotation: 0,
-                   speed: 125,
-                   shotFreqency: {
-                     mean: 3,
-                     stdDev: 1
-                   },
-                   shotAccuracy: Math.PI / 16,
-                   shotSpeed: 400,
-                   shotLifetime: 1.2,
-                   points: 1000,
-                   collisionCircles: [
-                     {
-                     angle: Math.PI / 2,
-                     distance: 15,
-                     radius: 17
-                     }, {
-                     angle: Math.PI * 3 / 2,
-                     distance: 15,
-                     radius: 17
-                     }
-                   ]
-              };
-      that.alienShips.push(MYGAME.alienShip(spec, MYGAME.graphics));
+      image: MYGAME.images['images/ufo1.png'],
+      size: {
+        width: 60,
+        height: 30
+      },
+      center: {
+        x: (that.playerShip.getShipCenter().x >= window.innerWidth / 2) ?  40 : (window.innerWidth - 40),
+        y: (that.playerShip.getShipCenter().y <= window.innerHeight / 2) ? (window.innerHeight - 60) : 60
+      },
+      direction: (that.playerShip.getShipCenter().x >= window.innerWidth / 2) ? (Math.PI / 2) : (Math.PI * 3 / 2),
+      rotation: 0,
+      speed: 125,
+      shotFreqency: {
+        mean: 3,
+        stdDev: 1
+      },
+      shotAccuracy: Math.PI / 16,
+      shotSpeed: 400,
+      shotLifetime: 1.2,
+      points: 1000,
+      collisionCircles: [
+        {
+          angle: Math.PI / 2,
+          distance: 15,
+          radius: 17
+        }, {
+          angle: Math.PI * 3 / 2,
+          distance: 15,
+          radius: 17
+        }
+      ]
+    };
+    that.alienShips.push(MYGAME.alienShip(spec, MYGAME.graphics));
   };
 
   var createLargeAlienShip = function () {
@@ -272,9 +286,9 @@ MYGAME.gameController = (function() {
   };
 
   that.getAsteroids = function () {
-	return asteroids;  
+  return asteroids;
   };
-  
+
   var addAsteroid = function () {
     ++that.wave;
     for (var i = 0; i < that.wave + that.wave/2; ++i) {
@@ -607,7 +621,11 @@ MYGAME.gameController = (function() {
       ]
     };
     return MYGAME.playerShip(shipSpec, MYGAME.graphics);
-  }
+  };
+
+  var AIUpdate = function () {
+    console.log('Decisions were made.');
+  };
 
   return that;
 }());
