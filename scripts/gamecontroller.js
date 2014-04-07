@@ -113,15 +113,19 @@ MYGAME.gameController = (function() {
   };
 
   that.render = function () {
-    that.playerShip.render();
+	if (remainingShips >= 0) {
+      that.playerShip.render();
+	}
     renderLasers();
     that.asteroidExploder.render();
     renderAsteroids();
     that.shipExploder.render();
     renderAlienShips();
     renderAlienPews();
-    drawRemainingShips();
-    renderGameInfo();
+    if (remainingShips >= 0) {
+      drawRemainingShips();
+      renderGameInfo();
+    }
   };
 
   var renderGameInfo = function () {

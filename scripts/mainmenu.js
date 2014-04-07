@@ -5,30 +5,40 @@ MYGAME.screens['main-menu'] = (function() {
   
   var secondsIdle
   , lastTimeStamp
+  , inMainMenu
   ;
+  
+  function stopIdleLoop () {
+	  inMainMenu = false;
+  }
   
   function initialize() {
     // Setup each of menu events for the screens
     document.getElementById('id-new-game').addEventListener(
       'click',
-      function() { 
+      function() {
+    	  MYGAME.screens['main-menu'].stopIdleLoop();
     	  MYGAME.screens['game-play'].setHumanPlayer(true);
     	  MYGAME.game.showScreen('game-play'); },
       false);
 
     document.getElementById('id-controls').addEventListener('click', function() {
+      MYGAME.screens['main-menu'].stopIdleLoop();
       MYGAME.game.showScreen('configure-controls');
     }, false);
 
     document.getElementById('id-high-scores').addEventListener('click', function() {
+      MYGAME.screens['main-menu'].stopIdleLoop();
       MYGAME.game.showScreen('high-scores');
     }, false);
 
     document.getElementById('id-help').addEventListener('click', function() {
+      MYGAME.screens['main-menu'].stopIdleLoop();
       MYGAME.game.showScreen('help');
     }, false);
 
     document.getElementById('id-about').addEventListener('click', function() {
+      MYGAME.screens['main-menu'].stopIdleLoop();
       MYGAME.game.showScreen('about');
     }, false);
   }
@@ -38,21 +48,19 @@ MYGAME.screens['main-menu'] = (function() {
 	secondsIdle += (time - lastTimeStamp) / 1000;
 	lastTimeStamp = time;
 	
-	if (secondsIdle <  10) {
+	if (secondsIdle <  10 && inMainMenu) {
 		requestAnimationFrame(idleLoop);
 	} else {
-		window.onkeypress = null;
-		window.onmousemove = null;
-		window.mousedown = null;
-		window.mouseup = null;
-		MYGAME.screens['game-play'].setHumanPlayer(false);
-		MYGAME.game.showScreen('game-play');
+		if (inMainMenu) {
+		  MYGAME.screens['game-play'].setHumanPlayer(false);
+		  MYGAME.game.showScreen('game-play');
+		}
 	}
   }
-  
-  
+ 
   function run() {
     // I know this is empty, there isn't anything to do.
+	  inMainMenu = true;
 	  secondsIdle = 0;
 	  lastTimeStamp = performance.now();
 	  
@@ -67,6 +75,7 @@ MYGAME.screens['main-menu'] = (function() {
 
   return {
     initialize : initialize,
-    run : run
+    run : run,
+    stopIdleLoop : stopIdleLoop
   };
 }());

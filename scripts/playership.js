@@ -35,23 +35,23 @@ MYGAME.playerShip = function(spec, graphics) {
       }
     ;
 
-  var shipShouldAccel = function() {
+  that.shipShouldAccel = function() {
     isAccelerating = true;
   };
 
-  var shipShouldTurnRight = function(elapsedTime) {
+  that.shipShouldTurnRight = function() {
     isTurningRight = true;
   };
 
-  var shipShouldTurnLeft = function(elapsedTime) {
+  that.shipShouldTurnLeft = function() {
     isTurningLeft = true;
   };
 
-  var fireLaserKeyPressed = function() {
+  that.fireLaserKeyPressed = function() {
     shouldTryToFireLaser = true;
   };
 
-  var hyperJumpKeyPressed = function () {
+  that.hyperJumpKeyPressed = function () {
     if (timeSinceLastJump > 3) {
       shouldTryToHyperJump = true;
     }
@@ -192,11 +192,11 @@ MYGAME.playerShip = function(spec, graphics) {
 
   that.setInputListeners = function (isHumanPlayer) {
     if (isHumanPlayer) {
-      myKeyboard.registerCommand(KeyEvent.DOM_VK_W, shipShouldAccel);
-      myKeyboard.registerCommand(KeyEvent.DOM_VK_A, shipShouldTurnLeft);
-      myKeyboard.registerCommand(KeyEvent.DOM_VK_D, shipShouldTurnRight);
-      myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, fireLaserKeyPressed);
-      myKeyboard.registerCommand(KeyEvent.DOM_VK_S, hyperJumpKeyPressed);
+      myKeyboard.registerCommand(KeyEvent.DOM_VK_W, that.shipShouldAccel);
+      myKeyboard.registerCommand(KeyEvent.DOM_VK_A, that.shipShouldTurnLeft);
+      myKeyboard.registerCommand(KeyEvent.DOM_VK_D, that.shipShouldTurnRight);
+      myKeyboard.registerCommand(KeyEvent.DOM_VK_SPACE, that.fireLaserKeyPressed);
+      myKeyboard.registerCommand(KeyEvent.DOM_VK_S, that.hyperJumpKeyPressed);
     }
   };
   
