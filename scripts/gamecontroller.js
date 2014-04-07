@@ -665,7 +665,7 @@ MYGAME.gameController = (function() {
     }
 
     if (that.alienShips.length > 0) {
-         var targetDirection = Angles.normalizer(angleFromTwoPoints(that.alienShips[0].getShipCenter(), that.playerShip.getShipCenter()) - Angles.normalizer(that.playerShip.getShipRotation()));
+         var targetDirection = Angles.normalizer((angleFromTwoPoints(that.alienShips[0].getShipCenter(), that.playerShip.getShipCenter()) + (that.alienShips[0].getShipCenter().y > that.playerShip.getShipCenter().y ? Math.PI : 0)) - Angles.normalizer(that.playerShip.getShipRotation()));
         if (targetDirection <= (Math.PI / 32)) {
          that.playerShip.fireLaserKeyPressed();
        } else if (targetDirection > Math.PI) {
@@ -677,7 +677,7 @@ MYGAME.gameController = (function() {
     }
 
     if (closestRoid.asteroid) {
-        var targetDirection = Angles.normalizer(angleFromTwoPoints(closestRoid.asteroid.getAsteroidCenter(), that.playerShip.getShipCenter()) - Angles.normalizer(that.playerShip.getShipRotation()));
+        var targetDirection = Angles.normalizer((angleFromTwoPoints(closestRoid.asteroid.getAsteroidCenter(), that.playerShip.getShipCenter()) + (closestRoid.asteroid.getAsteroidCenter().y > that.playerShip.getShipCenter().y ? Math.PI : 0)) - Angles.normalizer(that.playerShip.getShipRotation()));
         if (targetDirection <= (Math.PI / 32)) {
          that.playerShip.fireLaserKeyPressed();
        } else if (targetDirection > Math.PI) {
