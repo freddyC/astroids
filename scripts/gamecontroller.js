@@ -136,11 +136,11 @@ MYGAME.gameController = (function() {
 
   var renderGameInfo = function () {
     var scoreSpec = {
-     text: 'Score: ' + that.score + '   Level: ' + that.wave,
-     font: '20pt Calibri',
-     color: '#7CFC00',
+     text: 'Score: ' + that.score + '   Level: ' + that.wave + (that.playerShip.getHyperAvail() ? '   Hyper-Jump' : ''),
+     font: '18pt Calibri',
+     color: '#87D1F3',
      x: remainingShips * 30 + 20,
-     y: 40
+     y: 41
     };
     MYGAME.graphics.drawText(scoreSpec);
   };
@@ -628,7 +628,7 @@ MYGAME.gameController = (function() {
 
     var closestRoid = closestAsteroid();
 
-    if (closestRoid.asteroid && closestRoid.distance < 40) {
+    if (closestRoid.asteroid && closestRoid.distance < 50) {
       that.playerShip.hyperJumpKeyPressed();
       console.log('hyper jump');
       return;

@@ -271,6 +271,11 @@ MYGAME.playerShip = function(spec, graphics) {
 	  return JSON.parse(JSON.stringify(ship.speed));
   };
 
+  that.getHyperAvail = function() {
+	  return timeSinceLastJump > 5;
+  };
+  
+  
   that.resetShip = function() {
     that.stopSound();
     ship.rotation = 0;
