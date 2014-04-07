@@ -125,12 +125,17 @@ ul.menu li button:active {
   text-align: center;
 }
 
+table {
+  margin: auto;
+}
+
 th, td {
   text-align: center;
   padding: 8px 20px;
 }
 
 td {
+  padding: 5px 20px;
   font-size: 22px;
 }
 
@@ -144,3 +149,4 @@ th {
   margin: auto;
   background: blue;
 }
+
