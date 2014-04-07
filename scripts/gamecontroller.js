@@ -626,181 +626,87 @@ MYGAME.gameController = (function() {
 
   var AIUpdate = function () {
 
-	  var closestRoid = closestAsteroid();
+    var closestRoid = closestAsteroid();
 
-	  if (closestRoid.asteroid && closestRoid.distance < 40) {
-		  that.playerShip.hyperJumpKeyPressed();
-		  console.log('hyper jump');
-		  return;
-	  }
+    if (closestRoid.asteroid && closestRoid.distance < 40) {
+      that.playerShip.hyperJumpKeyPressed();
+      console.log('hyper jump');
+      return;
+    }
 
-	  if (closestRoid.asteroid && closestRoid.distance < 150 && that.playerShip.getShipSpeed() < 3) {
-		  var asteroidCenter = closestRoid.asteroid.getAsteroidCenter()
-		    , shipCenter = that.playerShip.getShipCenter()
-		    , targetAngle
-		    , shipAngle
-		    ;
+    if (closestRoid.asteroid && closestRoid.distance < 150 && that.playerShip.getShipSpeed() < 3) {
 
-		  if (shipCenter.x < asteroidCenter.x) {
-			  // The asteroid is right of the ship
-			  if(shipCenter.y < asteroidCenter.y) {
-				// The asteroid is below the ship
-				    targetAngle = Math.PI * 3 / 4;
-				    shipAngle = Angles.normalizer(that.playerShip.getShipRotation());
+      var targetDirection = Angles.normalizer(angleFromTwoPoints(closestRoid.asteroid.getAsteroidCenter(), that.playerShip.getShipCenter()) - Angles.normalizer(that.playerShip.getShipRotation()));
+      if (targetDirection <= (Math.PI / 32)) {
+         that.playerShip.shipShouldAccel();
+      } else if (targetDirection > Math.PI) {
+         that.playerShip.shipShouldTurnLeft();
+      } else {
+         that.playerShip.shipShouldTurnRight();
+       }
 
-				  //if (Math.abs(Math.atan2(Math.sin(targetAngle - shipAngle), Math.cos(targetAngle - shipAngle))) >= (Math.PI / 16)) {
-				    if (shipAngle < targetAngle || shipAngle > Math.PI * 7 / 4){
-					  // turn ship left
-					  that.playerShip.shipShouldTurnLeft();
-				    } else {
-					  // turn ship right
-					  that.playerShip.shipShouldTurnRight();
-				    }
-//				  } else {
-//					  that.playerShip.shipShouldAccel();
-//				  }
-			  } else {
-				// The asteroid is above the ship
-				  targetAngle = Math.PI / 4;
-				  shipAngle = Angles.normalizer(that.playerShip.getShipRotation());
+      return;
+    }
 
-				  //if (Math.abs(Math.atan2(Math.sin(targetAngle - shipAngle), Math.cos(targetAngle - shipAngle))) >= (Math.PI / 16)) {
-				    if (shipAngle < targetAngle || shipAngle > Math.PI * 5 / 4){
-					  // turn ship left
-					  that.playerShip.shipShouldTurnLeft();
-				    } else {
-					  // turn ship right
-					  that.playerShip.shipShouldTurnRight();
-				    }
-//				  } else {
-//					  that.playerShip.shipShouldAccel();
-//				  }
-			  }
+    if (that.playerShip.getShipSpeed() > 1) {
+       var targetDirection = Angles.normalizer(Angles.normalizer(that.playerShip.getShipDirection() + Math.PI) - Angles.normalizer(that.playerShip.getShipRotation()));
+        if (targetDirection <= (Math.PI / 32)) {
+         that.playerShip.shipShouldAccel();
+       } else if (targetDirection > Math.PI) {
+         that.playerShip.shipShouldTurnLeft();
+       } else {
+         that.playerShip.shipShouldTurnRight();
+       }
+     return;
+    }
 
-		  } else {
-			// The asteroid is left of the ship
+    if (that.playerShip.getShipSpeed() < 0.75) {
+      that.playerShip.shipShouldAccel();
+    }
 
-			  if(shipCenter.y < asteroidCenter.y) {
-				  // The asteroid is below the ship
+    if (that.alienShips.length > 0) {
+         var targetDirection = Angles.normalizer(angleFromTwoPoints(that.alienShips[0].getShipCenter(), that.playerShip.getShipCenter()) - Angles.normalizer(that.playerShip.getShipRotation()));
+        if (targetDirection <= (Math.PI / 32)) {
+         that.playerShip.fireLaserKeyPressed();
+       } else if (targetDirection > Math.PI) {
+         that.playerShip.shipShouldTurnLeft();
+       } else {
+         that.playerShip.shipShouldTurnRight();
+       }
+      return;
+    }
 
-				  targetAngle = Math.PI * 5 / 4;
-				  shipAngle = Angles.normalizer(that.playerShip.getShipRotation());
+    if (closestRoid.asteroid) {
+        var targetDirection = Angles.normalizer(angleFromTwoPoints(closestRoid.asteroid.getAsteroidCenter(), that.playerShip.getShipCenter()) - Angles.normalizer(that.playerShip.getShipRotation()));
+        if (targetDirection <= (Math.PI / 32)) {
+         that.playerShip.fireLaserKeyPressed();
+       } else if (targetDirection > Math.PI) {
+         that.playerShip.shipShouldTurnLeft();
+       } else {
+         that.playerShip.shipShouldTurnRight();
+       }
+      }
 
-				  //if (Math.abs(Math.atan2(Math.sin(targetAngle - shipAngle), Math.cos(targetAngle - shipAngle))) >= (Math.PI / 16)) {
-				    if (shipAngle < targetAngle && shipAngle > Math.PI / 4){
-					  // turn ship left
-					  that.playerShip.shipShouldTurnLeft();
-				    } else {
-					  // turn ship right
-					  that.playerShip.shipShouldTurnRight();
-				    }
-//				  } else {
-//					  that.playerShip.shipShouldAccel();
-//				  }
-
-			  } else {
-				  // The asteroid is above the ship
-
-				  targetAngle = Math.PI * 7 / 4;
-				  shipAngle = Angles.normalizer(that.playerShip.getShipRotation());
-
-				  //if (Math.abs(Math.atan2(Math.sin(targetAngle - shipAngle), Math.cos(targetAngle - shipAngle))) >= (Math.PI / 16)) {
-				    if (shipAngle < targetAngle && shipAngle > Math.PI * 3 / 4){
-					  // turn ship left
-					  that.playerShip.shipShouldTurnLeft();
-				    } else {
-					  // turn ship right
-					  that.playerShip.shipShouldTurnRight();
-				    }
-//				  } else {
-//					  that.playerShip.shipShouldAccel();
-//				  }
-		     }
-		  }
-
-		  //console.log('avoid mode');
-		  that.playerShip.shipShouldAccel();
-		  return;
-	  }
-
-
-	  // Slow the ship down!! You go too fast yo.
-	  if (that.playerShip.getShipSpeed() > 1) {
-		  //console.log('slow down mode');
-		 var targetDirection = Angles.normalizer(that.playerShip.getShipRotation() + Math.PI)
-		   , shipDirection = Angles.normalizer(that.playerShip.getShipDirection())
-		   ;
-
-		 if (Math.abs(Math.atan2(Math.sin(targetDirection - shipDirection), Math.cos(targetDirection - shipDirection))) <= (Math.PI / 24)) {
-			 that.playerShip.shipShouldAccel();
-			 //console.log('slow down accel');
-		 } else {
-			 that.playerShip.shipShouldTurnLeft();
-		 }
-
-		 return;
-	  }
-
-	  if (that.playerShip.getShipSpeed() < 0.75) {
-		  that.playerShip.shipShouldAccel();
-	  }
-
-	  if (that.alienShips.length > 0) {
-		  var targetDirection = angleFromTwoPoints(that.alienShips[0].getShipCenter(), that.playerShip.getShipCenter())
-	      , shipDirection = Angles.normalizer(that.playerShip.getShipRotation())
-		  ;
-
-	    if (closestRoid.asteroid.getAsteroidCenter().y > that.playerShip.getShipCenter().y) {
-	    	targetDirection += Math.PI;
-	    }
-
-
-	    if (Math.abs(Math.atan2(Math.sin(targetDirection - shipDirection), Math.cos(targetDirection - shipDirection))) <= (Math.PI / 24)) {
-			 that.playerShip.fireLaserKeyPressed();
-		 } else {
-			 that.playerShip.shipShouldTurnLeft();
-		 }
-
-	    return;
-	  }
-
-	  if (closestRoid.asteroid) {
-	    var targetDirection = angleFromTwoPoints(closestRoid.asteroid.getAsteroidCenter(), that.playerShip.getShipCenter())
-	      , shipDirection = Angles.normalizer(that.playerShip.getShipRotation())
-		  ;
-
-	    if (closestRoid.asteroid.getAsteroidCenter().y > that.playerShip.getShipCenter().y) {
-	    	targetDirection += Math.PI;
-	    }
-
-
-	    if (Math.abs(Math.atan2(Math.sin(targetDirection - shipDirection), Math.cos(targetDirection - shipDirection))) <= (Math.PI / 24)) {
-			 that.playerShip.fireLaserKeyPressed();
-		 } else {
-			 that.playerShip.shipShouldTurnLeft();
-		 }
-	  }
-
-  };
+};
 
   var closestAsteroid = function() {
-	  var shipCenter = that.playerShip.getShipCenter()
-	    , minAsteroid = null
-	    , minDistance = null
-	    ;
+    var shipCenter = that.playerShip.getShipCenter()
+      , minAsteroid = null
+      , minDistance = null
+      ;
 
-	  if (asteroids.length > 0) {
-		  minAsteroid = asteroids[0];
-		  minDistance = distanceBetweenPoints(shipCenter, asteroids[0].getAsteroidCenter()) - asteroids[0].radius;
-	  }
+    if (asteroids.length > 0) {
+      minAsteroid = asteroids[0];
+      minDistance = distanceBetweenPoints(shipCenter, asteroids[0].getAsteroidCenter()) - asteroids[0].radius;
+    }
 
-	  asteroids.forEach(function (asteroid) {
-		  if (distanceBetweenPoints(shipCenter, asteroid.getAsteroidCenter()) - asteroid.radius < minDistance) {
-			  minAsteroid = asteroid;
-			  minDistance = distanceBetweenPoints(shipCenter, asteroid.getAsteroidCenter()) - asteroid.radius;
-		  }
-	    });
-	  return {asteroid: minAsteroid, distance: minDistance};
+    asteroids.forEach(function (asteroid) {
+      if (distanceBetweenPoints(shipCenter, asteroid.getAsteroidCenter()) - asteroid.radius < minDistance) {
+        minAsteroid = asteroid;
+        minDistance = distanceBetweenPoints(shipCenter, asteroid.getAsteroidCenter()) - asteroid.radius;
+      }
+      });
+    return {asteroid: minAsteroid, distance: minDistance};
   };
 
 
