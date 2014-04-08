@@ -88,9 +88,8 @@ MYGAME.playerShip = function(spec, graphics) {
             }
           };
           MYGAME.gameController.lasers.push(MYGAME.laser(laserSpec, MYGAME.graphics));
-
-          //var laserSnd = new Audio('sounds/pew.mp3');
-          //laserSnd.volume = 0.3;
+          laserSnd.pause();
+          laserSnd.currentTime = 0;
           laserSnd.play();
         }
       }
