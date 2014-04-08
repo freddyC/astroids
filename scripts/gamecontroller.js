@@ -530,7 +530,7 @@ MYGAME.gameController = (function() {
   };
 
   var addPointsToScore = function (points) {
-    if (((that.score % 10000) + points) > 10000) {
+    if (((that.score % 10000) + points) >= 10000) {
       remainingShips += 1;
     }
     pointsSinceLastAlien += points;
@@ -681,6 +681,7 @@ MYGAME.gameController = (function() {
        } else {
          that.playerShip.shipShouldTurnRight();
        }
+        
       }
 
 };
