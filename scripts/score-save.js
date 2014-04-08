@@ -10,7 +10,7 @@ MYGAME.screens['get-player'] = (function() {
   }
 
   function run() {
-    console.log('Your Score: ' + MYGAME.gameController.score);
+    //console.log('Your Score: ' + MYGAME.gameController.score);
     $('#players-score').text('Your Score: ' + MYGAME.gameController.score);
   }
 

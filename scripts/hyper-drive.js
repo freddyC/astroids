@@ -17,12 +17,12 @@ MYGAME.HyperJump = (function (offset) {
 
 
   var emptiestQuad = function (x1, y1, x2, y2, dangerArr) {
-    console.log('passed into the function',x1, y1, x2, y2, dangerArr)
+    //console.log('passed into the function',x1, y1, x2, y2, dangerArr)
     if (dangerArr.length == 0) {
-      console.log('results',{
-        x: (x1 + x2) / 2,
-        y: (y1 + y2) / 2
-      });
+//      console.log('results',{
+//        x: (x1 + x2) / 2,
+//        y: (y1 + y2) / 2
+//      });
       return {
         x: (x1 + x2) / 2,
         y: (y1 + y2) / 2
@@ -66,7 +66,7 @@ MYGAME.HyperJump = (function (offset) {
       }
     }
 
-    console.log(limits);
+    //console.log(limits);
 
     dangerArr.forEach(function (a) {
       if (a.center.x > xH && a.center.y < yH) {
@@ -89,7 +89,7 @@ MYGAME.HyperJump = (function (offset) {
     if (points.q4.length < points[min].length) {
       min = 'q4';
     }
-    console.log('min',min);
+    //console.log('min',min);
     return emptiestQuad(limits[min].x1, limits[min].y1, limits[min].x2, limits[min].y2, points[min])
   };
 

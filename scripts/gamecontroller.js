@@ -626,7 +626,7 @@ MYGAME.gameController = (function() {
 
     if (closestRoid.asteroid && closestRoid.distance < 50) {
       that.playerShip.hyperJumpKeyPressed();
-      console.log('hyper jump');
+      //console.log('hyper jump');
       return;
     }
 

@@ -52,10 +52,10 @@ MYGAME.screens['game-play'] = (function() {
   }
 
   function startInputListeners () {
-    window.onkeypress = function(){ if(!humanPlayer){ console.log('key'); stopAttractMode();} };
+    window.onkeypress = function(){ if(!humanPlayer){ stopAttractMode();} };
     window.onmousemove = handleMouse;
-    window.mousedown = function(){ if(!humanPlayer){ console.log('mouse down'); stopAttractMode();} };
-    window.mouseup = function(){ if(!humanPlayer){ console.log('mouse up'); stopAttractMode();} };
+    window.mousedown = function(){ if(!humanPlayer){ stopAttractMode();} };
+    window.mouseup = function(){ if(!humanPlayer){ stopAttractMode();} };
   }
 
 
@@ -76,7 +76,7 @@ MYGAME.screens['game-play'] = (function() {
 
   function stopAttractMode () {
     if (inGame) {
-      console.log('input detected!');
+      //console.log('input detected!');
       inGame = false;
       MYGAME.gameController.clearGame();
       MYGAME.gameController.gameInProgress = false;

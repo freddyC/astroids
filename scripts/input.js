@@ -103,7 +103,7 @@ MYGAME.input = (function() {
       that.update = function(elapsedTime) {
         for (var key = 0; key < that.handlers.length; key++) {
           if (typeof that.keys[that.handlers[key].key] !== 'undefined') {
-            console.log()
+            //console.log()
             that.handlers[key].handler(elapsedTime);
           }
         }
@@ -117,7 +117,7 @@ MYGAME.input = (function() {
     }
 
   var updateInput = function () {
-    console.log('you are updating input');
+    //console.log('you are updating input');
     var accel = $('#set-accelerate').val()[0].toUpperCase()
       , left  = $('#set-left-turn').val()[0].toUpperCase()
       , right = $('#set-right-turn').val()[0].toUpperCase()

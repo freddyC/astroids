@@ -235,7 +235,7 @@ MYGAME.playerShip = function(spec, graphics) {
       myKeyboard.registerCommand(MYGAME.keys.shoot, that.fireLaserKeyPressed);
       myKeyboard.registerCommand(MYGAME.keys.jump, that.hyperJumpKeyPressed);
     }
-    console.log('the keybaord object', myKeyboard)
+    //console.log('the keybaord object', myKeyboard)
   };
 
   that.stopSound = function() {
