@@ -97,6 +97,10 @@ MYGAME.gameController = (function() {
   };
 
   that.update = function (elapsedTime) {
+	  if (!that.gameInProgress) {
+		  return;
+	  }
+	  
     if (alldone > 80) {
       that.gameInProgress = false;
       that.clearGame();
@@ -587,6 +591,13 @@ MYGAME.gameController = (function() {
     }
   };
 
+  window.onkeyup = function(event) {
+	if (that.gameInProgress && event.keyCode == KeyEvent.DOM_VK_ESCAPE) {
+		that.gameInProgress = false;
+	    that.clearGame();
+	    MYGAME.screens['game-play'].setHumanPlayer(false);
+	}  
+  };
 
   var initPlayerShip = function () {
     var shipSpec = {
