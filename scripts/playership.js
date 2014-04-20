@@ -195,12 +195,12 @@ MYGAME.playerShip = function(spec, graphics) {
   engine1 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
   engine2 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
   
-  hyperParticles = {
+  var hyperParticlesSpec = {
     image: MYGAME.images['images/whitestar.png'],
     lifetime: { mean: .3, stdev: 0.1 }
   };
   
-  hyperParticles = MYGAME.hyperParticles(hyperParticles, MYGAME.graphics);
+  hyperParticles = MYGAME.hyperParticles(hyperParticlesSpec, MYGAME.graphics);
 
   var originalKeys = {
     accel: KeyEvent.DOM_VK_W,
@@ -330,9 +330,19 @@ MYGAME.playerShip = function(spec, graphics) {
     	        },
     	        center: hyperCenter
     	      };
+    	var newHyperSpec2 = {
+    	        speed: {
+    	          mean: 400,
+    	          stdev: 100
+    	        },
+    	        center: JSON.parse(JSON.stringify(ship.center))
+    	      };
 
     	      for (var i = 0; i < 60; ++i) {
     	    	  hyperParticles.create(newHyperSpec);
+    	      }
+    	      for (var i = 0; i < 30; ++i) {
+    	    	  hyperParticles.create(newHyperSpec2);
     	      }
 
     }
@@ -371,18 +381,19 @@ MYGAME.playerShip = function(spec, graphics) {
   };
 
   that.render = function() {
-  if (MYGAME.gameController.playerShipShouldAppear) {
-    if (MYGAME.gameController.playerShipIsInvincible) {
-    ship.fade = 0.5;
-    } else {
-    ship.fade = 1.0;
-    }
-      graphics.drawImage(ship);
 
-  }
-  engine1.render();
-  engine2.render();
-  hyperParticles.render();
+    hyperParticles.render();
+    if (MYGAME.gameController.playerShipShouldAppear) {
+	    if (MYGAME.gameController.playerShipIsInvincible) {
+	      ship.fade = 0.5;
+	    } else {
+	      ship.fade = 1.0;
+	    }
+	    graphics.drawImage(ship);
+	}
+    engine1.render();
+    engine2.render();
+  
   };
 
   return that;
