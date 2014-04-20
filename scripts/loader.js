@@ -44,6 +44,7 @@ window.addEventListener('load', function() {
       'preload!scripts/about.js',
       'preload!scripts/alienship.js',
       'preload!scripts/alienpew.js',
+      'preload!scripts/hyperbar.js',
       'preload!images/ship.png',
       'preload!images/enterprise.png',
       'preload!images/blue.png',

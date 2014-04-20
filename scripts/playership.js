@@ -271,6 +271,13 @@ MYGAME.playerShip = function(spec, graphics) {
 	  return timeSinceLastJump > 5;
   };
   
+  that.getHyperCooldownPercent = function() {
+	  var percent = timeSinceLastJump / 5;
+	  if (percent > 1) {
+		  percent = 1;
+	  }
+	  return percent;
+  };
   
   that.resetShip = function() {
     that.stopSound();

@@ -23,6 +23,7 @@ MYGAME.gameController = (function() {
     , pointsSinceLastAlien
     , alienBoomSnd
     , isHumanPlayer
+    , hyperBar
     , that = {
         asteroids: null,
         wave: 0,
@@ -66,6 +67,7 @@ MYGAME.gameController = (function() {
     reverseSmallAsteroidImageArray = [];
     reverseMediumAsteroidImageArray = [];
     reverseLargeAsteroidImageArray = [];
+    hyperBar = MYGAME.hyperBar({ x: window.innerWidth - 200, y: 20 });
     initAsteroidsImgs();
     that.shipExploder = MYGAME.shipexplosion();
     that.asteroidExploder = MYGAME.asteroidexplosion();
@@ -112,6 +114,9 @@ MYGAME.gameController = (function() {
     if (!isHumanPlayer) {
       AIUpdate();
     }
+    
+    hyperBar.update(that.playerShip.getHyperCooldownPercent());
+    
     that.playerShip.update(elapsedTime);
     that.shipExploder.update(elapsedTime);
     that.asteroidExploder.update(elapsedTime);
@@ -144,12 +149,13 @@ MYGAME.gameController = (function() {
     if (remainingShips >= 0) {
       drawRemainingShips();
       renderGameInfo();
+      hyperBar.render();
     }
   };
 
   var renderGameInfo = function () {
     var scoreSpec = {
-     text: 'Score: ' + that.score + '   Level: ' + that.wave + (that.playerShip.getHyperAvail() ? '   Hyper-Jump' : ''),
+     text: 'Score: ' + that.score + '   Level: ' + that.wave,
      font: '18pt Calibri',
      color: '#87D1F3',
      x: remainingShips * 30 + 20,
