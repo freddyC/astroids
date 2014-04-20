@@ -27,6 +27,7 @@ window.addEventListener('load', function() {
       'preload!scripts/playershipengine.js',
       'preload!scripts/hyperParticles.js',
       'preload!scripts/shipexplosion.js',
+      'preload!scripts/asteroidparticles.js',
       'preload!scripts/asteroidexplosion.js',
       'preload!scripts/asteroid.js',
       'preload!scripts/laser.js',
@@ -54,7 +55,10 @@ window.addEventListener('load', function() {
       'preload!images/blueblow.png',
       'preload!images/greencircle.png',
       'preload!images/ufo1.png',
-      'preload!images/ufo2.png'
+      'preload!images/ufo2.png',
+      'preload!images/smoke1.png',
+      'preload!images/smoke2.png',
+      'preload!images/smoke3.png'
     ];
 
   for (i = 1; i <= 19; i++) {

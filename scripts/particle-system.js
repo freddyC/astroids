@@ -11,7 +11,10 @@ function particleSystem(spec, graphics) {
   // This creates one new particle
   //------------------------------------------------------------------
   that.create = function(point) {
-    var  size =  Random.nextGaussian(spec.size.mean, spec.size.stdev),
+    var  size =  Random.nextGaussian(spec.size.mean, spec.size.stdev), p;
+    
+    size = Math.max(1, size);
+    
     p = {
         image: spec.image,
         height: size,
@@ -23,8 +26,6 @@ function particleSystem(spec, graphics) {
         lifetime: Random.nextGaussian(spec.lifetime.mean, spec.lifetime.stdev),  // How long the particle should live, in seconds
         alive: 0  // How long the particle has been alive, in seconds
       };
-      // Ensure we have a valid size - gaussian numbers can be negative
-    p.size = Math.max(1, p.size);
       // Same thing with lifetime
     p.lifetime = Math.max(0.01, p.lifetime);
       // Assign a unique name to each particle
