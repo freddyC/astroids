@@ -17,6 +17,8 @@ MYGAME.playerShip = function(spec, graphics) {
     , engineSpec
     , engine1
     , engine2
+    , shieldSpec
+    , shieldSize
     , hyperSnd = new Audio('sounds/hypersound.mp3')
     , laserSnd = new Audio('sounds/pew.mp3')
     , rocketSnd = new Audio('sounds/rocket.mp3')
@@ -40,6 +42,23 @@ MYGAME.playerShip = function(spec, graphics) {
       }
     ;
 
+  if (spec.width > spec.height) {
+	  shieldSize = spec.width * 2
+  } else {
+	  shieldSize = spec.height * 2
+  }
+  
+  shieldSpec = {
+    image: MYGAME.images['images/shield.png'],
+    fade: 0.6,
+	center: ship.center,
+	size: {
+		width: shieldSize,
+		height: shieldSize
+	},
+	rotation: 0
+  };
+  
   hyperSnd.volume = 0.5;
   laserSnd.volume = 0.3;
   rocketSnd.volume = 0.4;
@@ -318,6 +337,9 @@ MYGAME.playerShip = function(spec, graphics) {
     engine2.update(elapsedTime/1000);
     hyperParticles.update(elapsedTime/1000);
     timeSinceLastJump += elapsedTime/1000;
+    
+    shieldSpec.center = that.getShipCenter();
+    shieldSpec.rotation = (shieldSpec.rotation + elapsedTime / 1000 * Math.PI) % (2 * Math.PI);
 
     if (shouldTryToHyperJump && timeSinceLastJump > 3) {
       shouldTryToHyperJump = false;
@@ -397,6 +419,7 @@ MYGAME.playerShip = function(spec, graphics) {
 	      ship.fade = 1.0;
 	    }
 	    graphics.drawImage(ship);
+	    graphics.drawImage(shieldSpec);
 	}
     engine1.render();
     engine2.render();
