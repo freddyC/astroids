@@ -6,10 +6,12 @@ MYGAME.playerShip = function(spec, graphics) {
     , isTurningLeft = false
     , isTurningRight = false
     , shouldTryToHyperJump = false
+    , shouldTurnOnShield = false
     , isPlayingRocketSound = false
     , shouldTryToFireLaser = false
     , rocketSoundSecondsPlayed = 0
     , timeSinceLastJump = 5
+    , timeSinceLastShield = 10
     , hyperParticles = null
     , hyperSpec
     , hyperCenter
@@ -43,7 +45,7 @@ MYGAME.playerShip = function(spec, graphics) {
   hyperSnd.volume = 0.5;
   laserSnd.volume = 0.3;
   rocketSnd.volume = 0.4;
-  
+
   that.shipShouldAccel = function() {
     isAccelerating = true;
   };
@@ -63,6 +65,13 @@ MYGAME.playerShip = function(spec, graphics) {
   that.hyperJumpKeyPressed = function () {
     if (timeSinceLastJump > 5) {
       shouldTryToHyperJump = true;
+    }
+  };
+
+  that.shieldKeyPressed = function () {
+    console.log('handleing shield inputs')
+    if (timeSinceLastShield > 10) {
+      shouldTurnOnShield = true;
     }
   };
 
@@ -194,12 +203,12 @@ MYGAME.playerShip = function(spec, graphics) {
 
   engine1 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
   engine2 = MYGAME.playerShipEngine(engineSpec, MYGAME.graphics);
-  
+
   var hyperParticlesSpec = {
     image: MYGAME.images['images/whitestar.png'],
     lifetime: { mean: .3, stdev: 0.1 }
   };
-  
+
   hyperParticles = MYGAME.hyperParticles(hyperParticlesSpec, MYGAME.graphics);
 
   var originalKeys = {
@@ -207,7 +216,8 @@ MYGAME.playerShip = function(spec, graphics) {
     left: KeyEvent.DOM_VK_A,
     right: KeyEvent.DOM_VK_D,
     shoot: KeyEvent.DOM_VK_SPACE,
-    jump: KeyEvent.DOM_VK_S
+    jump: KeyEvent.DOM_VK_S,
+    shield: KeyEvent.DOM_VK_X
   }
 
   that.setInputListeners = function (isHumanPlayer) {
@@ -226,6 +236,9 @@ MYGAME.playerShip = function(spec, graphics) {
     if (!MYGAME.keys.jump) {
       MYGAME.keys.jump = originalKeys.jump
     }
+    if (!MYGAME.keys.shield) {
+      MYGAME.keys.shield = originalKeys.shield
+    }
 
     if (isHumanPlayer) {
       myKeyboard.registerCommand(MYGAME.keys.accel, that.shipShouldAccel);
@@ -233,8 +246,9 @@ MYGAME.playerShip = function(spec, graphics) {
       myKeyboard.registerCommand(MYGAME.keys.right, that.shipShouldTurnRight);
       myKeyboard.registerCommand(MYGAME.keys.shoot, that.fireLaserKeyPressed);
       myKeyboard.registerCommand(MYGAME.keys.jump, that.hyperJumpKeyPressed);
+      myKeyboard.registerCommand(MYGAME.keys.shield, that.shieldKeyPressed);
     }
-    //console.log('the keybaord object', myKeyboard)
+    console.log('the keybaord object', myKeyboard)
   };
 
   that.stopSound = function() {
@@ -251,34 +265,46 @@ MYGAME.playerShip = function(spec, graphics) {
   };
 
   that.getShipVector = function () {
-	    // copy an object content to new object
-	  return JSON.parse(JSON.stringify({direction: ship.direction, point: ship.center}));
-	  };
+      // copy an object content to new object
+    return JSON.parse(JSON.stringify({direction: ship.direction, point: ship.center}));
+    };
 
   that.getShipRotation = function() {
-	  return JSON.parse(JSON.stringify(ship.rotation));
+    return JSON.parse(JSON.stringify(ship.rotation));
   };
 
   that.getShipDirection = function() {
-	  return JSON.parse(JSON.stringify(ship.direction));
+    return JSON.parse(JSON.stringify(ship.direction));
   };
 
   that.getShipSpeed = function() {
-	  return JSON.parse(JSON.stringify(ship.speed));
+    return JSON.parse(JSON.stringify(ship.speed));
   };
 
   that.getHyperAvail = function() {
-	  return timeSinceLastJump > 5;
+    return timeSinceLastJump > 5;
   };
-  
+
   that.getHyperCooldownPercent = function() {
-	  var percent = timeSinceLastJump / 5;
-	  if (percent > 1) {
-		  percent = 1;
-	  }
-	  return percent;
+    var percent = timeSinceLastJump / 5;
+    if (percent > 1) {
+      percent = 1;
+    }
+    return percent;
   };
-  
+
+  that.getShieldAvail = function() {
+    return timeSinceLastShield > 10;
+  };
+
+  that.getShieldCooldownPercent = function() {
+    var percent = timeSinceLastShield / 10;
+    if (percent > 1) {
+      percent = 1;
+    }
+    return percent;
+  };
+
   that.resetShip = function() {
     that.stopSound();
     ship.rotation = 0;
@@ -318,6 +344,11 @@ MYGAME.playerShip = function(spec, graphics) {
     engine2.update(elapsedTime/1000);
     hyperParticles.update(elapsedTime/1000);
     timeSinceLastJump += elapsedTime/1000;
+    timeSinceLastShield += elapsedTime/1000;
+    if (shouldTurnOnShield && timeSinceLastShield > 10) {
+      timeSinceLastShield = 0;
+      shouldTurnOnShield = false;
+    }
 
     if (shouldTryToHyperJump && timeSinceLastJump > 3) {
       shouldTryToHyperJump = false;
@@ -330,31 +361,30 @@ MYGAME.playerShip = function(spec, graphics) {
     }
 
     if (timeSinceLastJump < 0.25) {
-    	var newHyperSpec = {
-    	        speed: {
-    	          mean: 600,
-    	          stdev: 100
-    	        },
-    	        center: hyperCenter
-    	      };
-    	var newHyperSpec2 = {
-    	        speed: {
-    	          mean: 400,
-    	          stdev: 100
-    	        },
-    	        center: JSON.parse(JSON.stringify(ship.center))
-    	      };
+      var newHyperSpec = {
+        speed: {
+          mean: 600,
+          stdev: 100
+        },
+        center: hyperCenter
+      };
+      var newHyperSpec2 = {
+        speed: {
+          mean: 400,
+          stdev: 100
+        },
+        center: JSON.parse(JSON.stringify(ship.center))
+      };
 
-    	      for (var i = 0; i < 60; ++i) {
-    	    	  hyperParticles.create(newHyperSpec);
-    	      }
-    	      for (var i = 0; i < 30; ++i) {
-    	    	  hyperParticles.create(newHyperSpec2);
-    	      }
-
+      for (var i = 0; i < 60; ++i) {
+        hyperParticles.create(newHyperSpec);
+      }
+      for (var i = 0; i < 30; ++i) {
+        hyperParticles.create(newHyperSpec2);
+      }
     }
-    
-    
+
+
 
     if (isAccelerating !== isPlayingRocketSound) {
       isPlayingRocketSound = isAccelerating;
@@ -391,16 +421,16 @@ MYGAME.playerShip = function(spec, graphics) {
 
     hyperParticles.render();
     if (MYGAME.gameController.playerShipShouldAppear) {
-	    if (MYGAME.gameController.playerShipIsInvincible) {
-	      ship.fade = 0.5;
-	    } else {
-	      ship.fade = 1.0;
-	    }
-	    graphics.drawImage(ship);
-	}
+      if (MYGAME.gameController.playerShipIsInvincible) {
+        ship.fade = 0.5;
+      } else {
+        ship.fade = 1.0;
+      }
+      graphics.drawImage(ship);
+  }
     engine1.render();
     engine2.render();
-  
+
   };
 
   return that;
