@@ -4,7 +4,7 @@ function equationFromVector (v) {
 
 function interceptOfVectors (v1, v2) {
 	return interceptOfEquations(equationFromVector(v1), equationFromVector(v2));
-}
+};
 
 function equationFromTwoPoints (p1, p2) {
   var equation = {};
@@ -43,6 +43,10 @@ function isPointInCircle (p, circle) {
 function distanceBetweenPoints (p1, p2) {
   return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2));
 };
+
+function isCirclesColliding (c1, c2) {
+	return distanceBetweenPoints(c1.point, c2.point) <= c1.radius + c2.radius;
+}
 
 function isPointInSection (p0, p1, p2) {
   return ((p0.x >= p1.x && p0.x <= p2.x) || (p0.x <= p1.x && p0.x >= p2.x)) &&
@@ -96,3 +100,90 @@ function isPolygonInCircle(poly, circle) {
   }
   return isLineSegmentInCircle (poly[0], poly[poly.length-1], circle);
 };
+
+function componentVector(v) {
+	return {
+		x: v.magnitude * Math.cos(v.angle),
+		y: v.magnitude * Math.sin(v.angle)
+	};
+};
+
+function dotProduct(v1, v2) {
+	return (v1.x * v2.x) + (v1.y * v2.y);
+}
+
+function multiplyVectorByScalar (v, scalar) {
+	return {
+		x: v.x * scalar,
+		y: v.y * scalar
+	};
+};
+
+function addVectors(v1, v2) {
+	return {
+		x: v1.x + v2.x,
+		y: v1.y + v2.y
+	};
+};
+
+function getUnitVector(obj1, obj2) {
+	var c1 = obj1.getCenter()
+	  , c2 = obj2.getCenter()
+	  , v = {
+		  x: c2.x - c1.x,
+		  y: c2.y - c1.y
+      };
+	
+	var divisor = Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2));
+	
+	v.x = v.x / divisor;
+	v.y = v.y / divisor;
+	
+	return v;
+};
+
+function getTangentVector(v) {
+	return {
+		x: v.y * -1,
+		y: v.x
+	};
+};
+
+function getCollisionVectors(obj1, obj2) {
+	
+	var v1 = obj1.getComponentVector()
+	  , v2 = obj2.getComponentVector()
+      , un = getUnitVector(obj1, obj2)
+      , ut = getTangentVector(un)
+      , v1n = dotProduct(un, v1)
+	  , v1t = dotProduct(ut, v1)
+	  , v2n = dotProduct(un, v2)
+	  , v2t = dotProduct(ut, v2)
+	  , v1tPrime = v1t
+	  , v2tPrime = v2t
+	  , v1nPrime = ((v1n * (obj1.mass - obj2.mass)) + (2 * obj2.mass * v2n)) / (obj1.mass + obj2.mass)
+	  , v2nPrime = ((v2n * (obj2.mass - obj1.mass)) + (2 * obj1.mass * v1n)) / (obj1.mass + obj2.mass)
+	  , v1Prime = addVectors(multiplyVectorByScalar(un, v1nPrime), multiplyVectorByScalar(ut, v1tPrime))
+	  , v2Prime = addVectors(multiplyVectorByScalar(un, v2nPrime), multiplyVectorByScalar(ut, v2tPrime))
+	  ;
+
+      return {
+    	  v1: convertComponentToPolar(v1Prime),
+    	  v2: convertComponentToPolar(v2Prime)
+      };
+};
+
+
+function convertComponentToPolar(v) {
+	var direction = -wwdMath.atan(v.y / v.x);
+	if (v.x < 0) {
+		direction += Math.PI;
+	}
+
+	return {
+		direction: direction,
+		magnitude: Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2))
+	};
+}
+
+
