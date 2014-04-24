@@ -315,7 +315,7 @@ MYGAME.gameController = (function() {
     var fromTop = (Math.random() < 0.5)
       , reverse = (Math.random() < 0.5)
       , sideLength = 175
-      , radius = sideLength / 2
+      , radius = (sideLength / 2) - 15 
       ;
 
     largeAsteroidRadius = radius;

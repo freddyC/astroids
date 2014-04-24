@@ -95,6 +95,10 @@ MYGAME.playerShip = function(spec, graphics) {
 	  }
   };
   
+  that.canHyperJump = function() {
+	  return timeSinceLastJump > 5;
+  };
+  
   that.setSpeed = function(speed) {
 	  ship.speed = speed;
   };
@@ -118,7 +122,7 @@ MYGAME.playerShip = function(spec, graphics) {
   that.getShieldCircle = function() {
 	  return {
 		  point: JSON.parse(JSON.stringify(ship.center)),
-		  radius: shieldSize / 2
+		  radius: (shieldSize / 2) - 12
 	  };
   };
   
