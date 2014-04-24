@@ -60,7 +60,8 @@ window.addEventListener('load', function() {
       'preload!images/ufo2.png',
       'preload!images/smoke1.png',
       'preload!images/smoke2.png',
-      'preload!images/smoke3.png'
+      'preload!images/smoke3.png',
+      'preload!images/shield.png'
     ];
 
   for (i = 1; i <= 19; i++) {

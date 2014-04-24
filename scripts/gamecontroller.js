@@ -337,6 +337,7 @@ MYGAME.gameController = (function() {
       center: center,
       speed: Random.nextRange(90, 125),
       secondsToCycle: (Math.random() + 1)
+      mass: 1
     };
 
     return MYGAME.asteroid(asteroidSpec, MYGAME.graphics);
@@ -367,7 +368,8 @@ MYGAME.gameController = (function() {
       radius: radius,
       center: center,
       speed: Random.nextRange(100, 175),
-      secondsToCycle: (Math.random() + 0.8)
+      secondsToCycle: (Math.random() + 0.8),
+      mass: 1
     };
 
     return MYGAME.asteroid(asteroidSpec, MYGAME.graphics);
@@ -398,7 +400,8 @@ MYGAME.gameController = (function() {
       radius: radius,
       center: center,
       speed: Random.nextRange(150, 200),
-      secondsToCycle: (Math.random() + 0.25)
+      secondsToCycle: (Math.random() + 0.25),
+      mass: 1
     };
 
     return MYGAME.asteroid(asteroidSpec, MYGAME.graphics);
@@ -460,18 +463,68 @@ MYGAME.gameController = (function() {
     if (that.playerShipIsInvincible) {
       return;
     }
-    var shipPoly = that.playerShip.getShipPolygon();
+    
+    if (that.playerShip.isShieldActive()) {
+    	asteroids.forEach(function (asteroid) {
+    		if (isCirclesColliding(asteroid.getAsteroidCircle(), that.playerShip.getShieldCircle())) {
+    			console.log('collision');
 
-    asteroids.forEach(function (asteroid) {
-      var specs = {
-        point: asteroid.center,
-        radius: asteroid.radius
-      };
-      if ( isPolygonInCircle(shipPoly, specs) ) {
-        that.shipExploder.explode(that.playerShip.getShipCenter());
-        destroyPlayerShip();
-      }
-    });
+    			while(isCirclesColliding(asteroid.getAsteroidCircle(), that.playerShip.getShieldCircle())) {
+    				if (asteroid.getCenter().y < that.playerShip.getCenter().y) {
+    					asteroid.nudgeUp();
+    					that.playerShip.nudgeDown();
+    				} else {
+    					asteroid.nudgeDown();
+    					that.playerShip.nudgeUp();
+    				}
+    				
+    				if (asteroid.getCenter().x < that.playerShip.getCenter().x) {
+    					asteroid.nudgeLeft();
+    					that.playerShip.nudgeRight();
+    				} else {
+    					asteroid.nudgeRight();
+    					that.playerShip.nudgeLeft();
+    				}
+    				console.log('nudged');
+    			}
+
+    			var shipCenter = that.playerShip.getCenter()
+    			  , asteroidCenter = asteroid.getCenter()
+    			  , xComponent = asteroidCenter.x - shipCenter.x
+    			  , yComponent = asteroidCenter.y - shipCenter.y
+    			  ;
+    			
+    			var slope = (yComponent / xComponent);
+    			
+    			var newDirection;
+    			if(slope > 0) {
+    				newDirection = Math.atan(slope) - (Math.PI / 2);
+    			} else {
+    				newDirection = Math.atan(slope) + (Math.PI / 2);
+    			}
+
+    			if (that.playerShip.getCenter().y < asteroid.getCenter().y) {
+    				that.playerShip.setDirection(newDirection);
+    				asteroid.setDirection(newDirection + Math.PI);
+    			} else {
+    				that.playerShip.setDirection(newDirection + Math.PI);
+    				asteroid.setDirection(newDirection);
+    			}
+    		} 
+    	});
+    } else {
+      var shipPoly = that.playerShip.getShipPolygon();
+      asteroids.forEach(function (asteroid) {
+        var specs = {
+          point: asteroid.center,
+          radius: asteroid.radius
+        };
+        if ( isPolygonInCircle(shipPoly, specs) ) {
+          that.shipExploder.explode(that.playerShip.getShipCenter());
+          destroyPlayerShip();
+        }
+      });
+    }
 
     that.alienLasers.forEach(function (pew) {
       if (isPolygonInCircle(shipPoly, pew.getPewCircle()) || isPointInPolygon(pew.getPewCenter(), shipPoly)) {

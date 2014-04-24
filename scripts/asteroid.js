@@ -21,6 +21,9 @@ MYGAME.asteroid = function(spec, graphics) {
       }
     ;
 
+  that.mass = spec.mass;
+  that.recentlyCollided = false;
+  
   that.update = function(elapsedTime) {
     elapsedSeconds = (elapsedSeconds + ((elapsedTime / 1000) / spec.secondsToCycle)) % spec.secondsToCycle;
 
@@ -59,13 +62,68 @@ MYGAME.asteroid = function(spec, graphics) {
     return JSON.parse(JSON.stringify(asteroid.center));
   };
   
+  that.getCenter = function() {
+	  if(!asteroid.center.x || !asteroid.center.y) {
+		  debugger;
+	  }
+	    return JSON.parse(JSON.stringify(asteroid.center));
+	  };
+  
+  that.getAsteroidCircle = function() {
+	  return {
+		  point: JSON.parse(JSON.stringify(asteroid.center)),
+		  radius: asteroid.radius
+	  };
+  };
+  
+  that.setNewVector = function(v) {
+	  asteroid.direction = v.direction;
+	  asteroid.speed = v.magnitude;
+  };
+  
+  that.setDirection = function(angle) {
+	  asteroid.direction = angle;
+  };
+  
+  that.setSpeed = function(speed) {
+	  asteroid.speed = speed;
+  };
+  
+  that.getSpeed = function(speed) {
+	 return JSON.parse(JSON.stringify(asteroid.speed));
+  };
+  
+  that.nudgeUp = function() {
+	  asteroid.center.y -= 1;
+  };
+  
+  that.nudgeDown = function() {
+	  asteroid.center.y += 1;
+  };
+  
+  that.nudgeRight = function() {
+	  asteroid.center.x += 1;
+  };
+  
+  that.nudgeLeft = function() {
+	  asteroid.center.x -= 1;
+  };
+  
   that.getAsteroidVector = function() {
 	  return JSON.parse(JSON.stringify({direction: asteroid.direction, point: asteroid.center}));
   };
   
   that.getAsteroidFuture = function () {
     return JSON.parse(JSON.stringify(asteroid.futureCenter));
-  }
+  };
+  
+  that.getComponentVector = function() {
+	  var vector = {
+		    magnitude: asteroid.speed,
+		    angle: asteroid.direction
+	  };
+	  return componentVector(vector);
+  };
 
   that.render = function() {
     graphics.drawImage(asteroid);

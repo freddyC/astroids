@@ -19,6 +19,12 @@ MYGAME.playerShip = function(spec, graphics) {
     , engineSpec
     , engine1
     , engine2
+    , shieldSpec
+    , shieldSize
+    , shieldsRemaining = 3
+    , shieldHitsRemaining = 0
+    , shieldIsActive = true
+    , secondsShieldHasBeenActive
     , hyperSnd = new Audio('sounds/hypersound.mp3')
     , laserSnd = new Audio('sounds/pew.mp3')
     , rocketSnd = new Audio('sounds/rocket.mp3')
@@ -42,10 +48,73 @@ MYGAME.playerShip = function(spec, graphics) {
       }
     ;
 
+  if (spec.width > spec.height) {
+	  shieldSize = spec.width * 2
+  } else {
+	  shieldSize = spec.height * 2
+  }
+  
+  shieldSpec = {
+    image: MYGAME.images['images/shield.png'],
+    fade: 0.6,
+	center: ship.center,
+	size: {
+		width: shieldSize,
+		height: shieldSize
+	},
+	rotation: 0
+  };
+  
   hyperSnd.volume = 0.5;
   laserSnd.volume = 0.3;
   rocketSnd.volume = 0.4;
-
+  
+  that.mass = 2;
+  
+  that.shieldDidCollide = function() {
+	 
+  };
+  
+  that.setNewVector = function(v) {
+	  ship.direction = v.direction;
+	  ship.speed = v.magnitude / 100;
+  };
+  
+  that.setDirection = function(angle) {
+	  ship.direction = angle;
+  };
+  
+  that.setSpeed = function(speed) {
+	  ship.speed = speed;
+  };
+  
+  that.nudgeUp = function() {
+	  ship.center.y -= 1;
+  };
+  
+  that.nudgeDown = function() {
+	  ship.center.y += 1;
+  };
+  
+  that.nudgeRight = function() {
+	  ship.center.x += 1;
+  };
+  
+  that.nudgeLeft = function() {
+	  ship.center.x -= 1;
+  };
+  
+  that.getShieldCircle = function() {
+	  return {
+		  point: JSON.parse(JSON.stringify(ship.center)),
+		  radius: shieldSize / 2
+	  };
+  };
+  
+  that.isShieldActive = function() {
+	  return shieldIsActive;
+  };
+  
   that.shipShouldAccel = function() {
     isAccelerating = true;
   };
@@ -261,8 +330,17 @@ MYGAME.playerShip = function(spec, graphics) {
 
   that.getShipCenter = function () {
     // copy an object content to new object
+	  
     return JSON.parse(JSON.stringify(ship.center));
   };
+  
+  that.getCenter = function () {
+	    // copy an object content to new object
+	  if(!ship.center.x || !ship.center.y) {
+		  debugger;
+	  }
+	    return JSON.parse(JSON.stringify(ship.center));
+	  };
 
   that.getShipVector = function () {
       // copy an object content to new object
@@ -280,6 +358,10 @@ MYGAME.playerShip = function(spec, graphics) {
   that.getShipSpeed = function() {
     return JSON.parse(JSON.stringify(ship.speed));
   };
+  
+  that.getSpeed = function(speed) {
+		 return JSON.parse(JSON.stringify(ship.speed));
+	  };
 
   that.getHyperAvail = function() {
     return timeSinceLastJump > 5;
@@ -326,6 +408,14 @@ MYGAME.playerShip = function(spec, graphics) {
     return poly;
   };
 
+  that.getComponentVector = function() {
+	  var vector = {
+		    magnitude: ship.speed * 100,
+		    angle: ship.direction
+	  };
+	  return componentVector(vector);
+  };
+  
   that.update = function(elapsedTime) {
     if(!MYGAME.gameController.playerShipShouldAppear) {
       engine1.update(elapsedTime/1000);
@@ -344,6 +434,9 @@ MYGAME.playerShip = function(spec, graphics) {
     engine2.update(elapsedTime/1000);
     hyperParticles.update(elapsedTime/1000);
     timeSinceLastJump += elapsedTime/1000;
+    
+    shieldSpec.center = that.getShipCenter();
+    shieldSpec.rotation = (shieldSpec.rotation + elapsedTime / 1000 * Math.PI) % (2 * Math.PI);
     timeSinceLastShield += elapsedTime/1000;
     if (shouldTurnOnShield && timeSinceLastShield > 10) {
       timeSinceLastShield = 0;
@@ -430,6 +523,7 @@ MYGAME.playerShip = function(spec, graphics) {
   }
     engine1.render();
     engine2.render();
+    
 
   };
 
