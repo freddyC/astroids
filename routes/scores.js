@@ -30,6 +30,30 @@ exports.all = function(request, response) {
 };
 
 //------------------------------------------------------------------
+// Fetch lowest high score
+//------------------------------------------------------------------
+exports.min = function (request, response) {
+  console.log('Fetching lowest high score')
+  var scores = fs.readFileSync(filename);
+  scores = JSON.parse(scores);
+
+  if (scores.length < 10) {
+    response.writeHead(200, {'content-type': 'application/json'});
+    response.end(0);
+    return;
+  }
+
+  scores.sort(function (a, b) {
+    return (parseInt(a.score) < parseInt(b.score));
+  });
+
+  var score = (scores.length > 0) ? scores[scores.length-1].score : 0
+
+  response.writeHead(200, {'content-type': 'application/json'});
+  response.end(score);
+};
+
+//------------------------------------------------------------------
 // Add a new score to the server data.
 //------------------------------------------------------------------
 exports.add = function(request, response) {

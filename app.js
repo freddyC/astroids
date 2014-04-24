@@ -31,6 +31,7 @@ app.get('/', function(request, response) {
 });
 
 app.get('/v1/high-scores', scores.all);
+app.get('/v1/smallest-high-scores', scores.min);
 app.post('/v1/high-scores', scores.add);
 
 //------------------------------------------------------------------
