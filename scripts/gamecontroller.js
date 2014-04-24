@@ -52,6 +52,8 @@ MYGAME.gameController = (function() {
     that.lasers = [];
     that.playerShip = initPlayerShip();
     that.wave = 0;
+    that.shipExploder = MYGAME.shipexplosion();
+    that.asteroidExploder = MYGAME.asteroidexplosion();
   }
 
   that.init = function () {
@@ -315,7 +317,7 @@ MYGAME.gameController = (function() {
     var fromTop = (Math.random() < 0.5)
       , reverse = (Math.random() < 0.5)
       , sideLength = 175
-      , radius = (sideLength / 2) -4
+      , radius = (sideLength / 2) - 15 
       ;
 
     largeAsteroidRadius = radius;
@@ -463,7 +465,9 @@ MYGAME.gameController = (function() {
     if (that.playerShipIsInvincible) {
       return;
     }
-
+    
+    var shipPoly = that.playerShip.getShipPolygon();
+    
     if (that.playerShip.isShieldActive()) {
     	asteroids.forEach(function (asteroid) {
     		if (isCirclesColliding(asteroid.getAsteroidCircle(), that.playerShip.getShieldCircle())) {
@@ -515,7 +519,6 @@ MYGAME.gameController = (function() {
     		}
     	});
     } else {
-      var shipPoly = that.playerShip.getShipPolygon();
       asteroids.forEach(function (asteroid) {
         var specs = {
           point: asteroid.center,
@@ -529,13 +532,19 @@ MYGAME.gameController = (function() {
     }
 
     that.alienLasers.forEach(function (pew) {
-      if (isPolygonInCircle(shipPoly, pew.getPewCircle()) || isPointInPolygon(pew.getPewCenter(), shipPoly)) {
-        pew.shouldBeDeleted = true;
-        that.shipExploder.explode(that.playerShip.getShipCenter());
+      if (that.playerShip.isShieldActive()) {
+    	  if (isCirclesColliding(pew.getPewCircle(), that.playerShip.getShieldCircle())) {
+    		  pew.shouldBeDeleted = true;
+    		  that.playerShip.shieldDidCollide();
+    	  }
+      } else {
+        if (isPolygonInCircle(shipPoly, pew.getPewCircle()) || isPointInPolygon(pew.getPewCenter(), shipPoly)) {
+          pew.shouldBeDeleted = true;
+          that.shipExploder.explode(that.playerShip.getShipCenter());
             destroyPlayerShip();
+        }
       }
     });
-
   };
 
   var updateAlienCollision = function () {
@@ -703,7 +712,11 @@ MYGAME.gameController = (function() {
     var closestRoid = closestAsteroid();
 
     if (closestRoid.asteroid && closestRoid.distance < 50) {
-      that.playerShip.hyperJumpKeyPressed();
+    	if (that.playerShip.canHyperJump()) {
+    		that.playerShip.hyperJumpKeyPressed();
+    	} else {
+    		that.playerShip.shieldKeyPressed();
+    	}
       //console.log('hyper jump');
       return;
     }

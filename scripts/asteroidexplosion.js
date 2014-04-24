@@ -35,10 +35,10 @@ MYGAME.asteroidexplosion = function () {
     
     explosionPoints.forEach(function (point) {
     	var i;
-    	for (i = 0; i < 40; i++) {
+    	for (i = 0; i < 17; i++) {
     		var spec = {
     	    		  images: smokeImages,
-    	    		  size: { mean: 20, stdev: 10 },
+    	    		  size: { mean: 35, stdev: 8 },
     	    		  speed: { mean: 50, stdev: 25 },
     	    		  lifetime: { mean: .75, stdev: .25},
     	    		  center: JSON.parse(JSON.stringify(point.point))

@@ -52,6 +52,7 @@ MYGAME.asteroidParticles = function (graphics) {
       image: particleSpec.images[Random.nextRange(0, particleSpec.images.length - 1)],
       width: scale,
       height: scale,
+      fade: .35,
       direction: Math.random() * 2 * Math.PI,
       speed: Random.nextGaussian(particleSpec.speed.mean, particleSpec.speed.stdev), // pixels per second
       rotation: 0,
