@@ -1,4 +1,4 @@
-MYGAME.hyperBar = function(point) {
+MYGAME.shieldBar = function(point) {
   'use strict';
 
   var background = {
@@ -14,32 +14,32 @@ MYGAME.hyperBar = function(point) {
       y: point.y + 2,
       width: 146,
       height: 26,
-      color: 'rgb(21, 99, 52)',
+      color: 'white',
       maxWidth: 146
     };
 
   var readyText = {
-    text: 'Hyper-Jump Ready',
+    text: 'Shield',
     font: '12pt Calibri',
     color: 'white',
     x: point.x + 14,
     y: point.y + 20
-    };
+  };
 
   var chargingText = {
-      text: 'Charging...',
-      font: '12pt Calibri',
-      color: 'white',
-      x: point.x + 40,
-      y: point.y + 20
-      };
+    text: 'Charging...',
+    font: '12pt Calibri',
+    color: 'white',
+    x: point.x + 40,
+    y: point.y + 20
+  };
 
   function update(percent) {
     if (percent > 1) {
       percent = 1;
     }
     bar.width = bar.maxWidth * percent
-    if (bar.width != bar.maxWidth) {
+    if (bar.maxWidth != bar.width) {
       bar.color = 'red';
     } else {
       bar.color = 'rgb(21, 99, 52)';

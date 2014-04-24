@@ -24,6 +24,8 @@ MYGAME.gameController = (function() {
     , alienBoomSnd
     , isHumanPlayer
     , hyperBar
+    , shieldBar
+    , sheildIsActive
     , that = {
         asteroids: null,
         wave: 0,
@@ -43,7 +45,7 @@ MYGAME.gameController = (function() {
 
   that.clearGame = function () {
     backgroundSnd.currentTime = 0;
-	backgroundSnd.pause();
+    backgroundSnd.pause();
     that.playerShip.stopSound();
     timeSinceShipWasDestroyed = 0;
     asteroids = [];
@@ -68,6 +70,7 @@ MYGAME.gameController = (function() {
     reverseMediumAsteroidImageArray = [];
     reverseLargeAsteroidImageArray = [];
     hyperBar = MYGAME.hyperBar({ x: window.innerWidth - 200, y: 20 });
+    shieldBar = MYGAME.shieldBar({ x: window.innerWidth - 200, y: 60 });
     initAsteroidsImgs();
     that.shipExploder = MYGAME.shipexplosion();
     that.asteroidExploder = MYGAME.asteroidexplosion();
@@ -81,6 +84,7 @@ MYGAME.gameController = (function() {
     that.alienLasers = [];
     pointsSinceLastAlien = 0;
     isHumanPlayer = true;
+    sheildIsActive = false;
     isHumanPlayer = humanPlayer;
     that.playerShip.setInputListeners(isHumanPlayer);
     alldone = 0;
@@ -99,10 +103,10 @@ MYGAME.gameController = (function() {
   };
 
   that.update = function (elapsedTime) {
-	  if (!that.gameInProgress) {
-		  return;
-	  }
-	  
+    if (!that.gameInProgress) {
+      return;
+    }
+
     if (alldone > 80) {
       that.gameInProgress = false;
       that.clearGame();
@@ -114,15 +118,16 @@ MYGAME.gameController = (function() {
     if (!isHumanPlayer) {
       AIUpdate();
     }
-    
+
     hyperBar.update(that.playerShip.getHyperCooldownPercent());
-    
+    shieldBar.update(that.playerShip.getShieldCooldownPercent());
+
     that.playerShip.update(elapsedTime);
     that.shipExploder.update(elapsedTime);
     that.asteroidExploder.update(elapsedTime);
     updateDestroyedShip(elapsedTime);
     if (backgroundSnd.paused) {
-    	backgroundSnd.play();
+      backgroundSnd.play();
     }
     updateAsteroids(elapsedTime);
     updateLasers(elapsedTime);
@@ -150,6 +155,7 @@ MYGAME.gameController = (function() {
       drawRemainingShips();
       renderGameInfo();
       hyperBar.render();
+      shieldBar.render();
     }
   };
 
@@ -651,11 +657,11 @@ MYGAME.gameController = (function() {
   };
 
   window.onkeyup = function(event) {
-	if (that.gameInProgress && event.keyCode == KeyEvent.DOM_VK_ESCAPE) {
-		that.gameInProgress = false;
-	    that.clearGame();
-	    MYGAME.screens['game-play'].setHumanPlayer(false);
-	}  
+  if (that.gameInProgress && event.keyCode == KeyEvent.DOM_VK_ESCAPE) {
+    that.gameInProgress = false;
+      that.clearGame();
+      MYGAME.screens['game-play'].setHumanPlayer(false);
+  }
   };
 
   var initPlayerShip = function () {
@@ -751,7 +757,7 @@ MYGAME.gameController = (function() {
        } else {
          that.playerShip.shipShouldTurnRight();
        }
-        
+
       }
 
 };

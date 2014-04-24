@@ -118,11 +118,12 @@ MYGAME.input = (function() {
 
   var updateInput = function () {
     //console.log('you are updating input');
-    var accel = $('#set-accelerate').val()[0].toUpperCase()
-      , left  = $('#set-left-turn').val()[0].toUpperCase()
-      , right = $('#set-right-turn').val()[0].toUpperCase()
-      , shoot = $('#set-shoot').val()[0].toUpperCase()
-      , jump  = $('#set-hyper-shift').val()[0].toUpperCase()
+    var accel  = $('#set-accelerate').val()[0].toUpperCase()
+      , left   = $('#set-left-turn').val()[0].toUpperCase()
+      , right  = $('#set-right-turn').val()[0].toUpperCase()
+      , shoot  = $('#set-shoot').val()[0].toUpperCase()
+      , jump   = $('#set-hyper-shift').val()[0].toUpperCase()
+      , shield = $('#set-shield').val()[0].toUpperCase()
       ;
 
     accel = (accel) ? accel.charCodeAt() : null;
@@ -130,13 +131,15 @@ MYGAME.input = (function() {
     right = (right) ? right.charCodeAt() : null;
     shoot = (shoot) ? shoot.charCodeAt() : null;
     jump = (jump) ? jump.charCodeAt() : null;
+    shield = (shield) ? shield.charCodeAt() : null;
 
     var customKeys = {
       accel: accel,
       left: left,
       right: right,
       shoot: shoot,
-      jump: jump
+      jump: jump,
+      shield: shield
     }
     MYGAME.keys = customKeys;
     MYGAME.game.showScreen('main-menu');
@@ -148,6 +151,7 @@ MYGAME.input = (function() {
     $('#set-right-turn').val(String.fromCharCode(KeyEvent.DOM_VK_D));
     $('#set-shoot').val(String.fromCharCode(KeyEvent.DOM_VK_SPACE));
     $('#set-hyper-shift').val(String.fromCharCode(KeyEvent.DOM_VK_S));
+    $('#set-shield').val(String.fromCharCode(KeyEvent.DOM_VK_X));
   }
 
   return {

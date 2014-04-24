@@ -30,6 +30,7 @@
         <li><p>Right Turn: <input id="set-right-turn" type="text/javascript"></input></p></li>
         <li><p>Shoot Laser: <input id="set-shoot" type="text/javascript"></input></p></li>
         <li><p>Hyper Shift: <input id="set-hyper-shift" type="text/javascript"></input></p></li>
+        <li><p>Shield: <input id="set-shield" type="text/javascript"></input></p></li>
         <li>
           <button style="width: 100px;margin: 0 30px;" onclick="MYGAME.input.updateInput()">Save</button>
           <button style="width: 100px;margin: 0 30px;" onclick="MYGAME.input.resetInput()">Reset</button>
@@ -90,7 +91,7 @@
       <h1>AND ... you're dead</h1>
       <ul class="menu">
         <li><p id="players-score"></p></li>
-        <li><p>Your Name: <input id="player-name" type="text"></input></p></li>
+        <li id="you-made-a-high-score"><p>Your Name: <input id="player-name" type="text"></input></p></li>
       </ul>
       <ul class="menu">
         <li><button id="submit-score-button">Submit</button></li>
