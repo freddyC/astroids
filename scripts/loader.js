@@ -25,7 +25,7 @@ window.addEventListener('load', function() {
       'preload!scripts/renderer.js',
       'preload!scripts/playership.js',
       'preload!scripts/playershipengine.js',
-      'preload!scripts/hyperParticles.js',
+      'preload!scripts/hyperparticles.js',
       'preload!scripts/shipexplosion.js',
       'preload!scripts/asteroidparticles.js',
       'preload!scripts/asteroidexplosion.js',
