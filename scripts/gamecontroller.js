@@ -318,12 +318,12 @@ MYGAME.gameController = (function() {
       , radius = (sideLength / 2) -4
       ;
 
-    largeAsteroidRadius = radius -4;
-
+    largeAsteroidRadius = radius;
+    var side = (reverse) ? radius : window.innerWidth - radius;
     if (!center) {
       center = {
-        x: (fromTop) ? Random.nextRange(0, window.innerWidth) : 0 - radius,
-        y: (fromTop) ? 0 - radius: Random.nextRange(0, window.innerHeight)
+        x: (fromTop) ? Random.nextRange((radius), window.innerWidth - (radius)) :(side),
+        y: (fromTop) ?(side) : Random.nextRange((radius), window.innerHeight - (radius))
       };
     }
 
@@ -336,7 +336,7 @@ MYGAME.gameController = (function() {
       radius: radius,
       center: center,
       speed: Random.nextRange(90, 125),
-      secondsToCycle: (Math.random() + 1)
+      secondsToCycle: (Math.random() + 1),
       mass: 1
     };
 
@@ -463,14 +463,14 @@ MYGAME.gameController = (function() {
     if (that.playerShipIsInvincible) {
       return;
     }
-    
+
     if (that.playerShip.isShieldActive()) {
     	asteroids.forEach(function (asteroid) {
     		if (isCirclesColliding(asteroid.getAsteroidCircle(), that.playerShip.getShieldCircle())) {
     			console.log('collision');
-    			
+
     			that.playerShip.shieldDidCollide();
-    			
+
     			while(isCirclesColliding(asteroid.getAsteroidCircle(), that.playerShip.getShieldCircle())) {
     				if (asteroid.getCenter().y < that.playerShip.getCenter().y) {
     					asteroid.nudgeUp();
@@ -479,7 +479,7 @@ MYGAME.gameController = (function() {
     					asteroid.nudgeDown();
     					that.playerShip.nudgeUp();
     				}
-    				
+
     				if (asteroid.getCenter().x < that.playerShip.getCenter().x) {
     					asteroid.nudgeLeft();
     					that.playerShip.nudgeRight();
@@ -495,9 +495,9 @@ MYGAME.gameController = (function() {
     			  , xComponent = asteroidCenter.x - shipCenter.x
     			  , yComponent = asteroidCenter.y - shipCenter.y
     			  ;
-    			
+
     			var slope = (yComponent / xComponent);
-    			
+
     			var newDirection;
     			if(slope > 0) {
     				newDirection = Math.atan(slope) - (Math.PI / 2);
@@ -512,7 +512,7 @@ MYGAME.gameController = (function() {
     				that.playerShip.setDirection(newDirection + Math.PI);
     				asteroid.setDirection(newDirection);
     			}
-    		} 
+    		}
     	});
     } else {
       var shipPoly = that.playerShip.getShipPolygon();
