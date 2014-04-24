@@ -321,11 +321,10 @@ MYGAME.gameController = (function() {
       ;
 
     largeAsteroidRadius = radius;
-    var side = (reverse) ? radius : window.innerWidth - radius;
     if (!center) {
       center = {
-        x: (fromTop) ? Random.nextRange((radius), window.innerWidth - (radius)) :(side),
-        y: (fromTop) ?(side) : Random.nextRange((radius), window.innerHeight - (radius))
+        x: (fromTop) ? Random.nextRange(0, window.innerWidth) : -radius,
+        y: (fromTop) ? -radius : Random.nextRange(0, window.innerHeight)
       };
     }
 

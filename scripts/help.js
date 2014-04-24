@@ -16,7 +16,7 @@ MYGAME.screens['help'] = (function() {
       , right  = MYGAME.keys.right  ? String.fromCharCode(MYGAME.keys.right)   : String.fromCharCode(KeyEvent.DOM_VK_D)
       , shoot  = MYGAME.keys.shoot  ? String.fromCharCode(MYGAME.keys.shoot)   : 'Space'
       , jump   = MYGAME.keys.jump   ? String.fromCharCode(MYGAME.keys.jump)    : String.fromCharCode(KeyEvent.DOM_VK_S)
-      , shield = MYGAME.keys.shield ? String.fromCharCode(MYGAME.keys.shield) : String.fromCharCode(KeyEvent.DOM_VK_S)
+      , shield = MYGAME.keys.shield ? String.fromCharCode(MYGAME.keys.shield) : String.fromCharCode(KeyEvent.DOM_VK_X)
       ;
 
       if (accel === String.fromCharCode(KeyEvent.DOM_VK_SPACE)) { accel = 'Space'; }
