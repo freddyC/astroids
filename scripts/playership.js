@@ -23,7 +23,7 @@ MYGAME.playerShip = function(spec, graphics) {
     , shieldSize
     , shieldsRemaining = 3
     , shieldHitsRemaining = 0
-    , shieldIsActive = true
+    , shieldIsActive = false
     , secondsShieldHasBeenActive
     , hyperSnd = new Audio('sounds/hypersound.mp3')
     , laserSnd = new Audio('sounds/pew.mp3')
@@ -72,7 +72,10 @@ MYGAME.playerShip = function(spec, graphics) {
   that.mass = 2;
   
   that.shieldDidCollide = function() {
-	 
+	  shieldHitsRemaining--;
+	  if (shieldHitsRemaining <= 0) {
+		  shieldIsActive = false;
+	  }
   };
   
   that.setNewVector = function(v) {
@@ -82,6 +85,14 @@ MYGAME.playerShip = function(spec, graphics) {
   
   that.setDirection = function(angle) {
 	  ship.direction = angle;
+  };
+  
+  that.getShieldsRemaining = function() {
+	  if (shieldsRemaining > 0) {
+		  return shieldsRemaining;
+	  } else {
+		  return 0;
+	  }
   };
   
   that.setSpeed = function(speed) {
@@ -138,7 +149,7 @@ MYGAME.playerShip = function(spec, graphics) {
   };
 
   that.shieldKeyPressed = function () {
-    console.log('handleing shield inputs')
+    //console.log('handleing shield inputs')
     if (timeSinceLastShield > 10) {
       shouldTurnOnShield = true;
     }
@@ -438,9 +449,16 @@ MYGAME.playerShip = function(spec, graphics) {
     shieldSpec.center = that.getShipCenter();
     shieldSpec.rotation = (shieldSpec.rotation + elapsedTime / 1000 * Math.PI) % (2 * Math.PI);
     timeSinceLastShield += elapsedTime/1000;
-    if (shouldTurnOnShield && timeSinceLastShield > 10) {
+    if (shouldTurnOnShield && timeSinceLastShield > 10 && shieldsRemaining > 0) {
       timeSinceLastShield = 0;
       shouldTurnOnShield = false;
+      shieldIsActive = true;
+      shieldsRemaining -= 1;
+      shieldHitsRemaining = 2;
+    }
+    
+    if (shieldIsActive && timeSinceLastShield > 10) {
+    	shieldIsActive = false;
     }
 
     if (shouldTryToHyperJump && timeSinceLastJump > 3) {
@@ -513,6 +531,8 @@ MYGAME.playerShip = function(spec, graphics) {
   that.render = function() {
 
     hyperParticles.render();
+    engine1.render();
+    engine2.render();
     if (MYGAME.gameController.playerShipShouldAppear) {
       if (MYGAME.gameController.playerShipIsInvincible) {
         ship.fade = 0.5;
@@ -520,9 +540,11 @@ MYGAME.playerShip = function(spec, graphics) {
         ship.fade = 1.0;
       }
       graphics.drawImage(ship);
+      if (shieldIsActive) {
+    	  graphics.drawImage(shieldSpec);
+      }
   }
-    engine1.render();
-    engine2.render();
+    
     
 
   };

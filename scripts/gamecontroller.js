@@ -155,7 +155,7 @@ MYGAME.gameController = (function() {
       drawRemainingShips();
       renderGameInfo();
       hyperBar.render();
-      shieldBar.render();
+      shieldBar.render(that.playerShip.getShieldsRemaining());
     }
   };
 
@@ -468,7 +468,9 @@ MYGAME.gameController = (function() {
     	asteroids.forEach(function (asteroid) {
     		if (isCirclesColliding(asteroid.getAsteroidCircle(), that.playerShip.getShieldCircle())) {
     			console.log('collision');
-
+    			
+    			that.playerShip.shieldDidCollide();
+    			
     			while(isCirclesColliding(asteroid.getAsteroidCircle(), that.playerShip.getShieldCircle())) {
     				if (asteroid.getCenter().y < that.playerShip.getCenter().y) {
     					asteroid.nudgeUp();

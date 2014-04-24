@@ -19,10 +19,10 @@ MYGAME.shieldBar = function(point) {
     };
 
   var readyText = {
-    text: 'Shield',
+    text: 'Shield Ready',
     font: '12pt Calibri',
     color: 'white',
-    x: point.x + 14,
+    x: point.x + 34,
     y: point.y + 20
   };
 
@@ -46,15 +46,37 @@ MYGAME.shieldBar = function(point) {
     }
   };
 
-  function render () {
-    MYGAME.graphics.drawRect(background);
-    MYGAME.graphics.drawRect(bar);
-    if (bar.width === bar.maxWidth) {
-      MYGAME.graphics.drawText(readyText);
-    } else {
-      MYGAME.graphics.drawText(chargingText);
-    }
-
+  function render (shields) {
+	if (shields > 0) {
+      MYGAME.graphics.drawRect(background);
+      MYGAME.graphics.drawRect(bar);
+      if (bar.width === bar.maxWidth) {
+        MYGAME.graphics.drawText(readyText);
+      } else {
+        MYGAME.graphics.drawText(chargingText);
+      }
+      
+      var xOffset = background.x + 27
+        , yOffset = background.y + background.height + 35
+        , i
+        ;
+      
+      for (i = 0; i < shields; i++) {
+    	  var tinyShieldSpec = {
+		    image: MYGAME.images['images/shield.png'],
+			center: { x: xOffset, y: yOffset },
+			size: {
+				width: 40,
+				height: 40
+			},
+			rotation: 0
+		  };
+    	  MYGAME.graphics.drawImage(tinyShieldSpec);
+    	  xOffset += 50;
+      }
+      
+      
+	}
   };
 
   return {
