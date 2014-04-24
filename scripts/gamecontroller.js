@@ -315,10 +315,10 @@ MYGAME.gameController = (function() {
     var fromTop = (Math.random() < 0.5)
       , reverse = (Math.random() < 0.5)
       , sideLength = 175
-      , radius = sideLength / 2
+      , radius = (sideLength / 2) -4
       ;
 
-    largeAsteroidRadius = radius;
+    largeAsteroidRadius = radius -4;
 
     if (!center) {
       center = {
@@ -335,8 +335,8 @@ MYGAME.gameController = (function() {
       },
       radius: radius,
       center: center,
-      speed: Random.nextRange(50, 125),
-      secondsToCycle: (Math.random() + 1),
+      speed: Random.nextRange(90, 125),
+      secondsToCycle: (Math.random() + 1)
       mass: 1
     };
 
