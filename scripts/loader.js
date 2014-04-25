@@ -18,14 +18,15 @@ window.addEventListener('load', function() {
   console.log('Loading resources...');
   var i, load;
   load = [
-        'preload!scripts/random.js',
-        'preload!scripts/utils.js',
-        'preload!scripts/collision.js',
-        'preload!scripts/particle-system.js',
+      'preload!scripts/random.js',
+      'preload!scripts/utils.js',
+      'preload!scripts/collision.js',
+      'preload!scripts/particle-system.js',
       'preload!scripts/renderer.js',
       'preload!scripts/playership.js',
       'preload!scripts/playershipengine.js',
       'preload!scripts/hyperparticles.js',
+      'preload!scripts/shipparticles.js',
       'preload!scripts/shipexplosion.js',
       'preload!scripts/asteroidparticles.js',
       'preload!scripts/asteroidexplosion.js',
@@ -61,7 +62,9 @@ window.addEventListener('load', function() {
       'preload!images/smoke1.png',
       'preload!images/smoke2.png',
       'preload!images/smoke3.png',
-      'preload!images/shield.png'
+      'preload!images/shield.png',
+      'preload!images/fire1.png',
+      'preload!images/fire2.png'
     ];
 
   for (i = 1; i <= 19; i++) {

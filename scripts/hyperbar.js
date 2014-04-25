@@ -14,7 +14,7 @@ MYGAME.hyperBar = function(point) {
       y: point.y + 2,
       width: 146,
       height: 26,
-      color: 'rgb(21, 99, 52)',
+      color: 'green',
       maxWidth: 146
     };
 
@@ -42,7 +42,7 @@ MYGAME.hyperBar = function(point) {
     if (bar.width != bar.maxWidth) {
       bar.color = 'red';
     } else {
-      bar.color = 'rgb(21, 99, 52)';
+      bar.color = 'green';
     }
   };
 

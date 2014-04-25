@@ -166,7 +166,7 @@ MYGAME.gameController = (function() {
      text: 'Score: ' + that.score + '   Level: ' + that.wave,
      font: '18pt Calibri',
      color: '#87D1F3',
-     x: remainingShips * 30 + 20,
+     x: 20,
      y: 41
     };
     MYGAME.graphics.drawText(scoreSpec);
@@ -645,8 +645,8 @@ MYGAME.gameController = (function() {
 
   var drawRemainingShips = function () {
     var center = {
-      x: 20,
-      y: 30
+      x: 32,
+      y: 66
     };
     for (var i = 0; i < remainingShips; i++) {
       center.x += i;
