@@ -56,7 +56,9 @@ Pay attention to the rotating asteroids (you'll be in 2D, not 3D), the backgroun
 The following are the development milestones we developed in class:
 
  1) Ship Rendering & Movement : by 3/21/2014
+ 
  2) Asteroids moving, collision detection : 3/28/2014
+
  3) Particle system, projectiles doing things : 4/4/2014
 
 These are to help push you to work on the game before it is due, they don't necessarily provide enough to suggest you'll get the game done if you only complete the milestones by those dates.  Work early and often on this game.  Bring issues to class and let's discuss them as a group, allowing everyone to benefit from the experience.  I'm quite excited for this game, I'm looking forward to some great work!
